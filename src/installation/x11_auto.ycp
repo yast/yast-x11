@@ -91,14 +91,15 @@ else if (func == "Export") {
 // Return list of additional needed packages
 //---------------------------------
 else if (func == "Packages") {
-	ret = $[];
+    // Workaround: shouled be decalred in one place
+    ret = $["install":["XFree86", "XFree86-server", "3ddiag", "sax2", "saxident" ] ];
 }
 
 //=================================
 // Write given settings
 //---------------------------------
 else if (func == "Write") {
-        y2error("empty");
+        ret = WFM::CallFunction ("inst_x11", [true, true]);
 }
 
 //=================================

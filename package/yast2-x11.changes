@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sun Mar 21 01:28:44 CET 2004 - nashif@suse.de
+
+- Dont ask about installing packages in autoinst mode
+- Added needed X11 packages to _auto client
+
+-------------------------------------------------------------------
 Fri Mar 19 14:59:08 CET 2004 - mvidner@suse.cz
 
 - added AGENT_LIBADD so that agents work from standalone Perl
