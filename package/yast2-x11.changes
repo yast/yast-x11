@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 30 17:59:50 CET 2003 - ms@suse.de
+
+- added noborder option used in continue mode to suppress
+  the SaX2 main window border
+
+-------------------------------------------------------------------
 Wed Jan 29 14:27:42 CET 2003 - ms@suse.de
 
 - add message texts
