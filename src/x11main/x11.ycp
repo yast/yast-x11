@@ -9,8 +9,8 @@ BELONGS TO    : YaST2
               : (X11 integration part using SaX2/ISaX)
               :
 DESCRIPTION   : This script is a wrapper for x11main.ycp
-              : defining what to do after the main dialog
-              : is finished
+              : it implements what to do after the main dialog
+              : has been finished
               :
 STATUS        : Development
 **************/

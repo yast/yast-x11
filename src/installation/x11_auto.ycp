@@ -1,0 +1,92 @@
+/**************
+FILE          : x11_auto.ycp
+***************
+PROJECT       : YaST2
+              :
+AUTHOR        : Marcus Schäfer <ms@suse.de>
+              :
+BELONGS TO    : YaST2
+              : (X11 integration part using SaX2/ISaX)
+              :
+DESCRIPTION   : Autoinstallation client dispatcher for
+              : X11 configuration.
+              :
+              :
+STATUS        : Development
+**************/
+{
+textdomain "x11";
+
+y2milestone("X11 auto started");
+
+any ret = nil;
+string func = "";
+map param = $[];
+
+//=================================
+// Check arguments
+//---------------------------------
+if(size(Args()) > 0 && is(Args(0), string)) {
+	func = WFM::Args(0);
+	if(size(Args()) > 1 && is(Args(1), map))
+	param = WFM::Args(1);
+}
+y2debug("func=%1", func);
+y2debug("param=%1", param);
+
+//=================================
+// Create a summary
+//---------------------------------
+if(func == "Summary") {
+	// TODO
+}
+
+//=================================
+// Reset configuration
+//---------------------------------
+else if (func == "Reset") {
+	// TODO
+}
+
+//=================================
+// Change configuration
+//---------------------------------
+else if (func == "Change") {
+	// TODO
+}
+
+//=================================
+// Import configuration
+//---------------------------------
+else if (func == "Import") {
+	// TODO
+}
+
+//=================================
+// Return actual state
+//---------------------------------
+else if (func == "Export") {
+	// TODO
+}
+
+//=================================
+// Write given settings
+//---------------------------------
+else if (func == "Write") {
+	// TODO
+}
+
+//=================================
+// Unknown function
+//---------------------------------
+else {
+	y2error("Unknown function: %1", func);
+	ret = false;
+}
+
+y2debug("ret=%1", ret);
+y2milestone("X11 auto finished");
+
+return ret;
+
+}

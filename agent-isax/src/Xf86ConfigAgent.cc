@@ -34,8 +34,8 @@
 #include <string>
 
 #include <YCP.h>
-#include <ycp/y2log.h>
-#include <ycp/Parser.h>
+#include <y2util/y2log.h>
+#include <ycp/YCPParser.h>
 
 #include "Xf86ConfigAgent.h"
 
@@ -147,19 +147,9 @@ YCPValue Xf86ConfigAgent::readYCPFile( const string ycp_file )
 	return YCPError( msg );
     }
 
-    Parser parser( fd, ycp_file.c_str() );
+    YCPParser parser( fd, ycp_file.c_str() );
     parser.setBuffered();
-    YCode *parsed_code = parser.parse ();
-    YCPValue contents = YCPNull ();
-    if (parsed_code != NULL)
-	contents = parsed_code->evaluate (true);
-
-
-//    YCPParser parser( fd, ycp_file.c_str() );
-
-//    parser.setBuffered(); 	// Read from file. Buffering is always possible here
-
-//    YCPValue contents = parser.parse();
+    YCPValue contents = parser.parse ();
 
     close( fd );
 

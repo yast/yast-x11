@@ -15,7 +15,7 @@ X-SuSE-YaST-AutoInst=configure
 X-SuSE-YaST-Geometry=
 X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoinstResource=
-X-SuSE-YaST-AutoinstClient=autoinst_x11
+X-SuSE-YaST-AutoinstClient=x11_auto
 
 Icon=x11
 Exec=/sbin/yast2 x11 
