@@ -577,8 +577,9 @@ global define void concludeConfiguration () ``{
 	// remind to have a look at the keyboard module to fix
 	// the X11SetLanguage() call
 	// ---
+	string hwupdate = "/usr/X11R6/" + Display::lib +"/sax/tools/hwupdate";
 	SCR::Execute ( .target.bash,
-		"/usr/X11R6/lib/sax/tools/hwupdate --all"
+		hwupdate + " --all"
 	);
 
 	// ... /
