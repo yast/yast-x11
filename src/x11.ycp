@@ -114,7 +114,7 @@ define any installPackages() ``{
 // Check if X11 is installed
 //------------------------------------------
 if ( ! X11Version::have_x11 () ) {
-	return nil;
+	return `auto;
 }
 
 //==========================================
@@ -122,14 +122,14 @@ if ( ! X11Version::have_x11 () ) {
 //------------------------------------------
 if ( X11Version::version == "3" ) {
 	UI::ErrorPopup ( versionMismatch );
-    return nil;
+    return `auto;
 }
 
 //==========================================
 // install eventually missing packages...
 //------------------------------------------
 if (installPackages() == nil) {
-	return( nil );
+	return `auto;
 }
 
 //==========================================
