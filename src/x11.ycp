@@ -29,6 +29,24 @@ include "ui/common_popups.ycp";
 any ret = nil;
 
 //==========================================
+// Global Message Strings
+//------------------------------------------
+// Indicate that some packages required to setup
+// X11 are missing
+// ---
+string pacsMissing = _("
+The following packages are missing.
+%1
+Install now ?
+");
+// Indicate that the installed graphics card require
+// XFree86 3.3.x to work properly
+// ---
+string versionMismatch = _("
+Your graphics card required XFree86 V3 to be used
+");
+
+//==========================================
 // Functions...
 //------------------------------------------
 //---[ finish ]----//
@@ -79,7 +97,7 @@ define any installPackages() ``{
 			missing = missing + pac + "\n";
 		});
 		if ( ! UI::YesNoPopup ( sformat (
-			_("The following packages are missing.\n%1\nInstall now ?"),
+			pacsMissing,
 			missing
 		))) {
 			localReturn = nil;
@@ -105,9 +123,7 @@ if ( ! X11Version::have_x11 ) {
 // check XFree86 version
 //------------------------------------------
 if ( X11Version::version == "3" ) {
-	UI::ErrorPopup(
-		_("Your graphics card required XFree86 V3 to be used")
-	);
+	UI::ErrorPopup ( versionMismatch );
     return nil;
 }
 

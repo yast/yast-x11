@@ -41,6 +41,9 @@ list    initResult = [];
 //==========================================
 // Global Message Strings
 //------------------------------------------
+// General 3D warning to provide the user with information
+// about the currently driver status and usability
+// ---
 string Warning3D = _("
 All 3D drivers in Linux are in developmental phases and are
 therefore, in part, still regarded as experimental. Nevertheless,
@@ -56,7 +59,10 @@ configuration.
 
 Do you want to enable 3D for the following card:
 ");
-
+// Nvidia warning to inform the user about the dummy nvidia driver
+// which is not capable of 3D but may be updated directly from the
+// nvidia FTP server using YOU (YaST2 online update)
+// ---
 string WarningNVidia = _("
 Please be aware that this is not an official 2D/3D/OpenGL driver from nVidia
 due to licensing reasons. The 3D/OpenGL driver used if you enable 3D is not
