@@ -753,6 +753,7 @@ the noise.
 Try again.
 "));
 		    SetFocusMinHsync();
+		    ret = `again;
 		    continue;
 		}
 
@@ -761,6 +762,7 @@ Try again.
 		    // A frequency value is not of type numerical. User must correct this.
 		    Popup::Message(_("Maximum horizontal frequency is not a numerical value.\nPlease try again."));
 		    SetFocusMaxHsync();
+		    ret = `again;
 		    continue;
 		}
 
@@ -771,6 +773,7 @@ Try again.
 Try again.
 "));
 		    SetFocusMinVsync();
+		    ret = `again;
 		    continue;
 		}
 
@@ -779,6 +782,7 @@ Try again.
 		    // A frequency value is not of type numerical. User must correct this.
 		    Popup::Message(_("Maximum vertical frequency is not a numerical value.\nPlease try again."));
 		    SetFocusMaxVsync();
+		    ret = `again;
 		    continue;
 		}
 	
