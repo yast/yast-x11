@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 23 20:35:23 CEST 2004 - nashif@suse.de
+
+- Fixed setting of windowmanager/displaymanager
+- Fixed setting monitor device to configured one in monitor dialog
+
+-------------------------------------------------------------------
 Sun Sep 12 22:18:58 CEST 2004 - nashif@suse.de
 
 - Added schema file
