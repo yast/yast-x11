@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 04 20:46:56 CEST 2002 - arvin@suse.de
+
+- moved non binary files to /usr/share/YaST2
+
+-------------------------------------------------------------------
 Wed Jul 03 11:55:29 CEST 2002 - arvin@suse.de
 
 - merged yast2-agent-isax
