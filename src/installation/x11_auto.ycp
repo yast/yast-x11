@@ -17,6 +17,7 @@ STATUS        : Development
 {
 textdomain "x11";
 
+import "AutoinstX11";
 import "XProposal";
 
 y2milestone("X11 AutoInstall mode activated...");
@@ -47,28 +48,21 @@ else if (func == "Import") {
 // Create a summary
 //---------------------------------
 if(func == "Summary") {
-	// TODO
-}
-
-//=================================
-// Reset configuration
-//---------------------------------
-else if (func == "Reset") {
-	// TODO
+	ret = AutoinstX11::Summary();
 }
 
 //=================================
 // Change configuration
 //---------------------------------
 else if (func == "Change") {
-	// TODO
+	ret = AutoinstX11::X11AutoSequence();
 }
 
 //=================================
 // Return actual state
 //---------------------------------
 else if (func == "Export") {
-	// TODO
+	ret = AutoinstX11::Export();
 }
 
 //=================================
