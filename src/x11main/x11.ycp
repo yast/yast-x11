@@ -59,7 +59,7 @@ define any installPackages() ``{
 	list<string> neededPacs = [];
 	list<string> requiredPacs = [
 		"XFree86", "XFree86-server","libusb",
-		"3ddiag", "sax2", "saxident"
+		"3ddiag", "sax2", "sax2-gui", "sax2-ident", "sax2-tools"
 	];
 	// ... /
 	// setup contents of requiredPacs plus required pacs
