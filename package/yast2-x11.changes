@@ -1,4 +1,19 @@
 -------------------------------------------------------------------
+Mon Mar 21 09:22:10 CET 2005 - ms@suse.de
+
+- applied patch from Jiri Srain, fixing use of Pkg module (#73825)
+
+-------------------------------------------------------------------
+Wed Mar  2 10:14:00 CET 2005 - ms@suse.de
+
+- fixed occurances of XF86Config instead of xorg.conf (#67089)
+
+-------------------------------------------------------------------
+Tue Mar  1 11:39:56 CET 2005 - ms@suse.de
+
+- fixed keyboard driver name, must be "kbd" (#66546)
+
+-------------------------------------------------------------------
 Mon Feb 21 11:04:34 CET 2005 - ms@suse.de
 
 - added isax agent again (#66041)
