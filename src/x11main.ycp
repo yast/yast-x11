@@ -693,6 +693,16 @@ define void concludeConfiguration () ``{
 	Display::Save();
 
 	// ... /
+	// call hwupdate to be sure the config flags are set
+	// the call of X11SetLanguage may change this flags
+	// remind to have a look at the keyboard module to fix
+	// the X11SetLanguage() call
+	// ---
+	SCR::Execute ( .target.bash,
+		"/usr/X11R6/lib/sax/tools/hwupdate --all"
+	);
+
+	// ... /
 	// remove the hardware.chg file if it still exist
 	// because we have written a valid configuration now
 	// and want to use this configuration for any reconfiguration

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Aug 30 13:38:10 CEST 2002 - ms@suse.de
+
+- fixed update of hwflags
+
+-------------------------------------------------------------------
 Fri Aug 30 12:03:56 CEST 2002 - ms@suse.de
 
 - add option --yast to xapi call within x11main.ycp (#18262)
