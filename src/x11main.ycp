@@ -90,7 +90,7 @@ Do you want to enable 3D for the following card:
 //==========================================
 // Functions...
 //------------------------------------------
-//---[ getCardDriver ]----//
+//---[ isNVidiaCard ]----//
 define boolean isNVidiaCard () ``{
 	integer status = SCR::Execute ( .target.bash,
 		"/usr/X11R6/" + Display::lib + "/sax/api/tools/getNVCard"
@@ -421,6 +421,7 @@ define string getSuggestion (boolean init) ``{
 			map view = currentView["Desktop"]:$[];
 			string cardVendor = card["Vendor"]:"nil";
 			string cardModel  = card["Name"]:"nil";
+			string cardDriver = card["Driver"]:"nil";
 			string moniVendor = view["VendorName"]:"nil";
 			string moniModel  = view["ModelName"]:"nil";
 			string colorDepth = view["ColorDepth"]:"nil";
@@ -432,7 +433,8 @@ define string getSuggestion (boolean init) ``{
 			resolution = resList[0]:"nil";
 
 			data = data + _("Card:")
-				+ " " + cardVendor + " " + cardModel + "\n";
+				+ " " + cardVendor + " " + cardModel
+				+ " ( " + cardDriver + " )" + "\n";
 			data = data + "  " + _("Monitor:");
 			if (moniVendor == moniModel) {
 				data = data + " " + moniVendor + " [ ";
