@@ -2,7 +2,7 @@
 Fri Jul 26 12:17:29 CEST 2002 - ms@suse.de
 
 - provide have_x11 global variable to X11Version.ycp (#17172)
-- make use if X11Version::have_x11 within x11.ycp
+- make use of X11Version::have_x11 within x11.ycp
 
 -------------------------------------------------------------------
 Thu Jul 25 19:19:28 CEST 2002 - ms@suse.de
