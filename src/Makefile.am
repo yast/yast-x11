@@ -4,10 +4,7 @@
 
 SUBDIRS = include modules
 
-clientsdir = $(YAST2DIR)/clients
-configdir = $(YAST2DIR)/config
-
-clients_DATA =				\
+client_DATA =				\
 	inst_x11.ycp			\
 	x11.ycp				\
 	x11_write.ycp			\
@@ -15,4 +12,4 @@ clients_DATA =				\
 
 config_DATA = x11.y2cc
 
-EXTRA_DIST = $(clients_DATA) $(config_DATA)
+EXTRA_DIST = $(client_DATA) $(config_DATA)
