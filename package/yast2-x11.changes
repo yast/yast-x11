@@ -1,6 +1,7 @@
 -------------------------------------------------------------------
 Wed Feb 26 09:57:19 CET 2003 - ms@suse.de
 
+- disable use of pre-detected mouse information
 - set border width to 0 for install mode because we have
   a windowmanager there now (#24301)
 

@@ -103,6 +103,7 @@ global define list getSuggestion (boolean init) ``{
 		//===========================================
 		// get currently available mouse information
 		//-------------------------------------------
+		/*
 		if (Mouse::mset != "") {
 			userLine = "InputDevice->1->Option->Protocol = ";
 			userLine = userLine + Mouse::mset;
@@ -123,6 +124,7 @@ global define list getSuggestion (boolean init) ``{
 			userLine = userLine + Mouse::buttons;
 			userProfile = userProfile + userLine + "\n";
 		}
+		*/
 		//===========================================
 		// get currently available keyboard info
 		//-------------------------------------------
