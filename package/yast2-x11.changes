@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sun Mar  7 11:27:47 CET 2004 - kkaempf@suse.de
+
+- fix continue in loop
+
+-------------------------------------------------------------------
 Tue Mar  2 13:07:44 CET 2004 - visnov@suse.cz
 
 - added some type info for lists/maps
