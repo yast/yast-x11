@@ -1,6 +1,6 @@
 @HEADER-COMMENT@
 
-# neededforbuild  yast2-devel-packages yast2 yast2-installation  yast2-bootloader yast2-country yast2-mouse yast2-storage
+# neededforbuild  yast2-devel-packages yast2 yast2-installation  yast2-bootloader yast2-country yast2-mouse yast2-storage gpp libgpp
 
 @HEADER@
 Requires:	yast2
@@ -44,5 +44,7 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 @ybindir@/update_xf86config
 @ybindir@/xmigrate.pl
 @ydatadir@/monitors.ycp
+@scrconfdir@/*.scr
+@plugindir@/*.so.*
 @schemadir@/autoyast/rnc/*.rnc
 %doc @docdir@

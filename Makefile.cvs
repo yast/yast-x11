@@ -54,5 +54,17 @@ clean:
 	rm -rf src/modules/Makefile.in
 	rm -rf src/Makefile
 	rm -rf src/Makefile.in
+	rm -f  agent-isax/Makefile.in
+	rm -f  agent-isax/doc/autodocs/Makefile.in
+	rm -f  agent-isax/doc/Makefile.in
+	rm -f  agent-isax/src/Makefile.in
+	rm -f  agent-isax/conf/Makefile.in
+	rm -f  agent-isax/testsuite/Makefile.in 
+	rm -f  agent-isax/Makefile
+	rm -f  agent-isax/doc/autodocs/Makefile
+	rm -f  agent-isax/doc/Makefile
+	rm -f  agent-isax/src/Makefile
+	rm -f  agent-isax/conf/Makefile
+	rm -f  agent-isax/testsuite/Makefile
 	rm -f `find -name *.ybc`
 	rm -f Makefile.am.common
