@@ -29,17 +29,17 @@ public:
      * @param path Specifies what part of the subtree should
      * be read. The path is specified _relatively_ to Root()!
      */
-    YCPValue Read(const YCPPath& path, const YCPValue& arg = YCPNull());
+    YCPValue Read(const YCPPath& path, const YCPValue& arg = YCPNull(), const YCPValue& opt = YCPNull ());
 
     /**
      * Writes data. Destroy the result after use.
      */
-    YCPValue Write(const YCPPath& path, const YCPValue& value, const YCPValue& arg = YCPNull());
+    YCPBoolean Write(const YCPPath& path, const YCPValue& value, const YCPValue& arg = YCPNull());
 
     /**
      * Get a list of all subtrees.
      */
-    YCPValue Dir(const YCPPath& path);
+    YCPList Dir(const YCPPath& path);
     
 private:
     // Utilities
@@ -66,9 +66,9 @@ private:
     YCPValue ReadLayout( const YCPValue& arg = YCPNull() );
 
     // Write parts of the XF86Config file (only XFree 4)
-    YCPValue UpdateKeyboard( const YCPMap& config_map, const YCPValue& arg = YCPNull() );
-    YCPValue UpdateMouse( const YCPMap& config_map, const YCPValue& arg = YCPNull() );
-    YCPValue UpdatePath( const YCPMap& config_map, const YCPValue& arg = YCPNull() );
+    YCPBoolean UpdateKeyboard( const YCPMap& config_map, const YCPValue& arg = YCPNull() );
+    YCPBoolean UpdateMouse( const YCPMap& config_map, const YCPValue& arg = YCPNull() );
+    YCPBoolean UpdatePath( const YCPMap& config_map, const YCPValue& arg = YCPNull() );
 };
 
 

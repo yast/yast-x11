@@ -35,7 +35,7 @@
 
 #include <YCP.h>
 #include <y2util/y2log.h>
-#include <ycp/YCPParser.h>
+#include <ycp/Parser.h>
 
 #include "Xf86ConfigAgent.h"
 
@@ -147,9 +147,16 @@ YCPValue Xf86ConfigAgent::readYCPFile( const string ycp_file )
 	return YCPError( msg );
     }
 
-    YCPParser parser( fd, ycp_file.c_str() );
+    Parser parser( fd, ycp_file.c_str() );
     parser.setBuffered();
-    YCPValue contents = parser.parse ();
+    YCode *parsed_code = parser.parse ();
+    YCPValue contents = YCPNull ();
+    if (parsed_code != NULL)
+	contents = parsed_code->evaluate (true);
+
+//    YCPParser parser( fd, ycp_file.c_str() );
+//    parser.setBuffered();
+//    YCPValue contents = parser.parse ();
 
     close( fd );
 
@@ -634,7 +641,7 @@ YCPValue Xf86ConfigAgent::ReadLayout( const YCPValue& arg )
 
 // Update the rc.sax keyboard section
 //
-YCPValue Xf86ConfigAgent::UpdateKeyboard( const YCPMap& config_map, const YCPValue& arg )
+YCPBoolean Xf86ConfigAgent::UpdateKeyboard( const YCPMap& config_map, const YCPValue& arg )
 {
     y2milestone( "Updating the keyboard section" );
 
@@ -643,7 +650,8 @@ YCPValue Xf86ConfigAgent::UpdateKeyboard( const YCPMap& config_map, const YCPVal
     if ( ! file )
     {
 	string msg = "Can't open rc.sax file <" + rc_sax_path + "> for writing.";
-	return YCPError( msg );
+	ycp2error( msg.c_str() );
+	return YCPBoolean (false);
     }
 
     // Write the keyboard section
@@ -665,7 +673,7 @@ YCPValue Xf86ConfigAgent::UpdateKeyboard( const YCPMap& config_map, const YCPVal
 
 // Update the rc.sax mouse section
 //
-YCPValue Xf86ConfigAgent::UpdateMouse( const YCPMap& config_map, const YCPValue& arg )
+YCPBoolean Xf86ConfigAgent::UpdateMouse( const YCPMap& config_map, const YCPValue& arg )
 {
     y2milestone( "Updating the mouse section" );
 
@@ -674,7 +682,8 @@ YCPValue Xf86ConfigAgent::UpdateMouse( const YCPMap& config_map, const YCPValue&
     if ( ! file )
     {
 	string msg = "Can't open rc.sax file <" + rc_sax_path + "> for writing.";
-	return YCPError( msg );
+	ycp2error( msg.c_str() );
+	return YCPBoolean (false);
     }
 
     // Write the mouse section
@@ -696,7 +705,7 @@ YCPValue Xf86ConfigAgent::UpdateMouse( const YCPMap& config_map, const YCPValue&
 
 // Update the rc.sax path section
 //
-YCPValue Xf86ConfigAgent::UpdatePath( const YCPMap& config_map, const YCPValue& arg )
+YCPBoolean Xf86ConfigAgent::UpdatePath( const YCPMap& config_map, const YCPValue& arg )
 {
     y2milestone( "Updating the path section" );
 
@@ -705,7 +714,8 @@ YCPValue Xf86ConfigAgent::UpdatePath( const YCPMap& config_map, const YCPValue& 
     if ( ! file )
     {
 	string msg = "Can't open rc.sax file <" + rc_sax_path + "> for writing.";
-	return YCPError( msg );
+	ycp2error( msg.c_str() );
+	return YCPBoolean (false);
     }
 
     // Write the path section
@@ -740,7 +750,7 @@ Xf86ConfigAgent::Xf86ConfigAgent()
 // The generic SCR Read function.
 // This is only possible for XFree 4.
 //
-YCPValue Xf86ConfigAgent::Read( const YCPPath& path, const YCPValue& arg )
+YCPValue Xf86ConfigAgent::Read( const YCPPath& path, const YCPValue& arg, const YCPValue& opt )
 {
     YCPValue retval = YCPVoid();
 
@@ -813,9 +823,9 @@ YCPValue Xf86ConfigAgent::Read( const YCPPath& path, const YCPValue& arg )
 
 // The generic SCR Write function.
 //
-YCPValue Xf86ConfigAgent::Write( const YCPPath& path, const YCPValue& value, const YCPValue& arg )
+YCPBoolean Xf86ConfigAgent::Write( const YCPPath& path, const YCPValue& value, const YCPValue& arg )
 {
-    YCPValue retval = YCPBoolean( false );
+    YCPBoolean retval = YCPBoolean( false );
 
     y2milestone( "Path: <%s>", path->toString().c_str());
 
@@ -828,12 +838,14 @@ YCPValue Xf86ConfigAgent::Write( const YCPPath& path, const YCPValue& value, con
     //
     if ( ! path->isPath() )
     {
-	return YCPError( "Path is not a path" );
+	ycp2error( "Path is not a path" );
+	return YCPBoolean (false);
     }
 
     if ( ! value->isMap() )
     {
-	return YCPError( "Value is not a map" );
+	ycp2error( "Value is not a map" );
+	return YCPBoolean (false);
     }
 
     YCPMap config_map = value->asMap();
@@ -842,7 +854,8 @@ YCPValue Xf86ConfigAgent::Write( const YCPPath& path, const YCPValue& value, con
     //
     if ( path->isRoot() )	// Is "." in the agent, ".xf86config" in the outer world.
     {
-	return YCPError( string("Writing whole XF86Config not allowed here (Done by Sax).") );
+	ycp2error( "Writing whole XF86Config not allowed here (Done by Sax).") ;
+	return YCPBoolean (false);
     }
     else	// There is a subpath...
     {
@@ -854,7 +867,8 @@ YCPValue Xf86ConfigAgent::Write( const YCPPath& path, const YCPValue& value, con
 	     || subpath == "desktop"
 	     || subpath == "layout" )
 	{
-	    return YCPError( string("Writing ") + subpath + " is not provided!" );
+	    ycp2error( string (string("Writing ") + subpath + " is not provided!").c_str() );
+	    return YCPBoolean (false);
 	}
 	else if ( subpath == "keyboard" )
 	{
@@ -871,7 +885,8 @@ YCPValue Xf86ConfigAgent::Write( const YCPPath& path, const YCPValue& value, con
 	else
 	{
 	    string msg = "Unknown subpath <" + subpath + ">";
-	    return YCPError( msg );
+	    ycp2error( msg.c_str() );
+	    return YCPBoolean (false);
 	}
     }
 
@@ -881,7 +896,7 @@ YCPValue Xf86ConfigAgent::Write( const YCPPath& path, const YCPValue& value, con
 // The directory function.
 // Returns all possible subpaths as YCPList.
 //
-YCPValue Xf86ConfigAgent::Dir( const YCPPath& path )
+YCPList Xf86ConfigAgent::Dir( const YCPPath& path )
 {
     y2milestone( "Path: <%s>", path->toString().c_str());
 
