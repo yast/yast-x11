@@ -31,6 +31,7 @@ import "Display";
 // Module Globals...
 //------------------------------------------
 string  AutoInstallMapDisplayManager = "kdm";
+string  AutoInstallMapWindowManager = "kde";
 boolean configurationChanged = false;
 boolean AutoInstallMap3D = true;
 list    initResult = [];
@@ -204,6 +205,7 @@ global define list getSuggestion (boolean init) ``{
 			// needed data to the user profile
 			// ---
 			AutoInstallMapDisplayManager = data["display_manager"]:"kdm";
+			AutoInstallMapWindowManager = data["window_manager"]:"kde";
 			if (! data["enable_3d"]:true) {
 				AutoInstallMap3D = false;
 			}
@@ -500,30 +502,22 @@ global define void concludeConfiguration () ``{
 	// installed system
 	// ---
 	string displayManager = "kdm";
+	string windowManager = "kde";
 	if ( Mode::autoinst ) {
 		displayManager = AutoInstallMapDisplayManager;
+		windowManager = AutoInstallMapWindowManager;
 	}
-	if ( Mode::cont ) {
-		// we are within the installation process
-		// get list of base selections
-		list currentSWSelection = Pkg::GetSelections(`installed, "base");
-		if ((contains ( currentSWSelection, "Minimal" )
-		     ||	contains ( currentSWSelection, "Minimal+X11" ))
-		    && (!Pkg::IsProvided ("kdebase3-kdm")
-		    && Pkg::IsProvided ("gdm2")))
-		{
-			displayManager = "gdm";
-		}
-	} else {
+	if ( ! Mode::cont )
+	{
 		// we are within the installed SuSE Linux system
-		if ( ! Pkg::IsProvided ("kdebase3-kdm") ) {
-		if ( Pkg::IsProvided ("gdm2") ) {
+		if (!Pkg::IsProvided ("kdebase3-kdm") && Pkg::IsProvided ("gdm2")) {
 			// KDE is not installed but Gnome...
 			displayManager = "gdm";
+			windowManager = "gnome";
 		} else {
 			// KDE and Gnome are not installed...
 			displayManager = "xdm";
-		}
+			windowManager = "twm";
 		}
 	}
 	// ... /
@@ -558,15 +552,23 @@ global define void concludeConfiguration () ``{
 	// update sysconfig variables after reboot during
 	// the installation process
 	// ---
-	SCR::Write(
-		.sysconfig.displaymanager.DISPLAYMANAGER, displayManager
-	);
-	SCR::Write(
-		.sysconfig.displaymanager.DISPLAYMANAGER_STARTS_XSERVER, "yes"
-	);
-	SCR::Write(
-		.sysconfig.displaymanager, nil
-	);
+	if ( (! Mode::cont) || (Mode::autoinst) ) {
+		SCR::Write(
+			.sysconfig.displaymanager.DISPLAYMANAGER, displayManager
+		);
+		SCR::Write(
+			.sysconfig.windowmanager.DEFAULT_WM, windowManager
+		);
+		SCR::Write(
+			.sysconfig.displaymanager.DISPLAYMANAGER_STARTS_XSERVER, "yes"
+		);
+		SCR::Write(
+			.sysconfig.displaymanager, nil
+		);
+		SCR::Write(
+			.sysconfig.windowManager, nil
+		);
+	}
 	Display::Save();
 
 	// ... /
