@@ -848,6 +848,7 @@ Try again.
 	];
 
 	Wizard::CreateDialog ();
+        Wizard::SetDesktopIcon("x11");
 	symbol ret  =  WizardSequencer (dialogs, sequence);
 	UI::CloseDialog ();
 

@@ -112,7 +112,7 @@ global boolean has_fbdev = false;
 global boolean has_vga = false;
 // ...
 // List of X11 packages to be installed for X11.
-global list pacs_to_install = [];
+global list<string> pacs_to_install = [];
 // ...
 // library path prefix
 global string lib = "lib";
