@@ -71,7 +71,7 @@
 						     `id(`enable_3d),
 						     _("&Enable 3D Support if possible"),
 						     x11["enable_3d"]:false)
-					   ),			
+					   ),
 				     `VSpacing(1),
 				     `HBox(
 					   `HWeight(50,
@@ -137,7 +137,7 @@ be started at boot time and what display manager should be used.</p>
 	    UI::ChangeWidget(`id(`depth), `Enabled, false);
 	    UI::ChangeWidget(`id(`resolution), `Enabled, false);
 	    UI::ChangeWidget(`id(`dm), `Enabled, false);
-	    UI::ChangeWidget(`id(`enable_3d), `Enabled, false);	    
+	    UI::ChangeWidget(`id(`enable_3d), `Enabled, false);
 	}
 
 	any ret = nil;
@@ -150,14 +150,14 @@ be started at boot time and what display manager should be used.</p>
 		UI::ChangeWidget(`id(`depth), `Enabled, true);
 		UI::ChangeWidget(`id(`resolution), `Enabled, true);
 		UI::ChangeWidget(`id(`dm), `Enabled, true);
-		UI::ChangeWidget(`id(`enable_3d), `Enabled, true);		
+		UI::ChangeWidget(`id(`enable_3d), `Enabled, true);
 	    }
 	    else
 	    {
 		UI::ChangeWidget(`id(`depth), `Enabled, false);
 		UI::ChangeWidget(`id(`resolution), `Enabled, false);
 		UI::ChangeWidget(`id(`dm), `Enabled, false);
-		UI::ChangeWidget(`id(`enable_3d), `Enabled, false);		
+		UI::ChangeWidget(`id(`enable_3d), `Enabled, false);
 	    }
 
 	    if (ret == `key || ret ==`next  )
@@ -187,7 +187,7 @@ be started at boot time and what display manager should be used.</p>
 
 		any enable_3d	= UI::QueryWidget(`id(`enable_3d), `Value);
 		if (is(enable_3d, boolean))
-		    AutoinstX11::x11["enable_3d"] = enable_3d;	
+		    AutoinstX11::x11["enable_3d"] = enable_3d;
 	    }
 
 
@@ -200,8 +200,8 @@ be started at boot time and what display manager should be used.</p>
 
 
     /*
-     * Create dialog for monitor selection     
-     * @param list of vendors and models (each a list of strings)     
+     * Create dialog for monitor selection
+     * @param list of vendors and models (each a list of strings)
      * @return term dialog as term to be put into Wizard::SetContents()
      */
     define term  X11VideoDataDialog( list vendors, list models )
@@ -262,7 +262,7 @@ be started at boot time and what display manager should be used.</p>
 						  )
 					   )
 				 )
-			   )		     
+			   )
 		  );
 
 	return x11_video_data_dialog;
@@ -271,7 +271,7 @@ be started at boot time and what display manager should be used.</p>
 
     /**
      * Get the `Value property of an arbitrary widget
-     * @param widget_id	ID of the widget, e.g. `resolution     
+     * @param widget_id	ID of the widget, e.g. `resolution
      * @return the widget's `Value property
      */
     define any GetValue( symbol widget_id )	``{
@@ -280,7 +280,7 @@ be started at boot time and what display manager should be used.</p>
 
 
     /**
-     * Set the `Value property of an arbitrary widget     
+     * Set the `Value property of an arbitrary widget
      * @param widget_id	ID of the widget, e.g. `resolution
      * @param new_value	the new value
      */
@@ -292,7 +292,7 @@ be started at boot time and what display manager should be used.</p>
 
 
     /**
-     * Get help text for video data dialog     
+     * Get help text for video data dialog
      * @return string multi line help text in RichText (HTML like) format
      */
     define string X11VideoDataDialogHelpText()
@@ -349,11 +349,11 @@ specified in your monitor's manual. This usually helps a lot to reduce
 the noise.
 </p>
 ");
-	    
+
 	return helptext;
 
-    };	
-   
+    };
+
 
     // get the sync values --> string
     //
@@ -385,7 +385,7 @@ the noise.
     //
     define void SetCurrentVendor( string new_item ) ``{ UI::ChangeWidget(`id(`vendors), `CurrentItem, new_item ); }
     define void SetCurrentModel ( string new_item ) ``{ UI::ChangeWidget(`id(`models),  `CurrentItem, new_item ); }
-    
+
     // replace the vendor list
     //
     define void ReplaceVendors( list new_value ) ``{
@@ -404,7 +404,7 @@ the noise.
      * @return void
      */
     define  void ReplaceModels( list new_value ) ``{
-	
+
 	UI::ReplaceWidget( `id( `replace_point_models),
 			   `SelectionBox( `id( `models),
 					  `opt( `notify ),
@@ -506,7 +506,7 @@ the noise.
 	return toset( maplist( map monitor, vendor_monitors, ``( monitor["model"]:"")) );
     };
 
-    /**          
+    /**
      * Automagically update the frequency values for a specified model.
      */
     define void update_frequency_for_model( string vendor, string model)
@@ -517,24 +517,24 @@ the noise.
 			    ``(( monitor["vendor"]:""  == vendor)
 			       && (monitor["model"]:""  == model)) );
 
-	
+
 	// Set all the input fields according to this monitor's data
 	// first, assign the value to a float. the monitor data may contain
 	// integer values, but tostring expects a float.
 
-	float fsyncval = tofloat( lookup( monitor, "min_hsync", 0 ) );	
+	float fsyncval = tofloat( lookup( monitor, "min_hsync", 0 ) );
 	SetMinHsync (tostring( fsyncval, 1 ));
-	
+
 	fsyncval = tofloat( lookup( monitor, "max_hsync", 0 ) );
 	SetMaxHsync (tostring( fsyncval, 1 ));
-	
+
 	fsyncval = tofloat( lookup( monitor, "min_vsync", 0 ) );
 	SetMinVsync (tostring( fsyncval, 1 ));
-	
+
 	fsyncval = tofloat( lookup( monitor, "max_vsync", 0 ) );
 	SetMaxVsync (tostring( fsyncval, 1 ));
 
-	
+
 	return;
     }
 
@@ -548,36 +548,36 @@ the noise.
 	``{
 	if ( vendor == "No X11" )
 	{
-	    ReplaceModels( [] );		
+	    ReplaceModels( [] );
 
-	    SetMinHsync( "" );	
+	    SetMinHsync( "" );
 	    SetMaxHsync( "" );
 	    SetMinVsync( "" );
 	    SetMaxVsync( "" );
 
-	    AutoinstX11::current_model = "";				
+	    AutoinstX11::current_model = "";
 	}
-	else								
+	else
 	{
-	    list models = get_models_for_vendor( vendor, monitor_db );		   
-	    ReplaceModels( models );					
+	    list models = get_models_for_vendor( vendor, monitor_db );
+	    ReplaceModels( models );
 
-	    if ( models != [] )						
+	    if ( models != [] )
 	    {
-		if ( ! contains( models, AutoinstX11::current_model ) )	
-		    AutoinstX11::current_model = models[0]:"";		
+		if ( ! contains( models, AutoinstX11::current_model ) )
+		    AutoinstX11::current_model = models[0]:"";
 
-		SetCurrentModel( AutoinstX11::current_model );			
+		SetCurrentModel( AutoinstX11::current_model );
 		update_frequency_for_model( vendor, AutoinstX11::current_model );
 	    }
-	    else							
+	    else
 	    {
-		SetMinHsync( "" );					
+		SetMinHsync( "" );
 		SetMaxHsync( "" );
 		SetMinVsync( "" );
 		SetMaxVsync( "" );
 
-		AutoinstX11::current_model = "";					
+		AutoinstX11::current_model = "";
 	    }
 	}
 	return;
@@ -587,7 +587,7 @@ the noise.
      * Read the monitor db and get vendors and models lists.
      * Optionally extend db with probed monitor.
      */
-    define void get_vendors_and_models() ``{		
+    define void get_vendors_and_models() ``{
 	if (  AutoinstX11::monitor["monitor_vendor"]: ""  == "" )
 	{
 	    // monitor vendor not known
@@ -602,23 +602,23 @@ the noise.
 	    AutoinstX11::monitor["monitor_device"] =  AutoinstX11::current_model;
 	}
     }
-    
+
     /**
      * Display current vendor, model and associated values if possible.
      * @return void
-     */    
+     */
     define void display_models_and_values()
 	``{
-	if ( contains( AutoinstX11::vendors, AutoinstX11::current_vendor ) )			
+	if ( contains( AutoinstX11::vendors, AutoinstX11::current_vendor ) )
 	{
-	    SetCurrentVendor( AutoinstX11::current_vendor );				
+	    SetCurrentVendor( AutoinstX11::current_vendor );
 	    change_vendor( AutoinstX11::current_vendor,  AutoinstX11::all_monitors );
 	}
-	else								
+	else
 	{
-	    AutoinstX11::current_vendor = (string) select(  AutoinstX11::vendors, 0, "" );				
-	    SetCurrentVendor( AutoinstX11::current_vendor );			
-	    change_vendor( AutoinstX11::current_vendor, AutoinstX11::all_monitors );		
+	    AutoinstX11::current_vendor = (string) select(  AutoinstX11::vendors, 0, "" );
+	    SetCurrentVendor( AutoinstX11::current_vendor );
+	    change_vendor( AutoinstX11::current_vendor, AutoinstX11::all_monitors );
 	}
 	return;
     }
@@ -681,7 +681,7 @@ the noise.
     }
 
 
-    
+
 
     /**
      * Main Monitor Dialog
@@ -691,7 +691,7 @@ the noise.
 
 
 	AutoinstX11::readMonitorDB();
-	
+
 	map display =  AutoinstX11::display;
 	integer min_hsync = ceiling( display["min_hsync"]:0 );
 	integer max_hsync = floor  ( display["max_hsync"]:0 );
@@ -714,7 +714,7 @@ the noise.
 	display_models_and_values();
 
 	// Monitor
-    
+
 	string min_hsync_string = "";
 	string max_hsync_string = "";
 	string min_vsync_string = "";
@@ -726,27 +726,27 @@ the noise.
 
 	    if ( ret == `vendors )
 	    {
-		string new_vendor = GetCurrentVendor();	
+		string new_vendor = GetCurrentVendor();
 
-		if ( new_vendor != AutoinstX11::current_vendor )		
+		if ( new_vendor != AutoinstX11::current_vendor )
 		{
 		    AutoinstX11::current_vendor = new_vendor;
 		    change_vendor( AutoinstX11::current_vendor, AutoinstX11::all_monitors );
-		}		
+		}
 	    }
 	    else if ( ret == `models )
 	    {
-		string new_model = GetCurrentModel();		
+		string new_model = GetCurrentModel();
 
-		if ( new_model != AutoinstX11::current_model )		
-		{		    
+		if ( new_model != AutoinstX11::current_model )
+		{
 		    AutoinstX11::current_model = new_model;
 		    update_frequency_for_model( AutoinstX11::current_vendor,
-						AutoinstX11::current_model );  
-		}	
+						AutoinstX11::current_model );
+		}
 	    }
 	    else if ( ret == `next )
-	    {		
+	    {
 		min_hsync_string = GetMinHsync();
 		max_hsync_string = GetMaxHsync();
 		min_vsync_string = GetMinVsync();
@@ -793,7 +793,7 @@ Try again.
 		    ret = `again;
 		    continue;
 		}
-	
+
 		min_hsync = ceiling( tofloat( min_hsync_string ) );
 		max_hsync = floor  ( tofloat( max_hsync_string ) );
 		min_vsync = ceiling( tofloat( min_vsync_string ) );
@@ -813,7 +813,7 @@ Try again.
 		{
 		    store_VESA_LCD(  AutoinstX11::current_model, false );
 
-		}				
+		}
 	    }
 	} until ( ret == `next || ret == `back || ret == `abort);
 
