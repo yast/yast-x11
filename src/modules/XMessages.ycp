@@ -32,7 +32,9 @@ Install them now ?
 // XFree86 3.3.x to work properly
 // ---
 global string versionMismatch = _("
-Your graphics card requires XFree86 V3.
+The current XFree86 version no longer supports your graphics card.
+Configure the card based on XFree86 v3 by reinstalling the 'sax' package
+with YaST then starting the program with the command 'sax'.
 ");
 
 // General 3D warning to provide the user with information
