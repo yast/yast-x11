@@ -115,7 +115,7 @@ define any installPackages() ``{
 //==========================================
 // Check if X11 is installed
 //------------------------------------------
-if ( ! X11Version::have_x11 ) {
+if ( ! X11Version::have_x11 () ) {
 	return nil;
 }
 

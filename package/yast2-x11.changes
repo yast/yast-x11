@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Aug 26 12:45:04 CEST 2002 - arvin@suse.de
+
+- X11Version::have_x11 is a function now
+
+-------------------------------------------------------------------
 Thu Aug 22 13:55:44 CEST 2002 - kkaempf@suse.de
 
 - Adapt to new package manager.
@@ -6,7 +11,7 @@ Thu Aug 22 13:55:44 CEST 2002 - kkaempf@suse.de
 -------------------------------------------------------------------
 Thu Aug 15 11:40:58 CEST 2002 - jsuchome@suse.cz
 
-- Merged proofread texts for the second translation round. 
+- Merged proofread texts for the second translation round.
 
 -------------------------------------------------------------------
 Tue Aug 13 11:40:05 CEST 2002 - arvin@suse.de
