@@ -13,5 +13,5 @@
 .sysconfig.3ddiag
 
 `ag_ini(
-  SysConfigFile("/etc/sysconfig/3ddiag")
+  SCR::SysConfigFile("/etc/sysconfig/3ddiag")
 )
