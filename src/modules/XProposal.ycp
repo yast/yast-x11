@@ -544,10 +544,14 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 		//=====================================
 		// Change Bootloader configuration...
 		// ------------------------------------
+		list liloCode = SCR::Read ( .target.ycp,
+			liloCodeFile
+		);
+		string orig = Bootloader::getKernelParam ("LINUX_DEFAULT","vga");
 		string code = liloCode[0]:orig;
-		string orig = Bootloader::getKernelParam ("linux","vga");
 		if (orig != code) {
-			Bootloader::setKernelParam ("linux", "vga", code);
+			y2milestone ("Set fbdev console to mode: %1",code);
+			Bootloader::setKernelParam ("LINUX_DEFAULT", "vga", code);
 			Bootloader::Write();
 		}
 	}

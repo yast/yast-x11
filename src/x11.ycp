@@ -22,8 +22,6 @@ import "Display";
 import "Wizard";
 import "X11Version";
 import "Popup";
-import "Pkg";
-
 
 //==========================================
 // Globals...
