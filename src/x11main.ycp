@@ -609,19 +609,19 @@ define void concludeConfiguration () ``{
 	}
 	if ( Mode::cont ) {
 		// we are within the installation process
-		list currentSWSelection = SCR::Read (.package.selInstallSet);
-		if ((
-			contains ( currentSWSelection, "Minimal" )      ||
-			contains ( currentSWSelection, "Minimal+X11" )) &&
-			contains ( currentSWSelection, "Gnome" )        && ( !
-			contains ( currentSWSelection, "Kde" ) )
-		) {
+		// get list of base selections
+		list currentSWSelection = GetSelections(`installed, "base");
+		if ((contains ( currentSWSelection, "Minimal" )
+		     ||	contains ( currentSWSelection, "Minimal+X11" ))
+		    && (!Pkg::IsProvided ("kdebase3-kdm")
+		    && Pkg::IsProvided ("gdm2")))
+		{
 			displayManager = "gdm";
 		}
 	} else {
 		// we are within the installed SuSE Linux system
-		if ( ! SCR::Read(.targetpkg.installed, "kdebase3") ) {
-		if ( SCR::Read(.targetpkg.installed, "gdm") ) {
+		if ( ! Pkg::IsProvided ("kdebase3-kdm") ) {
+		if ( Pkg::IsProvided ("gdm2") ) {
 			// KDE is not installed but Gnome...
 			displayManager = "gdm";
 		} else {

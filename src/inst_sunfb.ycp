@@ -586,9 +586,9 @@ options to continue.
 
               list current_sel     = SCR::Read(.package.selInstallSet);
               string default_dm = "kdm";
-              if (contains (current_sel, "Gnome")
-                  && contains (current_sel, "Minimal")
-                  && (!contains (current_sel, "Kde")))
+              if (Pkg::IsProvided("Gnome")
+                  && Pkg::IsProvided("Minimal")
+                  && (!Pkg::IsProvided("Kde")))
                   default_dm = "xdm";
 
               SCR::Write(.sysconfig.CHECK_INITTAB, "yes" );

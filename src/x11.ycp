@@ -82,7 +82,7 @@ define any installPackages() ``{
 	// NOT installed at the time
 	// ---
     foreach (`pac, requiredPacs, ``{
-	if ( ! SCR::Read(.targetpkg.installed, pac) ) {
+	if ( ! Pkg::IsProvided (pac) ) {
 		neededPacs = add ( neededPacs, pac );
 	}
 	});
