@@ -418,7 +418,15 @@ the noise.
 
     // Handle `back button
     //
-    define void SetBackState( boolean new_value )	``{ UI::ChangeWidget(`id(`back), `Enabled, new_value ); }
+    define void SetBackState( boolean new_value )
+    ``{
+	if ( new_value )
+	    Wizard::EnableBackButton();
+	else
+	    Wizard::DisableBackButton();
+    }
+
+    // CAUTION: This no longer works with the new wizard - no way to query that value!
     define boolean GetBackState()  			``{ return (boolean)UI::QueryWidget(`id(`back), `Enabled ); }
 
 
