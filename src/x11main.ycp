@@ -249,7 +249,7 @@ define string getSuggestion (boolean init) ``{
 		string hwupdate = "/usr/X11R6/lib/sax/tools/hwupdate";
 		string config   = "/var/cache/sax/files/config";
 		integer update  = SCR::Execute ( .target.bash,
-			hwupdate + " --test --all"
+			hwupdate + " --test"
 		);
 		boolean haveConfig = (SCR::Read(.target.size, config)!=-1);
 		if ((update == 0) || (! haveConfig)) {
