@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jul 29 18:11:07 CEST 2002 - arvin@suse.de
+
+- fixed return value in x11.ycp
+
+-------------------------------------------------------------------
 Fri Jul 26 15:13:17 CEST 2002 - ms@suse.de
 
 - fixed base package list which indicate required packages for the
