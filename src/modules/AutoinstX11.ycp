@@ -45,7 +45,8 @@
      * Function sets internal variable, which indicates, that any
      * settings were modified, to "true"
      */
-    global define void SetModified () {
+    global define void SetModified ()
+    {
         modified = true;
     }
 
@@ -53,7 +54,8 @@
      * Functions which returns if the settings were modified
      * @return boolean  settings were modified
      */
-    global define boolean GetModified () {
+    global define boolean GetModified ()
+    {
         return modified;
     }
 
@@ -147,20 +149,67 @@
      *	@return list
      */
     define void readVendors()
-	``{
+    {
 	vendors = toset( maplist( map monitor, all_monitors, ``( monitor["vendor"]:"" )));
 	return;
     }
 
 
 
-    global define void readMonitorDB() ``{
-
+    global define void readMonitorDB()
+    {
 	all_monitors = (list<map>)SCR::Read( .target.ycp, [ static_monitors, [] ]);
 	readVendors();
 	return;
     }
 
+
+    /**
+     * Read data from suggest file if available
+     */
+    global define boolean Read()
+    {
+
+        x11["window_manager"] = (string) eval (SCR::Read(
+                    .sysconfig.displaymanager.DISPLAYMANAGER
+                    ));
+
+        x11["display_manager"] = (string) eval (SCR::Read(.sysconfig.windowmanager.DEFAULT_WM ));
+
+        string suggestFile = "/var/cache/sax/files/suggest.ycp";
+        if (SCR::Read(.target.size, suggestFile) == -1 )
+            return false;
+
+        // defaults
+        x11["configure_x11"] = true;
+        x11["enable_3d"] = false;
+
+        list initResult = (list)SCR::Read ( .target.ycp,
+                suggestFile
+                );
+        map allCards = initResult[0]:$[];
+        map allViews = initResult[1]:$[];
+        map currentView = allViews[0]:$[];
+        map view = currentView["Desktop"]:$[];
+        current_vendor = view["VendorName"]:"nil";
+        current_model  = view["ModelName"]:"nil";
+        x11["color_depth"] = view["ColorDepth"]:"nil";
+        string moniHsync  = view["HorizSync"]:"nil";
+        string moniVsync  = view["VertRefresh"]:"nil";
+        string modes = "Modes:" + view["ColorDepth"]:"nil";
+        if (moniHsync!=nil) {
+            list h = splitstring(moniHsync, "-");
+            display["min_hsync"] = tointeger(h[0]:"");
+            display["max_hsync"] = tointeger(h[1]:"");
+        }
+        if (moniVsync!=nil) {
+            list v = splitstring(moniVsync, "-");
+            display["min_vsync"] = tointeger(v[0]:"");
+            display["max_vsync"] = tointeger(v[1]:"");
+        }
+        x11["resolution"] = view[modes]:"nil";
+
+    }
 
 }
 

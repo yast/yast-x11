@@ -65,6 +65,12 @@ else if (func == "Summary") {
 }
 
 //=================================
+// Read configuration of running system
+//---------------------------------
+else if (func == "Read") {
+	ret = AutoinstX11::Read();
+}
+//=================================
 // Change configuration
 //---------------------------------
 else if (func == "Change") {

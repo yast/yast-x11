@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Sun Sep 12 22:18:58 CEST 2004 - nashif@suse.de
+
+- Added schema file
+
+-------------------------------------------------------------------
+Sun Sep 12 22:07:24 CEST 2004 - nashif@suse.de
+
+- Removed unused variables (height, width, frequency) from autoyast
+  map
+- In clone mode, read the suggest file if its available and create
+  a cloned configuration.
+
+-------------------------------------------------------------------
 Tue Aug 31 12:00:27 CEST 2004 - ms@suse.de
 
 - include proofread msgid's

@@ -702,10 +702,6 @@ the noise.
 	// store the new values into the X11 user_data struct
 	//
 	AutoinstX11::display = AutoinstX11::display;
-	AutoinstX11::display["width"]	= currentWidth;
-	AutoinstX11::display["height"]	= currentHeight;
-	AutoinstX11::display["frequency"]	= currentFrequency ;
-
 	return;
     }
 

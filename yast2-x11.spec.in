@@ -46,4 +46,5 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 @ybindir@/xmigrate.pl
 @ydatadir@/monitors.ycp
 @plugindir@/*.so.*
+@schemadir@/autoyast/rnc/*.rnc
 %doc @docdir@
