@@ -293,9 +293,9 @@ global define list getSuggestion (boolean init) ``{
 			// called
 			// ---
 			string D3File = "/var/cache/sax/files/3dname";
-			string D3Message = Warning3D;
+			string D3Message = XMessages::Warning3D;
 			if ( isNVidiaCard() ) {
-				D3Message = WarningNVidia;
+				D3Message = XMessages::WarningNVidia;
 			}
 			integer question = SCR::Execute ( .target.bash,
 				"/usr/X11R6/" + Display::lib + "/sax/sysp.pl -s server -n > "

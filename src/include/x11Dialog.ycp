@@ -17,7 +17,6 @@ STATUS        : Development
 **************/
 {
 textdomain "x11";
-import "XMessages";
 import "Wizard";
 
 UI( ``{

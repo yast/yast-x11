@@ -80,7 +80,7 @@ define any installPackages() ``{
 			missing = missing + pac + "\n";
 		});
 		if ( ! UI::YesNoPopup ( sformat (
-			pacsMissing,
+			XMessages::pacsMissing,
 			missing
 		))) {
 			localReturn = nil;
@@ -104,7 +104,7 @@ if ( ! X11Version::have_x11 () ) {
 // check XFree86 version
 //------------------------------------------
 if ( X11Version::version == "3" ) {
-	UI::ErrorPopup ( versionMismatch );
+	UI::ErrorPopup ( XMessages::versionMismatch );
     return `auto;
 }
 
