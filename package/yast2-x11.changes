@@ -2,6 +2,7 @@
 Thu Jul 25 19:19:28 CEST 2002 - ms@suse.de
 
 - removed XFree86 3.x code (xserver.ycp link)
+- remove hardware.chg file in inst_x11.ycp (concludeConfiguration())
 - rewrite Display.ycp
 
 -------------------------------------------------------------------

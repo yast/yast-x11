@@ -604,6 +604,16 @@ define void concludeConfiguration () ``{
 		.sysconfig.displaymanager, nil
 	);
 	Display::Save();
+
+	// ... /
+	// remove the hardware.chg file if it still exist
+	// because we have written a valid configuration now
+	// and want to use this configuration for any reconfiguration
+	// tasks in the future
+	// ---
+	SCR::Execute ( .target.bash,
+		"/bin/rm -f /var/cache/sax/files/hardware.chg"
+	);
 }
 
 //==========================================
