@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jul 25 19:19:28 CEST 2002 - ms@suse.de
+
+- removed XFree86 3.x code (xserver.ycp link)
+- rewrite Display.ycp
+
+-------------------------------------------------------------------
 Mon Jul 22 12:30:29 CEST 2002 - ms@suse.de
 
 - add check if card is capable of 3D and change the
