@@ -6,17 +6,12 @@
  * $Id$
  */
 {
-    textdomain "autoinst";
-
-
+    textdomain "x11";
     include "wizard/sequencer.ycp";
     import "Label";
     import "AutoinstX11";
     import "Wizard";
     import "Popup";
-
-
-
 
     /**
      * Build main Dialog

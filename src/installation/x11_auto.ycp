@@ -54,8 +54,8 @@ y2debug("param=%1", param);
 // Import configuration
 //---------------------------------
 if (func == "Import") {
-    AutoinstX11::Import(param);
-    
+        AutoinstX11::Import(param);
+
 }
 
 //=================================
@@ -76,7 +76,7 @@ else if (func == "Change") {
 // Reset configuration
 //---------------------------------
 else if (func == "Reset") {
-    AutoinstX11::Import($[]);
+        AutoinstX11::Import($[]);
 	ret = $[];
 }
 
@@ -88,10 +88,17 @@ else if (func == "Export") {
 }
 
 //=================================
+// Return list of additional needed packages
+//---------------------------------
+else if (func == "Packages") {
+	ret = $[];
+}
+
+//=================================
 // Write given settings
 //---------------------------------
 else if (func == "Write") {
-    y2error("empty");
+        y2error("empty");
 }
 
 //=================================
