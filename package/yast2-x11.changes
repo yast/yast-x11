@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Aug  9 22:21:50 CEST 2004 - nashif@suse.de
+
+- Export Display settings(frequencies)  correctly
+
+-------------------------------------------------------------------
 Thu Aug  5 12:28:45 CEST 2004 - jsuchome@suse.cz
 
 - removed live_eval mode (nashif)
