@@ -32,9 +32,14 @@ Install them now?
 // XFree86 3.3.x to work properly
 // ---
 global string versionMismatch = _("
-The current XFree86 version no longer supports your graphics card.
-Configure the card based on XFree86 v3 by reinstalling the 'sax' package
-with YaST then starting the program with the command 'sax'.
+Only a special driver for XFree86 3.3.6 is available for your graphics card.
+
+The configuration of graphics cards that were previously only supported by
+XFree86 3.3.6 will undergo a fundamental change, as XFree86 is no longer
+included in versions from SuSE Linux 8.3. However, the 'vesa' driver of
+XFree86 4.x allows almost all affected graphics cards to be run with higher
+resolution and color depth settings. To start the configuration, enter
+'sax2-vesa' on the command line.
 ");
 
 // General 3D warning to provide the user with information
