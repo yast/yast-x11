@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar 18 16:02:08 CET 2003 - ms@suse.de
+
+- check for Mode::x11_setup_needed too (#25566)
+
+-------------------------------------------------------------------
 Thu Mar 13 17:31:32 CET 2003 - ms@suse.de
 
 - fixed displaymanager/windowmanager sysconfig (#25249)

@@ -30,7 +30,7 @@ map     ret   = $[];
 //===================================================
 // Handle Arch flag
 //---------------------------------------------------
-if ( ! Arch::x11_setup_needed ) {
+if ( (! Arch::x11_setup_needed) || (! Mode::x11_setup_needed) ) {
 	boolean success = true;
 	ret = $[
 		"rich_text_title"       : "",
