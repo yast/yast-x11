@@ -8,7 +8,7 @@ AUTHOR        : Marcus Schäfer <ms@suse.de>
 BELONGS TO    : YaST2
               : (X11 integration part using SaX2/ISaX)
               :
-DESCRIPTION   : This script is a wrapper for inst_x11.ycp
+DESCRIPTION   : This script is a wrapper for x11main.ycp
               : defining what to do after the main dialog
               : is finished
               :
@@ -129,10 +129,10 @@ SCR::Execute (.target.bash,
 );
 
 //==========================================
-// call inst_x11.ycp
+// call x11main.ycp
 //------------------------------------------
 ret =  WFM::CallFunction (
-	`inst_x11( true, true )
+	`x11main( true, true )
 );
 if ( ret == `next ) {
 	ret = finish();

@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Jul 26 13:33:39 CEST 2002 - ms@suse.de
+
+- add basic inst_x11.ycp to installation package (#17203)
+- moved X11Version.ycp to installation package
+- moved inst_x11.ycp to x11main.ycp
+- fixed x11.ycp to call x11main
+
+-------------------------------------------------------------------
 Fri Jul 26 12:17:29 CEST 2002 - ms@suse.de
 
 - provide have_x11 global variable to X11Version.ycp (#17172)
