@@ -296,7 +296,7 @@ define string getSuggestion (boolean init) ``{
 	// call hwupdate --test and check for the existance of the
 	// storage binary file "/var/cache/sax/files/config"
 	// ---
-	if ( ! Mode::autoinst ) {
+	if ( (! Mode::autoinst) && (! Mode::live_eval) ) {
 	map displayInfo = UI::GetDisplayInfo();
 	if (displayInfo["TextMode"]:false) {
 		string hwupdate = "/usr/X11R6/" + Display::lib +"/sax/tools/hwupdate";
@@ -351,6 +351,14 @@ define string getSuggestion (boolean init) ``{
 	} else {
 		initString = initString + " --quiet no";
 	}
+	}
+	// ...
+	// If we are running in a live eval system, always answer
+	// the 3D question with no, because installing missing
+	// packages is not possible there
+	// ---
+	if ( Mode::live_eval ) {
+		initString = initString + " --quiet no";
 	}
 	// ...
 	// call init.pl now and remove the profile

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Oct  9 17:03:03 CEST 2002 - ms@suse.de
+
+- add live_eval check. Do not ask for 3D within live_eval
+  environment. Updating packages is not possible there
+
+-------------------------------------------------------------------
 Wed Oct  2 15:06:22 CEST 2002 - ms@suse.de
 
 - fixed return code used if module has to return 
