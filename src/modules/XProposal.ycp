@@ -125,7 +125,6 @@ global define list getSuggestion (boolean init) ``{
 			userLine = userLine + Mouse::buttons;
 			userProfile = userProfile + userLine + "\n";
 		}
-		*/
 		//===========================================
 		// get currently available keyboard info
 		//-------------------------------------------
@@ -179,6 +178,7 @@ global define list getSuggestion (boolean init) ``{
 			userLine = userLine + Keyboard::RightCtl;
 			userProfile = userProfile + userLine + "\n";
 		}
+		*/
 		//===========================================
 		// Include special information if the YaST2
 		// auto install mode is active
