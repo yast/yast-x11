@@ -297,6 +297,16 @@ define string getSuggestion (boolean init) ``{
 	initResult = SCR::Read ( .target.ycp,
 		suggestFile
 	);
+	//===========================================
+	// call 3Ddiag-result to get 3D status
+	//-------------------------------------------
+	boolean D3Active = "false";
+	integer D3Status = SCR::Execute (
+		.target.bash, "/usr/bin/3Ddiag-result"
+	);
+	if (D3Status == 0) {
+		D3Active = true;
+	}
 	// ... /
 	// create the information string containing the most
 	// important information about the graphics system.
@@ -310,6 +320,12 @@ define string getSuggestion (boolean init) ``{
 		map currentView = allViews[cnr]:$[];
 		cnr = cnr + 1;
 		if (currentCard == $[]) {
+			data = data + _("3D Acceleration:") + "\n";
+			if (D3Active) {
+				data = data + "  " + _("Enabled");
+			} else {
+				data = data + "  " + _("Disabled");
+			}
 			done = true;
 		} else {
 			map card = currentCard["Card"]:$[];
