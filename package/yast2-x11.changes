@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 26 21:37:26 CEST 2004 - nashif@suse.de
+
+- During autoinstall, run X11 as an additional workflow step
+- 2.10.5
+
+-------------------------------------------------------------------
 Fri Aug 13 12:52:38 CEST 2004 - msvec@suse.cz
 
 - fixed parallel build

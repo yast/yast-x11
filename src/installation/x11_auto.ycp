@@ -103,7 +103,8 @@ else if (func == "Packages") {
 // Write given settings
 //---------------------------------
 else if (func == "Write") {
-        ret = WFM::CallFunction ("inst_x11", [true, true]);
+        // ret = WFM::CallFunction ("inst_x11", [true, true]);
+        y2milestone("Not writing anything here, doing it in a seperate step");
 }
 
 //=================================

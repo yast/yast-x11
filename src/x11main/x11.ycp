@@ -140,7 +140,15 @@ if (SCR::Read(.sysconfig.bootloader.LOADER_TYPE) == "lilo") {
 //==========================================
 // call x11main.ycp
 //------------------------------------------
-ret =  WFM::CallFunction ("x11main", [true, true]);
+boolean next = true;
+boolean back = true;
+
+if (!(boolean)WFM::Args(0))
+   back = false;
+if (!(boolean)WFM::Args(1))
+   next = false;
+
+ret =  WFM::CallFunction ("x11main", [back, next]);
 if ( ret == `next ) {
 	ret = finish();
 }
