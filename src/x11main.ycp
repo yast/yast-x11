@@ -610,7 +610,7 @@ define void concludeConfiguration () ``{
 	if ( Mode::cont ) {
 		// we are within the installation process
 		// get list of base selections
-		list currentSWSelection = GetSelections(`installed, "base");
+		list currentSWSelection = Pkg::GetSelections(`installed, "base");
 		if ((contains ( currentSWSelection, "Minimal" )
 		     ||	contains ( currentSWSelection, "Minimal+X11" ))
 		    && (!Pkg::IsProvided ("kdebase3-kdm")
