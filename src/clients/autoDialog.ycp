@@ -553,25 +553,25 @@ the noise.
 	{
 	// Get the data record for this monitor
 	//
-	map monitor = (map)find( map monitor, AutoinstX11::all_monitors,
-			    ``(( monitor["vendor"]:""  == vendor)
-			       && (monitor["model"]:""  == model)) );
+	map monitor = (map)find( map m, AutoinstX11::all_monitors,
+			    ``(( m["vendor"]:""  == vendor)
+			       && (m["model"]:""  == model)) );
 
 
 	// Set all the input fields according to this monitor's data
 	// first, assign the value to a float. the monitor data may contain
 	// integer values, but tostring expects a float.
 
-	float fsyncval = tofloat( lookup( monitor, "min_hsync", 0 ) );
+	float fsyncval = tofloat( monitor["min_hsync"]:0  );
 	SetMinHsync (tostring( fsyncval, 1 ));
 
-	fsyncval = tofloat( lookup( monitor, "max_hsync", 0 ) );
+	fsyncval = tofloat( monitor["max_hsync"]:0 );
 	SetMaxHsync (tostring( fsyncval, 1 ));
 
-	fsyncval = tofloat( lookup( monitor, "min_vsync", 0 ) );
+	fsyncval = tofloat( monitor["min_vsync"]:0  );
 	SetMinVsync (tostring( fsyncval, 1 ));
 
-	fsyncval = tofloat( lookup( monitor, "max_vsync", 0 ) );
+	fsyncval = tofloat( monitor["max_vsync"]:0 );
 	SetMaxVsync (tostring( fsyncval, 1 ));
 
 
@@ -657,7 +657,7 @@ the noise.
 	}
 	else
 	{
-	    AutoinstX11::current_vendor = (string) select(  AutoinstX11::vendors, 0, "" );
+	    AutoinstX11::current_vendor = (string) AutoinstX11::vendors[0]:"";
 	    SetCurrentVendor( AutoinstX11::current_vendor );
 	    change_vendor( AutoinstX11::current_vendor, AutoinstX11::all_monitors );
 	}
@@ -691,7 +691,7 @@ the noise.
 
 	    if ( size( first ) > 0 )
 	    {
-		currentWidth = tointeger( select( first, 0, "" ) );
+		currentWidth = tointeger( first[0]:"" );
 
 		// 2. "768@75HZ" --> "768" and "75HZ"
 		//
