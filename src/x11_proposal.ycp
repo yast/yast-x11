@@ -21,6 +21,7 @@ import "XProposal";
 import "Report";
 import "Mode";
 import "Arch";
+import "Confirm";
 
 list    initResult = [];
 string  func  = WFM::Args(0);
@@ -61,6 +62,18 @@ if ( func == "MakeProposal" ) {
 	}
 	if ( forceReset ) {
 		y2milestone ("initial configuration: create...");
+		if ( Confirm::Detection (_("Graphics Cards")) != true ) {
+			y2milestone ("Abort X11 configuration...");
+			string proposal = "<ul><li>" + _("Not detected.") + "</li></ul>";
+			ret = $[
+				"rich_text_title"       : "",
+				"menu_title"            : "",
+				"id"                    : "",
+				"preformatted_proposal" : proposal,
+				"success"               : success
+			];
+			return ret;
+		}
 		initResult = XProposal::getSuggestion ( true );
 	} else {
 		y2milestone ("configuration changed: resetting...");
