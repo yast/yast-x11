@@ -20,8 +20,8 @@
     define term updateContents() ``{
 	map x11 = AutoinstX11::x11;
 	list resolutions        = [];
-	list resolutions_list = ["640x480", "800x600", "1024x768", "1152x864", "1280x960", "1280x1024", "1600x1200"];
-	list depths_list = [
+	list<string> resolutions_list = ["640x480", "800x600", "1024x768", "1152x864", "1280x960", "1280x1024", "1600x1200"];
+	list<map> depths_list = [
 			    $[
 			      "desc"	:_("8 Bit / 256 Colors"),
 			      "depth"	: 8
@@ -500,9 +500,9 @@ the noise.
      * Get a list of all monitor models for a specified vendor from the monitor database.
      * @return list
      */
-    define list get_models_for_vendor( string vendor, list monitor_db )
+    define list get_models_for_vendor( string vendor, list<map> monitor_db )
 	``{
-	list vendor_monitors = filter( map monitor, monitor_db, ``( lookup( monitor, "vendor", "" ) == vendor ) );
+	list<map> vendor_monitors = filter( map monitor, monitor_db, ``( lookup( monitor, "vendor", "" ) == vendor ) );
 	return toset( maplist( map monitor, vendor_monitors, ``( monitor["model"]:"")) );
     };
 
@@ -544,7 +544,7 @@ the noise.
      * Honor the special "No X11" entry.
      * It is assumed that the given vendor is known i.e. is a member of the given monitor_db.
      */
-    define void change_vendor( string vendor, list monitor_db )
+    define void change_vendor( string vendor, list<map> monitor_db )
 	``{
 	if ( vendor == "No X11" )
 	{

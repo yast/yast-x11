@@ -71,17 +71,17 @@
     global define string Summary() ``{
 	string summary = "";
 	map m = x11["monitor"]:$[];
-	string    current_vendor = m["monitor_vendor"]:"";
-	string current_model  = m["monitor_device"]:"";
+	string my_current_vendor = m["monitor_vendor"]:"";
+	string my_current_model  = m["monitor_device"]:"";
 
 	map   d   = m["display"]:$[];
 
 
-	string monitor =  Summary::NotConfigured();
+	string my_monitor =  Summary::NotConfigured();
 
-	if (size(current_vendor) > 0)
+	if (size(my_current_vendor) > 0)
 	{
-	    monitor =  sformat("%1   %2", current_vendor, current_model);
+	    my_monitor =  sformat("%1   %2", my_current_vendor, my_current_model);
 	}
 
 	string horizontal = sformat("%1 - %2",  d["min_hsync"]:0 , d["max_hsync"]:0);
@@ -110,7 +110,7 @@
 
 
 	summary = Summary::AddHeader(summary, _("Monitor"));
-	summary = Summary::AddLine(summary, monitor);
+	summary = Summary::AddLine(summary, my_monitor);
 	summary = Summary::AddHeader(summary, _("Horizontal frequency"));
 	summary = Summary::AddLine(summary, horizontal);
 	summary = Summary::AddHeader(summary, _("Vertical frequency"));

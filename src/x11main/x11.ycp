@@ -55,7 +55,7 @@ define any finish() ``{
 //------------------------------------------
 define any installPackages() ``{
 	any localReturn = `next;
-	list neededPacs = [];
+	list<string> neededPacs = [];
 	list<string> requiredPacs = [
 		"XFree86", "XFree86-server",
 		"3ddiag", "sax2", "saxident"

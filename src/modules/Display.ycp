@@ -172,7 +172,7 @@ define list pacs_and_servers( list<map> display_list ) ``{
 	    }
 
 	    // Extract all packages needed for this display controller.
-	    list pacs = dpycontroller["requires"]:[];
+	    list<string> pacs = dpycontroller["requires"]:[];
 	    foreach (string pac, pacs, ``{
 		x11pacs = add (x11pacs, pac);
 	    });
