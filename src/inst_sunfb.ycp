@@ -498,13 +498,13 @@ options to continue.
                    //
                    // establish XFree86 4.0.x as the currently activated XFree version.
                    //
-                   xresult = SCR (`Execute (.target.bash, "/usr/X11R6/bin/switch2xf86-4"));
+                   // xresult = SCR (`Execute (.target.bash, "/usr/X11R6/bin/switch2xf86-4"));
 
-                   if ( xresult != 0 )
-                   {
-                       y2error("Calling switch2xf86-4 script failed: %1", xresult );
-                       ok = false;     // X configuration not successful
-                   }
+                   //if ( xresult != 0 )
+                   //{
+                   //    y2error("Calling switch2xf86-4 script failed: %1", xresult );
+                   //    ok = false;     // X configuration not successful
+                   //}
                 }
                 else
                 {
@@ -568,13 +568,13 @@ options to continue.
                    //
                    // establish XFree86 3x as the currently activated XFree version.
                    //
-                   xresult = SCR (`Execute (.target.bash, "/usr/X11R6/bin/switch2xf86-3x"));
+                   //xresult = SCR (`Execute (.target.bash, "/usr/X11R6/bin/switch2xf86-3x"));
 
-                   if ( xresult != 0 )
-                   {
-                       y2error("Calling switch2xf86-3x script failed: %1", xresult );
-                       ok = false;     // X configuration not successful
-                   }
+                   //if ( xresult != 0 )
+                   //{
+                   //    y2error("Calling switch2xf86-3x script failed: %1", xresult );
+                   //    ok = false;     // X configuration not successful
+                   //}
             }
 
             // If everything above was ok
