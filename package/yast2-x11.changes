@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Tue Oct 22 14:29:30 CEST 2002 - ms@suse.de
+
+- moved sun module to single directory xsun
+- add extra message modul XMessages.ycp
+- add extra proposal modul to be able to have single x11 module
+  running in combination with an installation proposal
+  XProposal.ycp
+- clean dialog code -> x11Dialog.ycp
+
+-------------------------------------------------------------------
 Wed Oct  9 17:03:03 CEST 2002 - ms@suse.de
 
 - add live_eval check. Do not ask for 3D within live_eval
