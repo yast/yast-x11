@@ -33,7 +33,10 @@ include "x11/x11_auto_setup_dialog.ycp";
 //==========================================
 // Globals...
 //------------------------------------------
+string  AutoInstallMapDisplayManager = "kdm";
+boolean AutoInstallMapEnableX11 = true;
 boolean configurationChanged = false;
+boolean AutoInstallMap3D = true;
 boolean X11Enabled = true;
 boolean HWFlag     = false;
 string  suggestion = "";
@@ -207,11 +210,60 @@ define string getSuggestion (boolean init) ``{
 		//-------------------------------------------
 		if ( Mode::autoinst ) {
 			import "AutoInstall";
+			y2milestone ("AutoInstall mode activated...");
 			map data = AutoInstall::X11;
-			// TODO...
+			boolean configure_x11 = data["configure_x11"]:false;
+			// ...
+			// Check if X11 should be configured or not via
+			// the auto install map data
+			// ---
+			if (! configure_x11) {
+				AutoInstallMapEnableX11 = false;
+			}
+			// ...
 			// handle the auto install map and write the
 			// needed data to the user profile
 			// ---
+			AutoInstallMapDisplayManager = data["display_manager"]:"kdm";
+			if (! data["enable_3d"]:true) {
+				AutoInstallMap3D = false;
+			}
+			map monitor = data["monitor"]:$[];
+			map display = monitor["display"]:$[];
+			// ...
+			// set color depth from auto install map
+			// ---
+			userLine = "Screen->0->DefaultDepth = ";
+			userLine = userLine + data["color_depth"]:"16";
+			userProfile = userProfile + userLine + "\n";
+			// ...
+			// set H/V-sync value from auto install map
+			// ---
+			userLine = "Monitor->0->HorizSync = ";
+			userLine = userLine + display["min_hsync"]:"30" + "-";
+			userLine = userLine + display["max_hsync"]:"60";
+			userProfile = userProfile + userLine + "\n";
+			userLine = "Monitor->0->VertRefresh = ";
+			userLine = userLine + display["min_vsync"]:"50" + "-";
+			userLine = userLine + display["max_vsync"]:"65";
+			userProfile = userProfile + userLine + "\n";
+			// ...
+			// set monitor vendor/name string from
+			// auto install map
+			// ---
+			userLine = "Monitor->0->VendorName = ";
+			userLine = userLine + monitor["monitor_vendor"]:"Unknown";
+			userProfile = userProfile + userLine + "\n";
+			userLine = "Monitor->0->ModelName = ";
+			userLine = userLine + monitor["monitor_device"]:"Unknown";
+			userProfile = userProfile + userLine + "\n";
+			// ...
+			// set resolution from auto install map
+			// ---
+			userLine = "Screen->0->Depth->" + data["color_depth"]:"16";
+			userLine = userLine + "->Modes = ";
+			userLine = userLine + data["resolution"]:"640x480";
+			userProfile = userProfile + userLine + "\n";
 		}
 		//===========================================
 		// write profile, call init.pl and read the
@@ -310,6 +362,15 @@ define string getSuggestion (boolean init) ``{
 	initResult = SCR::Read ( .target.ycp,
 		suggestFile
 	);
+	//===========================================
+	// if auto install mode is active, check
+	// if 3D is disabled via install description
+	//-------------------------------------------
+	if ( Mode::autoinst ) {
+	if (! AutoInstallMap3D) {
+		SCR::Execute ( .target.bash, "/usr/X11R6/bin/switch2mesasoft" );
+	}
+	}
 	//===========================================
 	// call 3Ddiag-result to get 3D status
 	//-------------------------------------------
@@ -540,6 +601,9 @@ define void concludeConfiguration () ``{
 	// installed system
 	// ---
 	string displayManager = "kdm";
+	if ( Mode::autoinst ) {
+		displayManager = AutoInstallMapDisplayManager;
+	}
 	if ( Mode::cont ) {
 		// we are within the installation process
 		list currentSWSelection = SCR::Read (.package.selInstallSet);
@@ -738,7 +802,7 @@ HWFlag = (SCR::Read (.target.size,
 // Event loop...
 //------------------------------------------
 string helpText = UI::X11AutoSetupDialogHelpText();
-term   contents = UI::X11AutoSetupDialog( true, suggestion );
+term   contents = UI::X11AutoSetupDialog( AutoInstallMapEnableX11, suggestion );
 Wizard::SetContents(
 	_("Desktop Settings"),contents, helpText,
 	WFM::Args(0), WFM::Args(1)
