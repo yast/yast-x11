@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jun 25 18:17:22 CEST 2003 - arvin@suse.de
+
+- make it build with new checks
+
+-------------------------------------------------------------------
 Mon May 19 16:47:49 CEST 2003 - ms@suse.de
 
 - fixed bad "no proposal" message (#26918)
@@ -99,7 +104,7 @@ Tue Oct 22 14:29:30 CEST 2002 - ms@suse.de
 - moved sun module to single directory xsun
 - add extra message module XMessages.ycp
 - add extra proposal module to be able to have the x11 module
-  working as standalone module as well as running it in combination 
+  working as standalone module as well as running it in combination
   with an installation proposal -> XProposal.ycp
 - clean dialog code -> x11Dialog.ycp
 
@@ -112,7 +117,7 @@ Wed Oct  9 17:03:03 CEST 2002 - ms@suse.de
 -------------------------------------------------------------------
 Wed Oct  2 15:06:22 CEST 2002 - ms@suse.de
 
-- fixed return code used if module has to return 
+- fixed return code used if module has to return
   on fatal exception (use `auto instead of nil)
 
 -------------------------------------------------------------------
