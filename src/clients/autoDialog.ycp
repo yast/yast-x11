@@ -68,7 +68,7 @@
                     (x11["display_manager"]:"kdm" == "kdm")),
             `item(`id("gdm"), _("GDM"), (
                         x11["display_manager"]:"kdm" == "gdm")),
-            `item(`id("gdm"), _("XDM"), (
+            `item(`id("xdm"), _("XDM"), (
                         x11["display_manager"]:"kdm" == "xdm"))
             ];
 
@@ -78,7 +78,7 @@
                     (x11["window_manager"]:"kde" == "kde")),
             `item(`id("gnome"), _("GNOME"), (
                         x11["window_manager"]:"kde" == "gnome")),
-            `item(`id("gnome"), _("TWM"), (
+            `item(`id("twm"), _("TWM"), (
                         x11["window_manager"]:"kde" == "twm"))
             ];
 	term contents =
