@@ -17,7 +17,7 @@
     import "Arch";
     import "Wizard";
 
-    
+
    //
    // if the user doesn't want X11 at all proceed immediately
    //
@@ -311,8 +311,8 @@ You can manually configure X11 later (using <b><i>sax</i></b>) if you wish.
 			   _("Desktop Settings"),
 			   contents,
 			   help_text,
-			   Args(0),	// have_back_button
-			   Args(1)		          	// have_next_button
+			   WFM::Args(0),	// have_back_button
+			   WFM::Args(1)		          	// have_next_button
 			   );
 
    //
@@ -337,7 +337,7 @@ You can manually configure X11 later (using <b><i>sax</i></b>) if you wish.
 
 	  y2milestone("UserInput: %1", ret );
 
-	  if ( ret == `abort && CallFunction(`inst_confirm_abort(`incomplete) ) )
+	  if ( ret == `abort && WFM::CallFunction(`inst_confirm_abort(`incomplete) ) )
 	      return `abort;
 
 	  if ( ret == `cancel )

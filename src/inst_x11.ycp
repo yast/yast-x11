@@ -679,7 +679,7 @@ string helpText = UI::X11AutoSetupDialogHelpText();
 term   contents = UI::X11AutoSetupDialog( true, suggestion );
 Wizard::SetContents(
 	_("Desktop Settings"),contents, helpText,
-	Args(0), Args(1)
+	WFM::Args(0), WFM::Args(1)
 );
 
 //==========================================
@@ -721,7 +721,7 @@ repeat {
 			);
 			Wizard::SetContents (
 				_("Desktop Settings"),contents, helpText,
-				Args(0), Args(1)
+				WFM::Args(0), WFM::Args(1)
 			);
 			stop = false;
 		}

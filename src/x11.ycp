@@ -84,7 +84,7 @@ define any installPackages() ``{
 		))) {
 			localReturn = nil;
 		} else {
-			if ( CallFunction ( `sw_single( neededPacs ) ) != `next) {
+			if ( WFM::CallFunction ( `sw_single( neededPacs ) ) != `next) {
 			localReturn = nil;
 			}
 		}
@@ -124,7 +124,7 @@ SCR::Execute (.target.bash,
 //==========================================
 // call inst_x11.ycp
 //------------------------------------------
-ret =  CallFunction (
+ret =  WFM::CallFunction (
 	`inst_x11( true, true )
 );
 if ( ret == `next ) {

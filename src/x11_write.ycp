@@ -22,13 +22,13 @@
  * *** neither in the installation workflow nor in the  ***
  * *** controlcenter                                    ***
  * ********************************************************
- */ 
+ */
 
-/** 
+/**
  * @param first a map of x11 settings
  * @return boolean success of operation
  * @example map mm = $[ "FAIL_DELAY" : "77" ];
- * @example any ret = CallModule("x11_write",[mm]);
+ * @example any ret = WFM::CallModule("x11_write",[mm]);
  */
 
 {
@@ -36,15 +36,15 @@
 textdomain "x11";
 include "x11/io.ycp";
 
-list args = Args();
+list args = WFM::Args();
 
 if(size(args)<=0) {
     y2error("NOT writing, probably some mistake...");
     return false;
 }
 
-if(!is(Args(0),map)) {
-    y2error("Bad argument for x11 write: %1", Args(0));
+if(!is(WFM::Args(0),map)) {
+    y2error("Bad argument for x11 write: %1", WFM::Args(0));
     return false;
 }
 
