@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 20 09:33:19 CET 2003 - ms@suse.de
+
+- changed proposal format to be more use friendly (#23904)
+
+-------------------------------------------------------------------
 Mon Feb  3 10:18:27 CET 2003 - ms@suse.de
 
 - fixed bootloader re-configuration according to new

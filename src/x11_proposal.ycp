@@ -76,20 +76,18 @@ if ( func == "MakeProposal" ) {
 		map currentView = allViews[cnr]:$[];
 		cnr = cnr + 1;
 		if (currentCard == $[]) {
-			proposal = proposal + "</ul>";
-			proposal = proposal + "<p><b>" + _("3D Acceleration:") + "</b></p>";
-			proposal = proposal + "<ul>";
+			string key = _("3D Acceleration:");
 			if (XProposal::D3Active) {
-				proposal = proposal + "<li>" + _("Enabled") + "</li>";
+				proposal = proposal + "<li>" + key + _("Enabled") + "</li>";
 			} else {
 			if (cnr > 2) {
-				proposal = proposal + "<li>" + _("Unavailable") + "</li>";
+				proposal = proposal + "<li>" + key + _("Unavailable") + "</li>";
 			} else if ( SCR::Execute (
 				.target.bash, "/usr/bin/3Ddiag --num-3dboards"
 			) == 0) {
-				proposal = proposal + "<li>" + _("Unavailable") + "</li>";
+				proposal = proposal + "<li>" + key + _("Unavailable") + "</li>";
 			} else {
-				proposal = proposal + "<li>" + _("Disabled") + "</li>";
+				proposal = proposal + "<li>" + key + _("Disabled") + "</li>";
 			}
 			}
 			proposal = proposal + "</ul>";
