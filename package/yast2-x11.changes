@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 26 09:57:19 CET 2003 - ms@suse.de
+
+- set border width to 0 for install mode because we have
+  a windowmanager there now (#24301)
+
+-------------------------------------------------------------------
 Thu Feb 20 09:33:19 CET 2003 - ms@suse.de
 
 - changed proposal format to be more use friendly (#23904)

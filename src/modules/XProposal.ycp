@@ -601,7 +601,7 @@ global define boolean changeConfiguration () ``{
 	configurationChanged = true;
 	string xcopt = "--nointro";
 	if (Mode::cont) {
-		xcopt = xcopt + " -w 2";
+		xcopt = xcopt + " -w 0";
 	}
 	integer code = 0;
 	// ...
