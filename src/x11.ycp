@@ -124,9 +124,10 @@ if (installPackages() == nil) {
 SCR::Execute (.target.bash,
 	"/bin/cp /etc/X11/XF86Config /etc/X11/XF86Config.YaST2save"
 );
-SCR::Execute (.target.bash,
-	"/bin/cp /etc/lilo.conf /etc/lilo.conf.YaST2save"
-);
+    if (SCR::Read(.sysconfig.bootloader.LOADER_TYPE) == "lilo")
+    {
+	SCR::Execute (.target.bash, "/bin/cp /etc/lilo.conf /etc/lilo.conf.YaST2save");
+    }
 
 //==========================================
 // call x11main.ycp
