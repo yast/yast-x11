@@ -32,7 +32,9 @@ Summary:	-
 @yncludedir@/x11/*
 @clientdir@/*.ycp
 @scrconfdir@/*.scr
+%ifnarch s390 s390x
 @configdir@/*.y2cc
+%endif
 @ybindir@/mkttflinks
 @ybindir@/setVGA.pl
 @ybindir@/update_unique_keys.pl
