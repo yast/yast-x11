@@ -9,7 +9,7 @@ INCLUDES = -I$(includedir)
 noinst_PROGRAMS = runxf86config
 runxf86config_SOURCES = runxf86config.cc
 
-runxf86config_LDADD = -lscr -ly2 -lycp -lcrypt
+runxf86config_LDADD = -lscr -ly2 -lycp
 runxf86config_LDFLAGS = -L$(libdir)	\
 	-Xlinker --whole-archive	\
 	$(plugindir)/libpy2stdio.la	\
