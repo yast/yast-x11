@@ -1,0 +1,188 @@
+-------------------------------------------------------------------
+Thu Jun 13 11:00:19 CEST 2002 - fehr@suse.de
+
+- version 2.6.6
+- update keyboard handling to new interface between Keyboard.ycp 
+  and X11 configuration
+
+-------------------------------------------------------------------
+Wed May 22 15:29:23 MEST 2002 - tom@suse.de
+
+- Only correct an erroneously "y2tool tagversion" prior to check in.
+
+-------------------------------------------------------------------
+Wed May 22 15:06:14 MEST 2002 - tom@suse.de
+
+- This is a new version for Rel.8.1 where SaX is used to write the XF86Config
+  on the whole. Consequently there are some new Requirements.
+  o  Do not support Xfree 3 any more. (SaX can't do it).
+        Don't distinguish XFree3 from XFree4.
+  o  Do not write rc.sax sections on the whole (only partly update them).
+        Therefore the functions writing the different rc.sax sections must not
+        write static data (as was convenient up to now to *create* the sections
+  o  Remove option to have "manual" font paths (rely on SaX entirely).
+  o  Remove any functionality that is not related to mouse, keyboard or
+     language (writing).
+
+  All other functionality was good only for *creating* the XF86Config file
+  which is now done by SaX.
+
+  Now this agent is no longer capable of *creating* a fullsize XF68Config file.
+  Instead of this it can now do a true update of some sections, i.e. pass only
+  that information to isax that has changed in some way (no static section
+  data anymore).
+
+  TODO:
+  The keyboard functionality has to be redone in the future due to a new
+  method of information gaining to be used by the keyboard module.
+
+-------------------------------------------------------------------
+Mon May 06 18:51:43 CEST 2002 - arvin@suse.de
+
+- fixes for (the latest preview of) gcc 3.1
+
+-------------------------------------------------------------------
+Tue Apr 23 17:01:16 CEST 2002 - arvin@suse.de
+
+- use %{_libdir} in path for plugins
+
+-------------------------------------------------------------------
+Mon Apr 15 15:59:59 CEST 2002 - arvin@suse.de
+
+- fixes for gcc 3.1
+
+-------------------------------------------------------------------
+Tue Mar 19 19:02:10 MET 2002 - tom@suse.de
+
+- Cleaned up scrconf situation in specfile.
+
+-------------------------------------------------------------------
+Mon Feb 11 14:24:00 MET 2002 - tom@suse.de
+
+- corrected writing of mouse section
+
+-------------------------------------------------------------------
+Tue Feb  5 19:19:50 MET 2002 - tom@suse.de
+
+- Now supporting new isax-YaST2-fontpathes-tag
+
+-------------------------------------------------------------------
+Thu Oct 18 17:42:34 MEST 2001 - tom@suse.de
+
+- (#11689) Necessary changes to provide the BusID on PPC/r128.
+
+-------------------------------------------------------------------
+Fri Oct 12 17:50:08 MEST 2001 - tom@suse.de
+
+- (# 11790) Now removing a path that may exist for XkbLayout.
+
+-------------------------------------------------------------------
+Sun Sep 23 17:03:59 MEST 2001 - tom@suse.de
+
+- (#10755) Applied modifications necessary for VMware support.
+
+-------------------------------------------------------------------
+Wed Sep 12 17:08:40 MEST 2001 - tom@suse.de
+
+- Changed default for xkblayout from "en" to "us" to satisfy needs for sun.
+
+-------------------------------------------------------------------
+Wed Aug  8 13:10:28 MEST 2001 - tom@suse.de
+
+- Added Dir command to deliver all possible subpathes.
+
+-------------------------------------------------------------------
+Tue Aug  7 20:07:51 MEST 2001 - tom@suse.de
+
+- Finished redesign. Streamlined code. Added code for tmpdir determination.
+
+-------------------------------------------------------------------
+Sat Aug  4 19:51:54 MEST 2001 - tom@suse.de
+
+- Nearly completed version. Now reading/writing parts of the XF86Config
+- file is possible (isax has still problems somewhere).
+- Unsolved problem with the agent:
+- On reading no data is passed to the agent (yet). Therefore no information
+- about the tmp dir is available at this time. This is no problem with
+- writing since the map passed to the agent holds this information.
+
+-------------------------------------------------------------------
+Tue Jun 26 14:21:07 CEST 2001 - arvin@suse.de
+
+- adapt to new automake/autoconf
+
+-------------------------------------------------------------------
+Tue May  8 17:30:22 MEST 2001 - tom@suse.de
+
+- Added turkish font pathes to the language specific fonts.
+
+-------------------------------------------------------------------
+Mon May  7 18:09:16 MEST 2001 - tom@suse.de
+
+- added support for mice with wheels.
+
+-------------------------------------------------------------------
+Thu Mar 29 09:09:01 CEST 2001 - kkaempf@suse.de
+
+- dont install lib, only plugin is needed
+
+-------------------------------------------------------------------
+Mon Mar 26 13:34:22 CEST 2001 - arvin@suse.de
+
+- moved documentation to packages/yast2-agent-isax
+
+-------------------------------------------------------------------
+Thu Mar  8 12:00:00 CEST 2001 - tom@suse.de
+
+- renamed package to yast2-agent-isax
+
+-------------------------------------------------------------------
+Sat Jan 27 18:42:00 CET 2001 - arvin@suse.de
+
+- package split y2a_xf86 / y2a_xf86-devel
+
+-------------------------------------------------------------------
+Thu Jan 18 19:20:20 MET 2001 - tom@suse.de
+
+- added functionality for emulate 3 buttons (Bug #5802)
+
+-------------------------------------------------------------------
+Thu Jan 11 21:04:22 MET 2001 - tom@suse.de
+
+- added turkish fontpathes to Xf86ConfigAgent.cc
+
+-------------------------------------------------------------------
+Mon Dec  4 19:53:37 CET 2000 - kkaempf@suse.de
+
+- path is just ".xf86config"
+
+-------------------------------------------------------------------
+Thu Nov 16 16:59:58 CET 2000 - kkaempf@suse.de
+
+- provide shared libs for dynamic plugins
+
+-------------------------------------------------------------------
+Thu Nov  9 12:27:55 CET 2000 - kkaempf@suse.de
+
+- static plugin only
+
+-------------------------------------------------------------------
+Tue Nov  7 15:48:44 CET 2000 - kkaempf@suse.de
+
+- dont include targetroot
+
+-------------------------------------------------------------------
+Wed Oct 25 18:25:51 CEST 2000 - kkaempf@suse.de
+
+- Group set
+
+-------------------------------------------------------------------
+Fri Oct  6 10:25:32 CEST 2000 - kkaempf@suse.de
+
+- fix specfile
+
+-------------------------------------------------------------------
+Fri Sep 29 15:37:50 CEST 2000 - kkaempf@suse.de
+
+- initial version (split of from y2scr)
+
