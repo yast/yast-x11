@@ -149,11 +149,12 @@ YCPValue Xf86ConfigAgent::readYCPFile( const string ycp_file )
 
     Parser parser( fd, ycp_file.c_str() );
     parser.setBuffered();
-    YCode *parsed_code = parser.parse ();
+    YCodePtr parsed_code = parser.parse ();
     YCPValue contents = YCPNull ();
     if (parsed_code != NULL)
+    {
 	contents = parsed_code->evaluate (true);
-
+    }
 //    YCPParser parser( fd, ycp_file.c_str() );
 //    parser.setBuffered();
 //    YCPValue contents = parser.parse ();
