@@ -35,7 +35,6 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 %dir @yncludedir@/x11
 @yncludedir@/x11/*
 @clientdir@/*.ycp
-@scrconfdir@/*.scr
 %ifnarch s390 s390x
 @desktopdir@/*.desktop
 %endif
@@ -45,6 +44,5 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 @ybindir@/update_xf86config
 @ybindir@/xmigrate.pl
 @ydatadir@/monitors.ycp
-@plugindir@/*.so.*
 @schemadir@/autoyast/rnc/*.rnc
 %doc @docdir@
