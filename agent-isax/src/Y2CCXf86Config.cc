@@ -1,5 +1,6 @@
 #include <scr/Y2AgentComponent.h>
 #include <scr/Y2CCAgentComponent.h>
+#include <scr/SCRInterpreter.h>
 
 #include "Xf86ConfigAgent.h"
 
