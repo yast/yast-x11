@@ -219,18 +219,18 @@ global define list getSuggestion (boolean init) ``{
 			// set color depth from auto install map
 			// ---
 			userLine = "Screen->0->DefaultDepth = ";
-			userLine = userLine + data["color_depth"]:"16";
+			userLine = userLine + sformat("%1", data["color_depth"]:16 );
 			userProfile = userProfile + userLine + "\n";
 			// ...
 			// set H/V-sync value from auto install map
 			// ---
 			userLine = "Monitor->0->HorizSync = ";
-			userLine = userLine + display["min_hsync"]:"30" + "-";
-			userLine = userLine + display["max_hsync"]:"60";
+			userLine = userLine + sformat("%1", display["min_hsync"]:30 ) + "-";
+			userLine = userLine + sformat("%1", display["max_hsync"]:60 );
 			userProfile = userProfile + userLine + "\n";
 			userLine = "Monitor->0->VertRefresh = ";
-			userLine = userLine + display["min_vsync"]:"50" + "-";
-			userLine = userLine + display["max_vsync"]:"65";
+			userLine = userLine + sformat("%1", display["min_vsync"]:50 ) + "-";
+			userLine = userLine + sformat("%1", display["max_vsync"]:65 );
 			userProfile = userProfile + userLine + "\n";
 			// ...
 			// set monitor vendor/name string from
@@ -245,7 +245,7 @@ global define list getSuggestion (boolean init) ``{
 			// ...
 			// set resolution from auto install map
 			// ---
-			userLine = "Screen->0->Depth->" + data["color_depth"]:"16";
+			userLine = "Screen->0->Depth->" + sformat("%1", data["color_depth"]:16 );
 			userLine = userLine + "->Modes = ";
 			userLine = userLine + data["resolution"]:"640x480";
 			userProfile = userProfile + userLine + "\n";
