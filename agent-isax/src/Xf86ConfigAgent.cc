@@ -34,8 +34,8 @@
 #include <string>
 
 #include <YCP.h>
-#include <ycp/YCPParser.h>
 #include <ycp/y2log.h>
+#include <ycp/Parser.h>
 
 #include "Xf86ConfigAgent.h"
 
@@ -147,11 +147,19 @@ YCPValue Xf86ConfigAgent::readYCPFile( const string ycp_file )
 	return YCPError( msg );
     }
 
-    YCPParser parser( fd, ycp_file.c_str() );
+    Parser parser( fd, ycp_file.c_str() );
+    parser.setBuffered();
+    YCode *parsed_code = parser.parse ();
+    YCPValue contents = YCPNull ();
+    if (parsed_code != NULL)
+	contents = parsed_code->evaluate (true);
 
-    parser.setBuffered(); 	// Read from file. Buffering is always possible here
 
-    YCPValue contents = parser.parse();
+//    YCPParser parser( fd, ycp_file.c_str() );
+
+//    parser.setBuffered(); 	// Read from file. Buffering is always possible here
+
+//    YCPValue contents = parser.parse();
 
     close( fd );
 
@@ -216,12 +224,16 @@ YCPValue Xf86ConfigAgent::mergeMaps( YCPMap target, YCPMap source )
 
 		    // Add it to the inner target map.
 		    //
-		    t_value->asMap()->add( s2_key, s2_value );
+		    YCPMap t_value_map = t_value->asMap();
+		    t_value_map->add ( s2_key, s2_value );
+		    t_value = t_value_map;
+// this was wrong with NI
+//		    t_value->asMap()->add( s2_key, s2_value );
 		}
 
 		// Add this extended inner target map to the target map using the same key.
 		//
-		target->asMap()->add( t_key, t_value );
+		target->add( t_key, t_value );
 	    }
 	}
 
@@ -229,7 +241,7 @@ YCPValue Xf86ConfigAgent::mergeMaps( YCPMap target, YCPMap source )
 	{
 	    // Add the new incarnation to the target map with the source content.
 	    //
-	    target->asMap()->add( s_key, s_value );
+	    target->add( s_key, s_value );
 	}
     }
 
@@ -738,7 +750,7 @@ Xf86ConfigAgent::Xf86ConfigAgent()
 // The generic SCR Read function.
 // This is only possible for XFree 4.
 //
-YCPValue Xf86ConfigAgent::Read( const YCPPath& path, const YCPValue& arg )
+YCPValue Xf86ConfigAgent::Read( const YCPPath& path, const YCPValue& arg, const YCPValue& opt )
 {
     YCPValue retval = YCPVoid();
 

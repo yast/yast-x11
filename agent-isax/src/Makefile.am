@@ -13,8 +13,7 @@ liby2ag_xf86config_la_LDFLAGS = -version-info 2:0
 
 libpy2ag_xf86config_la_SOURCES =			\
 	$(liby2ag_xf86config_la_SOURCES)		\
-	Y2CCXf86Config.cc 	Y2CCXf86Config.h	\
-	Y2Xf86ConfigComponent.cc Y2Xf86ConfigComponent.h
+	Y2CCXf86Config.cc
 libpy2ag_xf86config_la_LDFLAGS = -version-info 2:0
 
 INCLUDES = -I$(includedir)
