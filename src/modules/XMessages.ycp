@@ -23,9 +23,9 @@ textdomain "x11";
 // X11 are missing
 // ---
 global string pacsMissing = _("
-The following packages are missing.
+The following packages are missing:
 %1
-Install them now ?
+Install them now?
 ");
 
 // Indicate that the installed graphics card require
@@ -50,7 +50,8 @@ Because of the somewhat experimental status of OpenGL drivers, we are
 not able to offer any installation support for configuring 3D hardware 
 acceleration or if any problems related to this should arise. 
 
-Do you want to enable 3D for this card?\n
+Enable 3D for this card?
+
 ");
 
 // Nvidia warning to inform the user about the dummy nvidia driver
@@ -71,7 +72,8 @@ If there are problems with the 2D/3D/OpenGL driver from nVidia, consult
 the vendor, as we unfortunately do not have any influence over the
 development of nVidia drivers.
 
-Do you want to prepare 3D for this card?\n
+Prepare 3D for this card?
+
 ");
 
 }

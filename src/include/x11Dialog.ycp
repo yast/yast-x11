@@ -90,16 +90,16 @@ UI( ``{
 		// pointing the possibility of either using X11 or textmode
 		// ---
 		global string HelpText = _("
-<p>Please look at the current desktop settings for the <i>X Window System</i>.
+<p>Review the current desktop settings for the <i>X Window System</i>.
 </p>
 <p> 
-If you don't like them, you can <b>Change</b> the settings. You also have 
-the choice to select <b>Text mode only</b> for skipping the X-Window 
+If you do not like them, you can <b>Change</b> the settings. You also have 
+the choice to select <b>Text Mode Only</b> to skip the X 
 configuration entirely. 
 </p> 
 <p>
 If you do that, you can always run <i>SaX2</i> 
-later. If you choose <b> Graphical desktop environment</b>, the current 
+later. If you choose <b>Graphical Desktop Environment</b>, the current 
 settings will be saved when you select <b>Next</b>.
 </p>
 ");

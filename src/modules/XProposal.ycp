@@ -312,7 +312,7 @@ global define list getSuggestion (boolean init) ``{
 			SCR::Execute ( .target.bash,
 				"/bin/rm -f " + D3File
 			);
-			string topic = _("3D capable card detected: ");
+			string topic = _("3D-Capable Card Detected: ");
 			if ( UI::YesNoPopup ( sformat (
 				_("%1 %2%3"),
 				topic,cardName,D3Message

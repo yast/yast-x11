@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jan 29 14:27:42 CET 2003 - ms@suse.de
+
+- add message texts
+
+-------------------------------------------------------------------
 Wed Jan 29 12:11:17 CET 2003 - ms@suse.de
 
 - add support for "Arch::x11_setup_needed" used within the

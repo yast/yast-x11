@@ -139,8 +139,8 @@ else if ( func == "AskUser" ) {
 //---------------------------------------------------
 else if ( func == "Description" ) {
 	ret = $[
-		"rich_text_title" : _( "Graphics cards" ),
-		"menu_title"      : _( "&Graphics cards" ),
+		"rich_text_title" : _("Graphics Cards"),
+		"menu_title"      : _("&Graphics Cards"),
 		"id"              : "x11_conf"
 	];
 }
