@@ -407,7 +407,7 @@ void  Xf86ConfigAgent::writeKeyboardSection( const YCPMap& config_map, FILE* fil
 	fprintf( file, " 0 RightCtl         =    %s\n", value );
 
     fprintf( file, " 0 Identifier       =    Keyboard[0]\n" );
-    fprintf( file, " 0 Driver           =    keyboard\n" );
+    fprintf( file, " 0 Driver           =    kbd\n" );
     fprintf(file, "}\n" );
 
     // no return value
