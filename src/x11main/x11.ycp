@@ -31,6 +31,7 @@ import "Wizard";
 import "X11Version";
 import "Popup";
 import "Mode";
+import "Package";
 
 //==========================================
 // Globals...
@@ -55,8 +56,6 @@ define any finish() ``{
 // installPackages()...
 //------------------------------------------
 define any installPackages() ``{
-	any localReturn = `next;
-	list<string> neededPacs = [];
 	list<string> requiredPacs = [
 		"xorg-x11", "xorg-x11-server","xorg-x11-server-glx","libusb",
 		"3ddiag", "sax2", "sax2-gui", "sax2-ident", "sax2-tools"
@@ -68,39 +67,12 @@ define any installPackages() ``{
 	requiredPacs = toset (
 		flatten( [requiredPacs, Display::pacs_to_install] )
 	);
-	// ... /
-	// create sublist of required packages which are
-	// NOT installed at the time
-	// ---
-	Pkg::TargetInit ("/", false);
-	foreach (string pac, requiredPacs, ``{
-	if ( ! Pkg::IsProvided (pac) ) {
-		neededPacs = add ( neededPacs, pac );
-	}
-	});
-	// ... /
-	// if there are packages left in the neededPacs list
-	// we need to install them now. ask the user for
-	// installing these packages
-	// ---
-	if ( size( neededPacs ) > 0 && !Mode::autoinst ()) {
-		string missing = "";
-		foreach (string pac, neededPacs, ``{
-			missing = missing + pac + "\n";
-		});
-		if ( ! Popup::YesNo ( sformat (
-			XMessages::pacsMissing,
-			missing
-		))) {
-			localReturn = nil;
-		} else {
-			Pkg::SourceStartCache (true);
-			WFM::CallFunction ("sw_single", [neededPacs]);
-		}
-	}
-	return (
-		localReturn
-	);
+
+        return Package::InstallAllMsg (
+		requiredPacs,
+                XMessages::pacsMissing)
+            ? `auto
+            : nil;
 }
 
 //==========================================
