@@ -76,7 +76,7 @@
             [
             `item(`id	("kde"), _("KDE"),
                     (x11["window_manager"]:"kde" == "kde")),
-            `item(`id("gnome"), _("Gnome"), (
+            `item(`id("gnome"), _("GNOME"), (
                         x11["window_manager"]:"kde" == "gnome")),
             `item(`id("gnome"), _("TWM"), (
                         x11["window_manager"]:"kde" == "twm"))

@@ -113,7 +113,7 @@
 	summary = Summary::AddHeader(summary, _("Configure X11"));
 	summary = Summary::AddLine(summary,  (x11["configure_x11"]:false) ? _("Yes") : nc);
 
-	summary = Summary::AddHeader(summary, _("Enable 3D Support if possible"));
+	summary = Summary::AddHeader(summary, _("Enable 3D Support If Possible"));
 	summary = Summary::AddLine(summary,  (x11["enable_3d"]:false) ? _("Yes") : nc);
 
 	summary = Summary::AddHeader(summary, _("Color Depth"));

@@ -100,11 +100,11 @@ if ( func == "MakeProposal" ) {
 		cnr = cnr + 1;
 		if (currentCard == $[]) {
 			string key = _("3D Acceleration:") + " ";
-			string env = _("Display-Environment:") + " ";
+			string env = _("Display Environment:") + " ";
 			if (cnr > 2) {
 				proposal = proposal + "<li>" + env + _("Multihead") + "</li>";
 			} else {
-				proposal = proposal + "<li>" + env + _("Singlehead") + "</li>";
+				proposal = proposal + "<li>" + env + _("Single Head") + "</li>";
 			}
 			if (XProposal::D3Active) {
 				proposal = proposal + "<li>" + key + _("Enabled") + "</li>";
