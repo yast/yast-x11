@@ -10,6 +10,9 @@
 # Status: Up-to-date
 #
 use strict;
+use Env;
+
+$ENV{LC_ALL} = "POSIX";
 
 #=================================
 # Globals...
