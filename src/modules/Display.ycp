@@ -470,6 +470,7 @@ define probe_settings() ``{
 	y2milestone ( "has_fbdev: %1", has_fbdev );
 
 	list display_list = SCR::Read( .probe.display );	// list of maps
+	if (display_list == nil) display_list = [];
 
 	y2milestone( "display_list: <%1>", display_list );
 
