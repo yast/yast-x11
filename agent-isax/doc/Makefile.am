@@ -6,7 +6,7 @@
 
 SUBDIRS = autodocs
 
-htmldir = $(docdir)
+htmldir = $(docdir)/agent-isax
 
 html_DATA = yast-isax.txt
 EXTRA_DIST = $(html_DATA)

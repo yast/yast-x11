@@ -2,7 +2,7 @@
 # Makefile.am for .../agent-isax/doc/autodocs
 #
 
-htmldir = $(docdir)/autodocs
+htmldir = $(docdir)/agent-isax/autodocs
 
 html_DATA = index.html $(wildcard *.html *.png) doxygen.css @RPMNAME@.tag
 CLEANFILES = $(html_DATA) doxygen.log doxygen.conf installdox
