@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Aug 13 12:52:38 CEST 2004 - msvec@suse.cz
+
+- fixed parallel build
+- 2.10.4
+
+-------------------------------------------------------------------
 Mon Aug  9 22:21:50 CEST 2004 - nashif@suse.de
 
 - Export Display settings(frequencies)  correctly
