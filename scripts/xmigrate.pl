@@ -16,7 +16,9 @@
 # 3) Create a SaX2 profile with the 3.x data
 # 4) Create new 4.x config file with SaX2
 #    - use real driver if supported
-#    - use vesa driver if card is not supported
+#    - use fbdev driver if card is framebuffer capable
+#    - use vesa driver if vesa BIOS was found
+#    - use vga driver if no VESA bios was found
 #
 # Status: Up-To-Date
 #
@@ -139,26 +141,52 @@ my $profile = "/var/cache/sax/files/updateProfile";
 open (FD,">$profile")
 	|| die "Update::Couldn't create file: $profile: $!";
 if (defined $color) {
-	print FD "Screen->[0]->DefaultDepth = $color\n";
+	print FD "Screen->0->DefaultDepth = $color\n";
 }
 if (defined $mode) {
-	print FD "Screen->[0]->Depth->$color->Modes = $mode\n";
+	print FD "Screen->0->Depth->$color->Modes = $mode\n";
 }
 if (defined %sync) {
-	print FD "Monitor->[0]->HorizSync = $sync{HSync}\n";
-	print FD "Monitor->[0]->VertRefresh = $sync{VSync}\n";
+	print FD "Monitor->0->HorizSync = $sync{HSync}\n";
+	print FD "Monitor->0->VertRefresh = $sync{VSync}\n";
 }
 
 #=======================================
 # Generate/Merge config file...
 #---------------------------------------
 if (isSupported()) {
+	#============================================
+	# 1) Card is supported...
+	#--------------------------------------------
 	close FD;
 	qx (sax2 -r -a -b $profile);
-} else {
-	print FD "Desktop->[0]->CalcModelines = no\n";
-	print FD "Monitor->[0]->CalcAlgorithm = XServerPool\n";
-	print FD "Desktop->[0]->Modelines\n";
+	exit 0;
+}
+if (open (FB,"/dev/fb0")) {
+	#============================================
+	# 2) Card not supported but fbdev capable
+	#--------------------------------------------
+	close FB;
+	close FD;
+	# YaST should InjectFile() the fbdev config file...
+	exit 1;
+}
+my $bios = qx (hwinfo --bios | grep "VESA BIOS");
+if ($bios =~ /VESA BIOS/) {
+	#============================================
+	# 3) Card not fbdev capable but VESA capable
+	#--------------------------------------------
+	print FD "Desktop->0->CalcModelines = no\n";
+	print FD "Monitor->0->CalcAlgorithm = XServerPool\n";
+	print FD "Desktop->0->Modelines\n";
 	close FD;
 	qx (sax2 -m 0=vesa -a -b $profile);
+	exit 2;
+} else {
+	#============================================
+	# 4) Card is not VESA capable -> vga
+	#--------------------------------------------
+	close FD;
+	qx (sax2 -m 0=vga -a);
+	exit 3;
 }
