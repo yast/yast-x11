@@ -17,6 +17,8 @@ STATUS        : Development
 {
 textdomain "x11";
 
+import "XProposal";
+
 y2milestone("X11 auto started");
 
 any ret = nil;
@@ -31,7 +33,7 @@ if(size(Args()) > 0 && is(Args(0), string)) {
 	if(size(Args()) > 1 && is(Args(1), map))
 	param = WFM::Args(1);
 }
-y2debug("func=%1", func);
+y2debug("func=%1",  func);
 y2debug("param=%1", param);
 
 //=================================
@@ -59,7 +61,7 @@ else if (func == "Change") {
 // Import configuration
 //---------------------------------
 else if (func == "Import") {
-	// TODO
+	ret == XProposal::getSuggestionString (true);
 }
 
 //=================================
@@ -73,7 +75,8 @@ else if (func == "Export") {
 // Write given settings
 //---------------------------------
 else if (func == "Write") {
-	// TODO
+	XProposal::concludeConfiguration (true);
+	ret = true;
 }
 
 //=================================
