@@ -566,7 +566,7 @@ global define void concludeConfiguration () ``{
 			.sysconfig.displaymanager, nil
 		);
 		SCR::Write(
-			.sysconfig.windowManager, nil
+			.sysconfig.windowmanager, nil
 		);
 	}
 	Display::Save();
