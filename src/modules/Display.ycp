@@ -136,7 +136,7 @@ define void get_lib_prefix () ``{
 
 
 //---[ pacs_and_servers ]---//
-define list pacs_and_servers( list display_list ) ``{
+define list pacs_and_servers( list<map> display_list ) ``{
 	// ...
 	// Check displaycontrollers (as returned from .probe.display)
 	// Replace the server alias with the real server for version 3.
@@ -280,7 +280,7 @@ define void probe_settings() ``{
 	}
 	y2milestone ( "has_fbdev: %1", has_fbdev );
 
-	list display_list = (list) SCR::Read( .probe.display );	// list of maps
+	list<map> display_list = (list<map>) SCR::Read( .probe.display );	// list of maps
 	if (display_list == nil) display_list = [];
 
 	y2milestone( "display_list: <%1>", display_list );

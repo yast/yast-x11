@@ -415,7 +415,7 @@ global define list resetSuggestion () ``{
 		return (getSuggestion (false));
 	}
 	list suggestion = [];
-	list moduleISaX = [
+	list<string> moduleISaX = [
 		"Card","Desktop","Mouse","Keyboard","Layout","Path"
 	];
 	string tmpdir = (string)SCR::Read( .target.tmpdir );

@@ -33,7 +33,7 @@
 
     // The monitor data base
     //
-    global list all_monitors = [];
+    global list<map> all_monitors = [];
 
 
 
@@ -135,7 +135,7 @@
 
     global define void readMonitorDB() ``{
 
-	all_monitors = (list)SCR::Read( .target.ycp, [ static_monitors, [] ]);
+	all_monitors = (list<map>)SCR::Read( .target.ycp, [ static_monitors, [] ]);
 	// y2milestone("Monitors: %1", all_monitors);
 	readVendors();
 	// y2milestone("Vendors: %1", vendors);
