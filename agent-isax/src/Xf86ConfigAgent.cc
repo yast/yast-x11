@@ -740,7 +740,7 @@ Xf86ConfigAgent::Xf86ConfigAgent()
 // The generic SCR Read function.
 // This is only possible for XFree 4.
 //
-YCPValue Xf86ConfigAgent::Read( const YCPPath& path, const YCPValue& arg, const YCPValue& opt )
+YCPValue Xf86ConfigAgent::Read( const YCPPath& path, const YCPValue& arg )
 {
     YCPValue retval = YCPVoid();
 
