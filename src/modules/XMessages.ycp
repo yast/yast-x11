@@ -36,7 +36,7 @@ Only a special driver for XFree86 3.3.6 is available for your graphics card.
 
 The configuration of graphics cards that were previously only supported by
 XFree86 3.3.6 will undergo a fundamental change, as XFree86 is no longer
-included in versions from SuSE Linux 8.3. However, the 'vesa' driver of
+included in versions from SuSE Linux. However, the 'vesa' driver of
 XFree86 4.x allows almost all affected graphics cards to be run with higher
 resolution and color depth settings. To start the configuration, enter
 'sax2-vesa' on the command line.
@@ -61,7 +61,7 @@ Enable 3D for this card?
 
 // Nvidia warning to inform the user about the dummy nvidia driver
 // which is not capable of 3D but may be updated directly from the
-// nvidia FTP server using YOU (YaST2 online update)
+// nvidia FTP server using YOU (YaST online update)
 // ---
 global string WarningNVidia = _("
 The driver used for this card is not an official 2D/3D/OpenGL driver from 
@@ -71,7 +71,7 @@ is not hardware-accelerated.
 To use hardware accelerated 3D/OpenGL, update the packages 
 NVIDIA_GLX and NVIDIA_kernel for SuSE Linux from the nVidia web server 
 (http://www.nvidia.com). You can also do this comfortably via 
-YOU (YaST2 Online Update).
+YOU (YaST Online Update).
  
 If there are problems with the 2D/3D/OpenGL driver from nVidia, consult
 the vendor, as we unfortunately do not have any influence over the
