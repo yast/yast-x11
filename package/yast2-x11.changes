@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Mar 25 07:00:21 CET 2004 - nashif@suse.de
+
+- Fixed bug #36895: Module Mode was not imported
+
+-------------------------------------------------------------------
 Mon Mar 22 08:24:15 CET 2004 - ms@suse.de
 
 - setupRunlevel() is now only called if X11 will be directly
