@@ -37,7 +37,7 @@ if ( ! Arch::x11_setup_needed ) {
 		"menu_title"            : "",
 		"id"                    : "",
 		"preformatted_proposal" : "",
-		"success" :             : success
+		"success"               : success
 	];
 	return ret;
 }
