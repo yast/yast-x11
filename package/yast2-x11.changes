@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jul 21 14:37:31 CEST 2004 - arvin@suse.de
+
+- added openssl-devel to neededforbuild
+
+-------------------------------------------------------------------
 Mon Jun 21 11:19:05 CEST 2004 - ms@suse.de
 
 - HEAD development open again, version 2.10
