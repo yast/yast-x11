@@ -41,7 +41,7 @@ list    initResult = [];
 //------------------------------------------
 //---[ isNVidiaCard ]----//
 define boolean isNVidiaCard () ``{
-	integer status = SCR::Execute ( .target.bash,
+	integer status = (integer) SCR::Execute ( .target.bash,
 		"/usr/X11R6/" + Display::lib + "/sax/api/tools/getNVCard"
 	);
 	if (status == 1) {

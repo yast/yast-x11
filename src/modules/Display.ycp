@@ -114,6 +114,248 @@ string display_data_file = "/var/lib/YaST2/Display_data.ycp";
 list videoprobelist = [];	// List of all probed videocards
 
 //================================================
+// Local Functions...
+//------------------------------------------------
+//---[ get_lib_prefix ]---//
+define void get_lib_prefix () ``{
+	string testFile = "/usr/X11R6/lib/sax/init.pl";
+	boolean islib = (SCR::Read(.target.size, testFile)!=-1);
+	if (islib) {
+		lib = "lib";
+	} else {
+		lib = "lib64";
+	}
+}
+
+
+//---[ pacs_and_servers ]---//
+define list pacs_and_servers( list display_list ) ``{
+	// ...
+	// Check displaycontrollers (as returned from .probe.display)
+	// Replace the server alias with the real server for version 3.
+	// @return  [
+	//	unknown_server, unique_key, x11pacs_to_install, xserver, xserver_3d
+	// ]
+	//
+	string default_alias = "VGA16";
+	list default_srvlist = [ "xvga16", "XF86_VGA16" ];
+
+	if ( has_fbdev ) {
+	    default_alias = "FBDEV";
+	    default_srvlist = [ "xfbdev", "XF86_FBDev" ];
+	}
+
+	// Do we fail to recognize the server?
+	boolean unknown_server = true;
+
+	// Should we warn the user?
+	boolean warn_nvidia = false;
+
+	// List of packages to install.
+	list x11pacs = [];
+
+	// Read server->package map.
+	map xsrvmap = $[];
+
+	// Special voodoo add-on handling ?
+	boolean have_voodoo_special = false;
+
+	// Loop over all probed controllers.
+	foreach (map dpycontroller, display_list, ``{
+	    // Check for voodoo/voodoo2.
+	    if ( dpycontroller["vendor_id"]:0 == 0x1121a ) {
+		integer voodoo_device_id = dpycontroller["device_id"]:0;
+		if ( ( voodoo_device_id == 0x10001 ) ||
+		     ( voodoo_device_id == 0x10002 ) )
+		{
+		    have_voodoo_special = true;
+		}
+	    }
+
+	    // Extract all packages needed for this display controller.
+	    list pacs = dpycontroller["requires"]:[];
+	    foreach (`pac, pacs, ``{
+		x11pacs = add (x11pacs, pac);
+	    });
+	});
+
+	// Now setup xserver and xserver_3d for the *active*
+	// display controller.
+	map x_server = $[];
+	map x_server_3d = $[];
+	string uni_key = "";
+	string card_name = "";
+	boolean vga_present = false;
+	// ...
+	// Scan "x11" list (driver info) in first entry
+	// of videoprobelist (active bios display).
+	// ---
+	videoprobelist = (list) SCR::Read( .probe.bios_video );
+	if ( videoprobelist != nil && size( videoprobelist ) > 0 ) {
+	    vga_present = true;		// We found a VGA card
+	    map first_video = videoprobelist[0]:$[];
+	    uni_key = first_video["unique_key"]:"";
+		// ...
+	    // name = sub_vendor + sub_device
+	    // fallback to vendor + device
+		// ---
+	    card_name = first_video["sub_vendor"]:(first_video["vendor"]:"")
+		        + " "
+		        + first_video["sub_device"]:(first_video["device"]:"");
+
+	    foreach( map x11server, first_video["x11"]:[], ``{
+		if (x11server["server"]:"" == "nvidia" ) {
+		    x11server["warn_nvidia"] = true;
+		}
+		// ...
+		// Get first 3d entry as "xserver_3d" and first
+		// non-3d entry as "xserver".
+		// ---
+		if ( x11server["has_3d"]:false ) {
+		    if ( size( x_server_3d ) == 0 ) {
+			x_server_3d = x11server;
+		    }
+		}
+		else	// has_3d == false
+		{
+		    if ( size( x_server ) == 0 ) {
+			x_server = x11server;
+		    }
+		}
+	    }); // foreach x11server
+
+	    // Did we find a server?
+	    if ( size( x_server ) == 0 ) {
+		if ( has_fbdev ) {
+		    x_server = $["server" : "fbdev", "version" : "4"];
+		}
+		else
+		{
+		    x_server = $["server" : "vga", "version" : "4"];
+		}
+		unknown_server = true;
+	    }
+	    else
+	    {
+		unknown_server = false;
+	    }
+		// ...
+	    // If no 3d server was found but a voodoo
+		// card take non-3d server as 3d.
+	    // ---
+	    if ( ( size( x_server_3d ) == 0 ) && have_voodoo_special ) {
+		x_server_3d = (map) eval (x_server);
+		x_server_3d["has_3d"] = true;
+	    }
+	}
+	else	// No VGA card present
+	{
+	    vga_present = false;
+	}
+	return [
+		unknown_server, uni_key, x11pacs, x_server,
+		x_server_3d, card_name, vga_present
+	];
+}
+
+//---[ probe_settings ]----//
+define void probe_settings() ``{
+	// ...
+	// Probe graphics card and add needed xserver to pacs_to_install
+	// Check if the system has a framebuffer device.
+	//
+	fbdev_resol = (list) SCR::Read( .probe.framebuffer );
+	y2milestone( "fbdev_resol: <%1>", fbdev_resol );
+	if ( fbdev_resol != nil && fbdev_resol != [] )	{
+		has_fbdev = true;
+	} else	{
+		has_fbdev = false;
+	}
+	y2milestone ( "has_fbdev: %1", has_fbdev );
+
+	list display_list = (list) SCR::Read( .probe.display );	// list of maps
+	if (display_list == nil) display_list = [];
+
+	y2milestone( "display_list: <%1>", display_list );
+
+	if ( display_list != nil && size( display_list ) > 0 ) {
+	    map display = display_list[0]:$[];
+
+	    bus_id  = display["bus_id"]:0;
+	    slot_id = display["slot_id"]:0;
+	    func_id = display["func_id"]:0;
+	}
+	// Check displaycontrollers.
+	// [
+	//  unknown_server, unique_key, x11pacs_to_install,
+	//  xserver, xserver_3d, card_name, vga_present
+	// ]
+	list serversettings = pacs_and_servers( display_list );
+
+	y2milestone( "serversettings: <%1>", serversettings );
+
+	// Assign xserver data for 2D and 3D case for public access.
+	xserver_is_unknown = serversettings[0]:true;
+	xserver	           = serversettings[3]:$[];
+	xserver_3d	       = serversettings[4]:$[];
+	has_3d		       = xserver_3d["has_3d"]:false;
+
+	y2milestone ( "xserver_is_unknown: %1", xserver_is_unknown );
+	y2milestone ( "xserver: %1", xserver );
+	y2milestone ( "xserver_3d: %1", xserver_3d );
+	y2milestone ( "has_3d: %1", has_3d );
+
+	// Hardware info.
+	unique_key      = serversettings[1]:"";
+	video_card_name = serversettings[5]:"";
+	has_vga	        = serversettings[6]:false;
+
+	y2milestone ( "unique_key: %1", unique_key );
+	y2milestone ( "video_card_name: %1", video_card_name );
+	y2milestone ( "has_vga: %1", has_vga );
+
+	// Package info.
+	pacs_to_install = serversettings[2]:[];
+
+	y2milestone ( "pacs_to_install: %1", pacs_to_install );
+
+	return;
+}
+//----[ Restore ]-----//
+global define boolean Restore() ``{
+	// ...
+	// Restore the the current data from a file that
+	// has been saved before
+	// @return  true    - Data base file found. Restore successful
+	// @return  false   - No data base file found
+	// --
+	map display_data = (map) SCR::Read( .target.ycp, display_data_file );
+	if ( display_data == nil ) {
+		y2milestone( "No saved display data" );
+		return false;
+	}
+	else
+	{
+	    y2milestone( "Found saved display data: <%1>", display_data );
+	    // Restore public data.
+	    xserver_is_unknown = display_data["xserver_is_unknown"]:true;
+	    xserver		    = display_data["xserver"]:$[];
+	    xserver_3d		= display_data["xserver_3d"]:$[];
+	    has_3d		    = display_data["has_3d"]:false;
+	    unique_key		= display_data["unique_key"]:"";
+	    bus_id		    = display_data["bus_id"]:0;
+	    slot_id		    = display_data["slot_id"]:0;
+	    func_id		    = display_data["func_id"]:0;
+	    video_card_name	= display_data["video_card_name"]:"";
+	    fbdev_resol		= display_data["fbdev_resol"]:[];
+	    has_fbdev		= display_data["has_fbdev"]:false;
+	    has_vga		    = display_data["has_vga"]:false;
+	    pacs_to_install	= display_data["pacs_to_install"]:[];
+	    return true;
+	}
+}
+
+//================================================
 // Global Functions...
 //------------------------------------------------
 //----[ Display ]----//
@@ -136,7 +378,7 @@ global define void Display() ``{
 }
 
 //----[ Check ]----//
-global define boolean Check() ``{
+global define integer Check() ``{
 	// ...
 	// Check current configuration
 	// This function should be called to check consistency with
@@ -184,7 +426,7 @@ global define void Configure() ``{
 	// cards which in turn would not allow to "unmark" all cards that may have
 	// been removed.
 	// ---
-	videoprobelist = SCR::Read( .probe.display.manual );	// Manual probing
+	videoprobelist = (list) SCR::Read( .probe.display.manual );	// Manual probing
 
 	integer list_size = size( videoprobelist );
 	if ( list_size > 0 ) {
@@ -275,246 +517,4 @@ global define void Save() ``{
 	return;
 }
 
-//----[ Restore ]-----//
-global define boolean Restore() ``{
-	// ...
-	// Restore the the current data from a file that
-	// has been saved before
-	// @return  true    - Data base file found. Restore successful
-	// @return  false   - No data base file found
-	// --
-	map display_data = SCR::Read( .target.ycp, display_data_file );
-	if ( display_data == nil ) {
-		y2milestone( "No saved display data" );
-		return false;
-	}
-	else
-	{
-	    y2milestone( "Found saved display data: <%1>", display_data );
-	    // Restore public data.
-	    xserver_is_unknown = display_data["xserver_is_unknown"]:true;
-	    xserver		    = display_data["xserver"]:$[];
-	    xserver_3d		= display_data["xserver_3d"]:$[];
-	    has_3d		    = display_data["has_3d"]:false;
-	    unique_key		= display_data["unique_key"]:"";
-	    bus_id		    = display_data["bus_id"]:0;
-	    slot_id		    = display_data["slot_id"]:0;
-	    func_id		    = display_data["func_id"]:0;
-	    video_card_name	= display_data["video_card_name"]:"";
-	    fbdev_resol		= display_data["fbdev_resol"]:[];
-	    has_fbdev		= display_data["has_fbdev"]:false;
-	    has_vga		    = display_data["has_vga"]:false;
-	    pacs_to_install	= display_data["pacs_to_install"]:[];
-	    return true;
-	}
-}
-
-//================================================
-// Local Functions...
-//------------------------------------------------
-//---[ get_lib_prefix ]---//
-define get_lib_prefix () ``{
-	string testFile = "/usr/X11R6/lib/sax/init.pl";
-	boolean islib = (SCR::Read(.target.size, testFile)!=-1);
-	if (islib) {
-		lib = "lib";
-	} else {
-		lib = "lib64";
-	}
-}
-
-
-//---[ pacs_and_servers ]---//
-define pacs_and_servers( list display_list ) ``{
-	// ...
-	// Check displaycontrollers (as returned from .probe.display)
-	// Replace the server alias with the real server for version 3.
-	// @return  [
-	//	unknown_server, unique_key, x11pacs_to_install, xserver, xserver_3d
-	// ]
-	//
-	string default_alias = "VGA16";
-	list default_srvlist = [ "xvga16", "XF86_VGA16" ];
-
-	if ( has_fbdev ) {
-	    default_alias = "FBDEV";
-	    default_srvlist = [ "xfbdev", "XF86_FBDev" ];
-	}
-
-	// Do we fail to recognize the server?
-	boolean unknown_server = true;
-
-	// Should we warn the user?
-	boolean warn_nvidia = false;
-
-	// List of packages to install.
-	list x11pacs = [];
-
-	// Read server->package map.
-	map xsrvmap = $[];
-
-	// Special voodoo add-on handling ?
-	boolean have_voodoo_special = false;
-
-	// Loop over all probed controllers.
-	foreach (`dpycontroller, display_list, ``{
-	    // Check for voodoo/voodoo2.
-	    if ( dpycontroller["vendor_id"]:0 == 0x1121a ) {
-		integer voodoo_device_id = dpycontroller["device_id"]:0;
-		if ( ( voodoo_device_id == 0x10001 ) ||
-		     ( voodoo_device_id == 0x10002 ) )
-		{
-		    have_voodoo_special = true;
-		}
-	    }
-
-	    // Extract all packages needed for this display controller.
-	    list pacs = dpycontroller["requires"]:[];
-	    foreach (`pac, pacs, ``{
-		x11pacs = add (x11pacs, pac);
-	    });
-	});
-
-	// Now setup xserver and xserver_3d for the *active*
-	// display controller.
-	map x_server = $[];
-	map x_server_3d = $[];
-	string uni_key = "";
-	string card_name = "";
-	boolean vga_present = false;
-	// ...
-	// Scan "x11" list (driver info) in first entry
-	// of videoprobelist (active bios display).
-	// ---
-	videoprobelist = SCR::Read( .probe.bios_video );
-	if ( videoprobelist != nil && size( videoprobelist ) > 0 ) {
-	    vga_present = true;		// We found a VGA card
-	    map first_video = videoprobelist[0]:$[];
-	    uni_key = first_video["unique_key"]:"";
-		// ...
-	    // name = sub_vendor + sub_device
-	    // fallback to vendor + device
-		// ---
-	    card_name = first_video["sub_vendor"]:(first_video["vendor"]:"")
-		        + " "
-		        + first_video["sub_device"]:(first_video["device"]:"");
-
-	    foreach( `x11server, first_video["x11"]:[], ``{
-		if (x11server["server"]:"" == "nvidia" ) {
-		    x11server["warn_nvidia"] = true;
-		}
-		// ...
-		// Get first 3d entry as "xserver_3d" and first
-		// non-3d entry as "xserver".
-		// ---
-		if ( x11server["has_3d"]:false ) {
-		    if ( size( x_server_3d ) == 0 ) {
-			x_server_3d = x11server;
-		    }
-		}
-		else	// has_3d == false
-		{
-		    if ( size( x_server ) == 0 ) {
-			x_server = x11server;
-		    }
-		}
-	    }); // foreach x11server
-
-	    // Did we find a server?
-	    if ( size( x_server ) == 0 ) {
-		if ( has_fbdev ) {
-		    x_server = $["server" : "fbdev", "version" : "4"];
-		}
-		else
-		{
-		    x_server = $["server" : "vga", "version" : "4"];
-		}
-		unknown_server = true;
-	    }
-	    else
-	    {
-		unknown_server = false;
-	    }
-		// ...
-	    // If no 3d server was found but a voodoo
-		// card take non-3d server as 3d.
-	    // ---
-	    if ( ( size( x_server_3d ) == 0 ) && have_voodoo_special ) {
-		x_server_3d = eval (x_server);
-		x_server_3d["has_3d"] = true;
-	    }
-	}
-	else	// No VGA card present
-	{
-	    vga_present = false;
-	}
-	return [
-		unknown_server, uni_key, x11pacs, x_server,
-		x_server_3d, card_name, vga_present
-	];
-}
-
-//---[ probe_settings ]----//
-define probe_settings() ``{
-	// ...
-	// Probe graphics card and add needed xserver to pacs_to_install
-	// Check if the system has a framebuffer device.
-	//
-	fbdev_resol = SCR::Read( .probe.framebuffer );
-	y2milestone( "fbdev_resol: <%1>", fbdev_resol );
-	if ( fbdev_resol != nil && fbdev_resol != [] )	{
-		has_fbdev = true;
-	} else	{
-		has_fbdev = false;
-	}
-	y2milestone ( "has_fbdev: %1", has_fbdev );
-
-	list display_list = SCR::Read( .probe.display );	// list of maps
-	if (display_list == nil) display_list = [];
-
-	y2milestone( "display_list: <%1>", display_list );
-
-	if ( display_list != nil && size( display_list ) > 0 ) {
-	    map display = display_list[0]:$[];
-
-	    bus_id  = display["bus_id"]:0;
-	    slot_id = display["slot_id"]:0;
-	    func_id = display["func_id"]:0;
-	}
-	// Check displaycontrollers.
-	// [
-	//  unknown_server, unique_key, x11pacs_to_install,
-	//  xserver, xserver_3d, card_name, vga_present
-	// ]
-	list serversettings = pacs_and_servers( display_list );
-
-	y2milestone( "serversettings: <%1>", serversettings );
-
-	// Assign xserver data for 2D and 3D case for public access.
-	xserver_is_unknown = serversettings[0]:true;
-	xserver	           = serversettings[3]:$[];
-	xserver_3d	       = serversettings[4]:$[];
-	has_3d		       = xserver_3d["has_3d"]:false;
-
-	y2milestone ( "xserver_is_unknown: %1", xserver_is_unknown );
-	y2milestone ( "xserver: %1", xserver );
-	y2milestone ( "xserver_3d: %1", xserver_3d );
-	y2milestone ( "has_3d: %1", has_3d );
-
-	// Hardware info.
-	unique_key      = serversettings[1]:"";
-	video_card_name = serversettings[5]:"";
-	has_vga	        = serversettings[6]:false;
-
-	y2milestone ( "unique_key: %1", unique_key );
-	y2milestone ( "video_card_name: %1", video_card_name );
-	y2milestone ( "has_vga: %1", has_vga );
-
-	// Package info.
-	pacs_to_install = serversettings[2]:[];
-
-	y2milestone ( "pacs_to_install: %1", pacs_to_install );
-
-	return;
-}
 }
