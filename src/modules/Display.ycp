@@ -392,11 +392,13 @@ define pacs_and_servers( list display_list ) ``{
 	    list x11list = dpycontroller["x11"]:[];
 
 	    // Extract all packages needed for this display controller.
-	    foreach (`x11entry, x11list, ``{
+	    foreach (`x11entry, x11list,
+	    ``{
 		list pacs = extract_packages( x11entry, xsrvmap );
-		foreach (`pac, pacs, ``{
+		foreach (`pac, pacs,
+		``{
 		    if ( size( pac ) > 0 ) {
-				x11pacs = add( x11pacs, pac );
+			x11pacs = add( x11pacs, pac );
 		    }
 		});
 	    });
@@ -437,13 +439,13 @@ define pacs_and_servers( list display_list ) ``{
 		// ---
 		if ( x11server["has_3d"]:false ) {
 		    if ( size( x_server_3d ) == 0 ) {
-				x_server_3d = x11server;
+			x_server_3d = x11server;
 		    }
 		}
 		else	// has_3d == false
 		{
 		    if ( size( x_server ) == 0 ) {
-				x_server = x11server;
+			x_server = x11server;
 		    }
 		}
 	    }); // foreach x11server
@@ -468,8 +470,8 @@ define pacs_and_servers( list display_list ) ``{
 		// card take non-3d server as 3d.
 	    // ---
 	    if ( ( size( x_server_3d ) == 0 ) && have_voodoo_special ) {
-			x_server_3d = eval (x_server);
-			x_server_3d["has_3d"] = true;
+		x_server_3d = eval (x_server);
+		x_server_3d["has_3d"] = true;
 	    }
 	}
 	else	// No VGA card present
