@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 29 13:04:30 CET 2002 - ms@suse.de
+
+- fixed message strings which were not declared as global
+  but used as global
+
+-------------------------------------------------------------------
 Wed Nov 13 12:11:19 CET 2002 - ms@suse.de
 
 - Adapt error message text if XFree86 version 3 has to be used
