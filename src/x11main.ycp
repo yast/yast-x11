@@ -595,7 +595,7 @@ define void concludeConfiguration () ``{
 			string kernel = SCR::Read ( .grub.sections.linux.kernel );
 			string result = tmpdir + "/" + kernelline;
 			SCR::Execute ( .target.bash,
-				"/usr/lib/YaST2/bin/setVGA "
+				"/usr/lib/YaST2/bin/setVGA.pl "
 				+ kernel + " " + code + "> " + result
 			);
 			string update = SCR::Read ( .target.string, result );

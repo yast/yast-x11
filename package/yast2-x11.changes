@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Jul 30 12:22:43 CEST 2002 - ms@suse.de
+
+- moved helper scripts from the tools to the scripts directory
+- add setVGA script used for the GrUB reconfiguration to the source
+- add GrUB update to x11main.ycp
+- changed hwupdate call in textmode (removed opion --all)
+
+-------------------------------------------------------------------
 Mon Jul 29 18:11:07 CEST 2002 - arvin@suse.de
 
 - fixed return value in x11.ycp

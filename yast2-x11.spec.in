@@ -30,5 +30,8 @@ Summary:	-
 @scrconfdir@/*.scr
 @configdir@/*.y2cc
 @ybindir@/mkttflinks
+@ybindir@/setVGA.pl
+@ybindir@/update_unique_keys.pl
+@ybindir@/update_xf86config
 @plugindir@/*.so.*
 %doc @docdir@
