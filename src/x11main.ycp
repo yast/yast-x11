@@ -20,392 +20,58 @@ STATUS        : Development
 {
 textdomain "x11";
 
+import "XProposal";
 import "Mode";
 import "Report";
 import "Wizard";
-import "Mouse";
-import "Keyboard";
-import "Display";
 
 include "ui/common_popups.ycp";
-include "x11/x11_auto_setup_dialog.ycp";
-include "lilo/misc.ycp";
+include "x11/x11Dialog.ycp";
 
 //==========================================
-// Globals...
+// textMode...
 //------------------------------------------
-string  AutoInstallMapDisplayManager = "kdm";
-boolean AutoInstallMapEnableX11 = true;
-boolean configurationChanged = false;
-boolean AutoInstallMap3D = true;
-boolean X11Enabled = true;
-boolean HWFlag     = false;
-string  suggestion = "";
-list    initResult = [];
-
-//==========================================
-// Global Message Strings
-//------------------------------------------
-// General 3D warning to provide the user with information
-// about the currently driver status and usability
-// ---
-string Warning3D = _("
-All 3D drivers in Linux are in developmental phases and are
-therefore, in part, still regarded as experimental. Nevertheless,
-we have decided to include the drivers in our distribution because of the
-high demand for 3D hardware acceleration in Linux.
-
-Because of the somewhat experimental status of OpenGL drivers, we are
-not able to offer any installation support for configuring 3D hardware 
-acceleration or if any problems related to this should arise. 
-
-Do you want to enable 3D for this card?\n
-");
-// Nvidia warning to inform the user about the dummy nvidia driver
-// which is not capable of 3D but may be updated directly from the
-// nvidia FTP server using YOU (YaST2 online update)
-// ---
-string WarningNVidia = _("
-The driver used for this card is not an official 2D/3D/OpenGL driver from 
-nVidia for licensing reasons. The 3D/OpenGL driver used if you enable 3D 
-is not hardware-accelerated.
-    
-To use hardware accelerated 3D/OpenGL, update the packages 
-NVIDIA_GLX and NVIDIA_kernel for SuSE Linux from the nVidia web server 
-(http://www.nvidia.com). You can also do this comfortably via 
-YOU (YaST2 Online Update).
- 
-If there are problems with the 2D/3D/OpenGL driver from nVidia, consult
-the vendor, as we unfortunately do not have any influence over the
-development of nVidia drivers.
-
-Do you want to prepare 3D for this card?\n
-");
-
-
-//==========================================
-// Functions...
-//------------------------------------------
-//---[ isNVidiaCard ]----//
-define boolean isNVidiaCard () ``{
-	integer status = SCR::Execute ( .target.bash,
-		"/usr/X11R6/" + Display::lib + "/sax/api/tools/getNVCard"
-	);
-	if (status == 1) {
-		return (true);
-	}
-	return (false);
+define void textMode () ``{
+	// ...
+	// callback function if the user don`t want to use X11
+	// in this case no config file will be written
+	// ---
+	// y2milestone ("textMode()...");
+	// ---
+	X11Enabled = false;
+	SetTextMode();
 }
 
-//---[ getSuggestion ]----//
-define string getSuggestion (boolean init) ``{
-	// ...
-	// The keyboard and mouse module hold the user input information
-	// provided in an earlier step of the installation process.
-	// Therefore we need to generate a special init.pl batch input
-	// file containing the user selections about pointer and keyboard
-	// information.
+//==========================================
+// autoMode...
+//------------------------------------------
+define void autoMode () ``{
+	//...
+	// callback function if the user want to use X11
+	// we will enable the dialog controls again
 	// ---
-	// After the batch input file is created we will call the SaX2
-	// init module to create a YCP suggestion file and initialize all
-	// other modules needed for reconfigure X11
+	// y2milestone ("autoMode()...");
 	// ---
-	y2milestone ("getSuggestion()...");
+	X11Enabled = true;
+	SetX11Mode();
+	XProposal::setupRemoteControl();
+}
 
-	string data = "";
-	string suggestFile = "/var/cache/sax/files/suggest.ycp";
-	string profileFile = "/var/cache/sax/files/userProfile";
-	string userProfile = "";
-	string userLine    = "";
-
-	if (init) {
-	if (Mode::cont) {
-		//===========================================
-		// get currently available mouse information
-		//-------------------------------------------
-		if (Mouse::mset != "") {
-			userLine = "InputDevice->1->Option->Protocol = ";
-			userLine = userLine + Mouse::mset;
-			userProfile = userLine + "\n";
-		}
-		if (Mouse::device != "") {
-			userLine = "InputDevice->1->Option->Device = ";
-			userLine = userLine + Mouse::device;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if ( Mouse::wheels != 0 ) {
-			integer x = Mouse::wheels + 3;
-			integer y = x + 1;
-			userLine = "InputDevice->1->Option->ZAxisMapping = ";
-			userLine = userLine + x + " " + y;
-			userProfile = userProfile + userLine + "\n";
-			userLine = "InputDevice->1->Option->ButtonNumber = ";
-			userLine = userLine + Mouse::buttons;
-			userProfile = userProfile + userLine + "\n";
-		}
-		//===========================================
-		// get currently available keyboard info
-		//-------------------------------------------
-		if (Keyboard::XkbLayout != "") {
-			userLine = "InputDevice->0->Option->XkbLayout  = ";
-			userLine = userLine + Keyboard::XkbLayout;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::XkbModel != "") {
-			userLine = "InputDevice->0->Option->XkbModel   = ";
-			userLine = userLine + Keyboard::XkbModel;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::Protocol != "") {
-			userLine = "InputDevice->0->Option->Protocol   = ";
-			userLine = userLine + Keyboard::Protocol;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::XkbRules != "") {
-			userLine = "InputDevice->0->Option->XkbRules   = ";
-			userLine = userLine + Keyboard::XkbRules;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::XkbOptions != "") {
-			userLine = "InputDevice->0->Option->XkbOptions = ";
-			userLine = userLine + Keyboard::XkbOptions;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::MapName != "") {
-			userLine = "InputDevice->0->Option->MapName    = ";
-			userLine = userLine + Keyboard::MapName;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::XkbKeyCodes != "") {
-			userLine = "InputDevice->0->Option->XkbKeyCodes= ";
-			userLine = userLine + Keyboard::XkbKeyCodes;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::LeftAlt != "") {
-			userLine = "InputDevice->0->Option->LeftAlt    = ";
-			userLine = userLine + Keyboard::LeftAlt;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::RightAlt != "") {
-			userLine = "InputDevice->0->Option->RightAlt   = ";
-			userLine = userLine + Keyboard::RightAlt;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::ScrollLock != "") {
-			userLine = "InputDevice->0->Option->ScrollLock = ";
-			userLine = userLine + Keyboard::ScrollLock;
-			userProfile = userProfile + userLine + "\n";
-		}
-		if (Keyboard::RightCtl != "") {
-			userLine = "InputDevice->0->Option->RightCtl   = ";
-			userLine = userLine + Keyboard::RightCtl;
-			userProfile = userProfile + userLine + "\n";
-		}
-		//===========================================
-		// Include special information if the YaST2
-		// auto install mode is active
-		//-------------------------------------------
-		if ( Mode::autoinst ) {
-			import "AutoInstall";
-			y2milestone ("AutoInstall mode activated...");
-			map data = AutoInstall::X11;
-			boolean configure_x11 = data["configure_x11"]:false;
-			// ...
-			// Check if X11 should be configured or not via
-			// the auto install map data
-			// ---
-			if (! configure_x11) {
-				AutoInstallMapEnableX11 = false;
-			}
-			// ...
-			// handle the auto install map and write the
-			// needed data to the user profile
-			// ---
-			AutoInstallMapDisplayManager = data["display_manager"]:"kdm";
-			if (! data["enable_3d"]:true) {
-				AutoInstallMap3D = false;
-			}
-			map monitor = data["monitor"]:$[];
-			map display = monitor["display"]:$[];
-			// ...
-			// set color depth from auto install map
-			// ---
-			userLine = "Screen->0->DefaultDepth = ";
-			userLine = userLine + data["color_depth"]:"16";
-			userProfile = userProfile + userLine + "\n";
-			// ...
-			// set H/V-sync value from auto install map
-			// ---
-			userLine = "Monitor->0->HorizSync = ";
-			userLine = userLine + display["min_hsync"]:"30" + "-";
-			userLine = userLine + display["max_hsync"]:"60";
-			userProfile = userProfile + userLine + "\n";
-			userLine = "Monitor->0->VertRefresh = ";
-			userLine = userLine + display["min_vsync"]:"50" + "-";
-			userLine = userLine + display["max_vsync"]:"65";
-			userProfile = userProfile + userLine + "\n";
-			// ...
-			// set monitor vendor/name string from
-			// auto install map
-			// ---
-			userLine = "Monitor->0->VendorName = ";
-			userLine = userLine + monitor["monitor_vendor"]:"Unknown";
-			userProfile = userProfile + userLine + "\n";
-			userLine = "Monitor->0->ModelName = ";
-			userLine = userLine + monitor["monitor_device"]:"Unknown";
-			userProfile = userProfile + userLine + "\n";
-			// ...
-			// set resolution from auto install map
-			// ---
-			userLine = "Screen->0->Depth->" + data["color_depth"]:"16";
-			userLine = userLine + "->Modes = ";
-			userLine = userLine + data["resolution"]:"640x480";
-			userProfile = userProfile + userLine + "\n";
-		}
-		//===========================================
-		// write profile, call init.pl and read the
-		// generated suggestion file
-		//-------------------------------------------
-		y2milestone ("UserProfile: <%1>",userProfile);
-		SCR::Write(.target.string, profileFile, userProfile );
-	}
-
-	//===========================================
-	// create the initString for init.pl call
-	// ------------------------------------------
-	boolean haveProfile = (
-		SCR::Read(.target.size, profileFile)!=-1
-	);
-	SCR::Execute ( .target.bash,
-		"/bin/rm -f " + suggestFile
-	);
-	string initCommand = "/usr/X11R6/" + Display::lib + "/sax/init.pl";
-	string initString  = initCommand + " --suggest";
-	if ( haveProfile ) {
-		initString = initString + " -b " + profileFile;
-	}
-
+//==========================================
+// getSuggestionString...
+//------------------------------------------
+define string getSuggestionString ( boolean init ) ``{
 	// ...
-	// if YaST2 is running in [normal] textmode init.pl will eventually
-	// print the 3D question on stdout. To prevent this we will implement
-	// the 3D question in ycp and set the answer via the init.pl option
-	// --quiet. To make sure the question won`t be printed.
-	//
-	// if init.pl don`t need to perform a hardware scan we are not
-	// allowed to display the 3D question. To check this we will
-	// call hwupdate --test and check for the existance of the
-	// storage binary file "/var/cache/sax/files/config"
-	// ---
-	if ( (! Mode::autoinst) && (! Mode::live_eval) ) {
-	map displayInfo = UI::GetDisplayInfo();
-	if (displayInfo["TextMode"]:false) {
-		string hwupdate = "/usr/X11R6/" + Display::lib +"/sax/tools/hwupdate";
-		string config   = "/var/cache/sax/files/config";
-		integer update  = SCR::Execute ( .target.bash,
-			hwupdate + " --test"
-		);
-		boolean haveConfig = (SCR::Read(.target.size, config)!=-1);
-		if ((update == 0) || (! haveConfig)) {
-			// ...
-			// ok init will call sysp and now we have to find
-			// out if the 3D question will come up if sysp is
-			// called
-			// ---
-			string D3File = "/var/cache/sax/files/3dname";
-			string D3Message = Warning3D;
-			if ( isNVidiaCard() ) {
-				D3Message = WarningNVidia;
-			}
-			integer question = SCR::Execute ( .target.bash,
-				"/usr/X11R6/" + Display::lib + "/sax/sysp.pl -s server -n > "
-				+ D3File
-			);
-			if (question == 1) {
-			string cardName = SCR::Read(.target.string, D3File );
-			SCR::Execute ( .target.bash,
-				"/bin/rm -f " + D3File
-			);
-			string topic = _("3D capable card detected: ");
-			if ( UI::YesNoPopup ( sformat (
-				_("%1 %2%3"),
-				topic,cardName,D3Message
-			))) {
-				initString = initString + " --quiet yes";
-			} else {
-				initString = initString + " --quiet no";
-			}
-			}
-		} else {
-			initString = initString + " --quiet no";
-		}
-	}
-	}
-	// ...
-	// I we are in auto install mode check for the enable_3d
-	// flag and set the answer for the 3D question to init.pl
-	// via the --quiet option
-	// ---
-	if ( Mode::autoinst ) {
-	if (AutoInstallMap3D) {
-		initString = initString + " --quiet yes";
-	} else {
-		initString = initString + " --quiet no";
-	}
-	}
-	// ...
-	// If we are running in a live eval system, always answer
-	// the 3D question with no, because installing missing
-	// packages is not possible there
-	// ---
-	if ( Mode::live_eval ) {
-		initString = initString + " --quiet no";
-	}
-	// ...
-	// call init.pl now and remove the profile
-	// file after this call
-	// ---
-	integer initCode = SCR::Execute (
-		.target.bash, initString
-	);
-	if ( haveProfile ) {
-	SCR::Execute (
-		.target.bash, "/bin/rm -f " + profileFile
-	);
-	}
-	y2milestone (
-		"initCode: <%1>",initCode
-	);
-	} // end of [if (init)]
-
-	//===========================================
-	// read suggest.ycp
-	//-------------------------------------------
-	initResult = SCR::Read ( .target.ycp,
-		suggestFile
-	);
-	//===========================================
-	// if auto install mode is active, check
-	// if 3D is disabled via install description
-	//-------------------------------------------
-	if ( Mode::autoinst ) {
-	if (! AutoInstallMap3D) {
-		SCR::Execute ( .target.bash, "/usr/X11R6/bin/switch2mesasoft" );
-	}
-	}
-	//===========================================
-	// call 3Ddiag-result to get 3D status
-	//-------------------------------------------
-	boolean D3Active = false;
-	integer D3Status = SCR::Execute (
-		.target.bash, "/usr/bin/3Ddiag-result --omit-config"
-	);
-	if (D3Status == 0) {
-		D3Active = true;
-	}
-	// ... /
 	// create the information string containing the most
 	// important information about the graphics system.
 	// ---
+	string data = "";
+	list initResult = [];
+	if ( init ) {
+		initResult = XProposal::getSuggestion (init);
+	} else {
+		initResult = XProposal::resetSuggestion ();
+	}
 	map allCards = initResult[0]:$[];
 	map allViews = initResult[1]:$[];
 	boolean done = false;
@@ -422,7 +88,7 @@ define string getSuggestion (boolean init) ``{
 			// or the environment is capable of using 3D
 			// ---
 			data = data + _("3D Acceleration:") + "\n";
-			if (D3Active) {
+			if (XProposal::D3Active) {
 				data = data + "  " + _("Enabled");
 			} else {
 			if (cnr > 2) {
@@ -461,348 +127,17 @@ define string getSuggestion (boolean init) ``{
 			} else {
 				data = data + " " + moniVendor + " " + moniModel + " [ ";
 			}
-			data = data + moniHsync + " " + _("kHz") + " / "
-				+ moniVsync + " " + _("Hz") + " ]" + "\n";
-			data = data + "  " + _("Resolutions:")
-				+ " " + resolution + "\n";
-			data = data + "  " + _("Color depth:")
-				+ " " + colorDepth + " " + _("bit") + "\n\n";
-		}
+				data = data + moniHsync + " " + _("kHz") + " / "
+					+ moniVsync + " " + _("Hz") + " ]" + "\n";
+				data = data + "  " + _("Resolutions:")
+					+ " " + resolution + "\n";
+				data = data + "  " + _("Color depth:")
+					+ " " + colorDepth + " " + _("bit") + "\n\n";
+			}
 	} until (
 		done == true
 	);
-	return ( data );
-}
-
-//==========================================
-// resetSuggestion...
-//------------------------------------------
-define string resetSuggestion () ``{
-	// ...
-	// use ISaX to recreate the suggest.ycp file
-	// from the currently installed configuration
-	// file
-	// ---
-	list suggestion = [];
-	list moduleISaX = [
-		"Card","Desktop","Mouse","Keyboard","Layout","Path"
-	];
-	string suggestFile = "/var/cache/sax/files/suggest.ycp";
-	string tmpdir = SCR::Read( .target.tmpdir );
-	foreach (`mod, moduleISaX,``{
-		string modFile = tmpdir + "/" + mod;
-		SCR::Execute ( .target.bash,
-			"/usr/X11R6/" + Display::lib + "/sax/tools/isax -y -l "
-			+ mod + ">" + modFile
-		);
-		map modResult = SCR::Read ( .target.ycp,
-			modFile
-		);
-		suggestion = add (
-			suggestion,modResult
-		);
-	});
-	if (suggestion != []) {
-		SCR::Write(.target.ycp, suggestFile,
-		suggestion
-		);
-		string suggest = getSuggestion (false);
-		return (suggest);
-	}
-}
-
-//==========================================
-// cleanSweep...
-//------------------------------------------
-define void cleanSweep () ``{
-	// ...
-	// clean the system to be X11 config clean this
-	// means no graphics system is available after
-	// this function was called
-	// ---
-	// y2milestone ("cleanSweep()...");
-	// ---
-	SCR::Execute ( .target.bash,
-		"/bin/rm -f /etc/X11/XF86Config"
-	);
-	SCR::Execute ( .target.remove,
-		"/var/X11R6/bin/X"
-	);
-}
-
-//==========================================
-// abortConfiguration...
-//------------------------------------------
-define void abortConfiguration () ``{
-	// ...
-	// callback function if the user aborted the
-	// dialog in this case we will switch back to the
-	// YaST2 saved configuration file
-	// ---
-	// y2milestone ("abortConfiguration()...");
-	// ---
-	SCR::Execute ( .target.bash,
-		"/bin/mv /etc/X11/XF86Config.YaST2save /etc/X11/XF86Config"
-	);
-	// ...
-	// if there was a hardware.chg file before startup
-	// we should recreate the file because the user
-	// aborted the configuration at this point
-	// ---
-	if (HWFlag) {
-	SCR::Execute ( .target.bash,
-		"/bin/touch /var/cache/sax/files/hardware.chg"
-	);
-	}
-}
-
-//==========================================
-// textMode...
-//------------------------------------------
-define void textMode () ``{
-	// ...
-	// callback function if the user don`t want to use X11
-	// in this case no config file will be written
-	// ---
-	// y2milestone ("textMode()...");
-	// ---
-	X11Enabled = false;
-	SetTextMode();
-}
-
-//==========================================
-// autoMode...
-//------------------------------------------
-define void autoMode () ``{
-	//...
-	// callback function if the user want to use X11
-	// we will enable the dialog controls again
-	// ---
-	// y2milestone ("autoMode()...");
-	// ---
-	X11Enabled = true;
-	SetX11Mode();
-	setupRemoteControl();
-}
-
-//==========================================
-// concludeConfiguration...
-//------------------------------------------
-define void concludeConfiguration () ``{
-	// ...
-	// callback function if the user selected the next button.
-	// Ensure a valid configuration file has been written. If
-	// the configuration suggestion was not modified we will save
-	// the suggestion as final configuration. Otherwhise the X11
-	// Manager has already done the job of saving the config file
-	// ---
-	// y2milestone ("concludeConfiguration()...");
-	// ---
-	// ... /
-	// clean sweep if we don`t want to use X11
-	// ---
-	if (! X11Enabled) {
-		cleanSweep (); return;
-	}
-	// ... /
-	// save and link configuration if not already
-	// done via xapi
-	// ---
-	string configFile = "/etc/X11/XF86Config";
-	boolean configExist = (SCR::Read(.target.size, configFile)!=-1);
-
-	if (configurationChanged == false) {
-	if ( (Mode::cont) || (! configExist) || (HWFlag) ) {
-	SCR::Execute ( .target.bash,
-		"/usr/X11R6/" + Display::lib + "/sax/xc.pl --auto"
-	);
-	}
-	}
-	// ... /
-	// set displaymanager to use after reboot during the
-	// installation process and if YaST2 is started in the
-	// installed system
-	// ---
-	string displayManager = "kdm";
-	if ( Mode::autoinst ) {
-		displayManager = AutoInstallMapDisplayManager;
-	}
-	if ( Mode::cont ) {
-		// we are within the installation process
-		// get list of base selections
-		list currentSWSelection = Pkg::GetSelections(`installed, "base");
-		if ((contains ( currentSWSelection, "Minimal" )
-		     ||	contains ( currentSWSelection, "Minimal+X11" ))
-		    && (!Pkg::IsProvided ("kdebase3-kdm")
-		    && Pkg::IsProvided ("gdm2")))
-		{
-			displayManager = "gdm";
-		}
-	} else {
-		// we are within the installed SuSE Linux system
-		if ( ! Pkg::IsProvided ("kdebase3-kdm") ) {
-		if ( Pkg::IsProvided ("gdm2") ) {
-			// KDE is not installed but Gnome...
-			displayManager = "gdm";
-		} else {
-			// KDE and Gnome are not installed...
-			displayManager = "xdm";
-		}
-		}
-	}
-	// ... /
-	// rewrite lilo.conf if lilocode.ycp exist
-	// ---
-	string loaderType = SCR::Read (
-		.sysconfig.bootloader.LOADER_TYPE
-	);
-	string liloCodeFile = "/var/cache/sax/files/lilocode.ycp";
-	boolean updateNeeded = (SCR::Read (.target.size, liloCodeFile)!=-1);
-	if (updateNeeded) {
-		list liloCode = SCR::Read ( .target.ycp, liloCodeFile );
-		if (loaderType == "lilo") {
-		//=================================
-		// Change LILO configuration...
-		// --------------------------------
-		string orig = SCR::Read ( .lilo.sections.linux.vga );
-		string code = liloCode[0]:orig;
-		if (orig != code) {
-			SCR::Write( .lilo.sections.linux.vga, code );
-			SCR::Write( .lilo, nil );
-			integer status = SCR::Execute( .target.bash, "/sbin/lilo" );
-			if ( status != 0 ) {
-				y2error ("Calling /sbin/lilo failed: %1", status );
-			}
-		}
-		} else if (loaderType == "grub") {
-		//=================================
-		// Change GRUB configuration...
-		// --------------------------------
-		string orig = getGrubKernelParam ("linux","vga");
-		string code = liloCode[0]:orig;
-		if (orig != code) {
-			setGrubKernelParam ("linux", "vga", code);
-		}
-		}
-	}
-	// ... /
-	// Update the console Keyboard using the keyboard
-	// module which could do this job
-	// ---
-	map KBDSection = initResult[3]:$[];
-	map KBDCurrent = KBDSection[0]:$[];
-	map KBDRecord  = KBDCurrent["Keyboard"]:$[];
-	string KBDLayout = KBDRecord["XkbLayout"]:"us";
-	Keyboard::X11SetLanguage (
-		KBDLayout
-	);
-
-	// ... /
-	// update sysconfig variables after reboot during
-	// the installation process
-	// ---
-	SCR::Write(
-		.sysconfig.displaymanager.DISPLAYMANAGER, displayManager
-	);
-	SCR::Write(
-		.sysconfig.displaymanager.DISPLAYMANAGER_STARTS_XSERVER, "yes"
-	);
-	SCR::Write(
-		.sysconfig.displaymanager, nil
-	);
-	Display::Save();
-
-	// ... /
-	// call hwupdate to be sure the config flags are set
-	// the call of X11SetLanguage may change this flags
-	// remind to have a look at the keyboard module to fix
-	// the X11SetLanguage() call
-	// ---
-	SCR::Execute ( .target.bash,
-		"/usr/X11R6/lib/sax/tools/hwupdate --all"
-	);
-
-	// ... /
-	// remove the hardware.chg file if it still exist
-	// because we have written a valid configuration now
-	// and want to use this configuration for any reconfiguration
-	// tasks in the future
-	// ---
-	SCR::Execute ( .target.bash,
-		"/bin/rm -f /var/cache/sax/files/hardware.chg"
-	);
-}
-
-//==========================================
-// changeConfiguration...
-//------------------------------------------
-define boolean changeConfiguration () ``{
-	// ...
-	// callback function if the user selected the change button.
-	// run the SaX2 interface in this case
-	// ---
-	// y2milestone ("changeConfiguration()...");
-	// ---
-	configurationChanged = true;
-	string xcopt = "--nointro";
-	if (Mode::cont) {
-		xcopt = xcopt + " -w 2";
-	}
-	integer code = 0;
-	// ...
-	// if there is no hardware.chg file we are able to read the
-	// currently used system configuration with xc.pl. Therefore we
-	// will pass the option --sysconfig to xc.pl.
-	// Notes:
-	// -----
-	// 1) --sysconfig does not have any effect if we are running
-	//    YaST2 from a graphics mode.
-	//
-	// 2) if no configuration file exist and we are running in
-	//    in textmode xc.pl will ignore --sysconfig
-	// ---
-	if (! HWFlag) {
-		xcopt = xcopt + " --sysconfig";
-	}
-	if (Mode::cont) {
-		xcopt = xcopt + " --nocheckpacs";
-	}
-	if (Mode::cont) {
-	code = SCR::Execute ( .target.bash,
-		"/usr/X11R6/" + Display::lib + "/sax/xc.pl -y --fullscreen " + xcopt
-	);
-	} else {
-	code = SCR::Execute ( .target.bash,
-		"/usr/X11R6/"+ Display::lib + "/sax/xc.pl -y " + xcopt
-	);
-	}
-	if (code == 0) {
-		configurationChanged = false;
-	}
-	return (
-	configurationChanged
-	);
-}
-
-//==========================================
-// setup YaST2 remote call behaviour...
-//------------------------------------------
-define void setupRemoteControl () ``{
-	// ...
-	// if we are running a remote session in text mode
-	// we had to disable the change button because this
-	// will lead to a starting X-Server on the local machine
-	// which is not usefull in this case
-	// ---
-	map displayInfo = UI::GetDisplayInfo();
-	if (displayInfo["TextMode"]:false) {
-	integer remote = SCR::Execute ( .target.bash,
-		"/usr/X11R6/" + Display::lib + "/sax/tools/whois"
-	);
-	if (remote == 1) {
-		UI::ChangeWidget (`id(`change), `Enabled, false );
-	}
-	}
+	return (data);
 }
 
 //==========================================
@@ -813,12 +148,12 @@ Wizard::OpenAcceptDialog();
 //==========================================
 // Initialize...
 //------------------------------------------
-suggestion = getSuggestion (true);
+string suggestion = getSuggestionString (true);
 
 //==========================================
 // Check if hardware.chg exist...
 //------------------------------------------
-HWFlag = (SCR::Read (.target.size,
+XProposal::HWFlag = (SCR::Read (.target.size,
 	"/var/cache/sax/files/hardware.chg"
 ) !=-1);
 
@@ -826,7 +161,9 @@ HWFlag = (SCR::Read (.target.size,
 // Event loop...
 //------------------------------------------
 string helpText = UI::X11AutoSetupDialogHelpText();
-term   contents = UI::X11AutoSetupDialog( AutoInstallMapEnableX11, suggestion );
+term   contents = UI::X11AutoSetupDialog(
+	XProposal::AutoInstallMapEnableX11, suggestion
+);
 Wizard::SetContents(
 	_("Desktop Settings"),contents, helpText,
 	WFM::Args(0), WFM::Args(1)
@@ -835,13 +172,13 @@ Wizard::SetContents(
 //==========================================
 // Check if yast2 was called remotely
 //------------------------------------------
-setupRemoteControl();
+XProposal::setupRemoteControl();
 
 //==========================================
 // conclude directly if auto install mode
 //------------------------------------------
 if ( Mode::autoinst ) {
-	concludeConfiguration();
+	XProposal::concludeConfiguration();
 	return `next;
 }
 boolean stop = false;
@@ -849,7 +186,7 @@ symbol ret   = nil;
 repeat {
 	ret = Wizard::UserInput();
 	if ( ret == `abort || ret == `cancel || ret == `back ) {
-		abortConfiguration();
+		XProposal::abortConfiguration();
 	}
 	if ( ret == `text_mode_only ) {
 		textMode();
@@ -858,13 +195,13 @@ repeat {
 		autoMode();
 	}
 	if ( ret == `next ) {
-		concludeConfiguration();
+		XProposal::concludeConfiguration();
 	}
 	if ( ret == `change ) {
-		stop = changeConfiguration();
+		stop = XProposal::changeConfiguration();
 		if (stop) {
 			SetTextMode();
-			string suggestion = resetSuggestion ();
+			string suggestion = getSuggestionString (false);
 			SetX11Mode();
 			term   contents = UI::X11AutoSetupDialog (
 				true, suggestion

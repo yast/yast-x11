@@ -1,0 +1,75 @@
+/**************
+FILE          : Messages.ycp
+***************
+PROJECT       : YaST2
+              :
+AUTHOR        : Marcus Schäfer <ms@suse.de>
+              :
+BELONGS TO    : YaST2
+              : (X11 integration part using SaX2/ISaX)
+              :
+DESCRIPTION   : Provide global message descriptions
+              : used in all modules concering the X11
+              : configuration
+              :
+STATUS        : Development
+**************/
+{
+module "XMessages";
+
+textdomain "x11";
+// ...
+// Indicate that some packages required to setup
+// X11 are missing
+// ---
+global string pacsMissing = _("
+The following packages are missing.
+%1
+Install them now ?
+");
+
+// Indicate that the installed graphics card require
+// XFree86 3.3.x to work properly
+// ---
+global string versionMismatch = _("
+Your graphics card requires XFree86 V3.
+");
+
+// General 3D warning to provide the user with information
+// about the currently driver status and usability
+// ---
+string Warning3D = _("
+All 3D drivers in Linux are in developmental phases and are
+therefore, in part, still regarded as experimental. Nevertheless,
+we have decided to include the drivers in our distribution because of the
+high demand for 3D hardware acceleration in Linux.
+
+Because of the somewhat experimental status of OpenGL drivers, we are
+not able to offer any installation support for configuring 3D hardware 
+acceleration or if any problems related to this should arise. 
+
+Do you want to enable 3D for this card?\n
+");
+
+// Nvidia warning to inform the user about the dummy nvidia driver
+// which is not capable of 3D but may be updated directly from the
+// nvidia FTP server using YOU (YaST2 online update)
+// ---
+string WarningNVidia = _("
+The driver used for this card is not an official 2D/3D/OpenGL driver from 
+nVidia for licensing reasons. The 3D/OpenGL driver used if you enable 3D 
+is not hardware-accelerated.
+    
+To use hardware accelerated 3D/OpenGL, update the packages 
+NVIDIA_GLX and NVIDIA_kernel for SuSE Linux from the nVidia web server 
+(http://www.nvidia.com). You can also do this comfortably via 
+YOU (YaST2 Online Update).
+ 
+If there are problems with the 2D/3D/OpenGL driver from nVidia, consult
+the vendor, as we unfortunately do not have any influence over the
+development of nVidia drivers.
+
+Do you want to prepare 3D for this card?\n
+");
+
+}

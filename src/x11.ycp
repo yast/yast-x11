@@ -17,6 +17,7 @@ STATUS        : Development
 {
 textdomain "x11";
 
+import "XMessages";
 import "Display";
 import "Wizard";
 import "X11Version";
@@ -27,24 +28,6 @@ include "ui/common_popups.ycp";
 // Globals...
 //------------------------------------------
 any ret = nil;
-
-//==========================================
-// Global Message Strings
-//------------------------------------------
-// Indicate that some packages required to setup
-// X11 are missing
-// ---
-string pacsMissing = _("
-The following packages are missing.
-%1
-Install them now ?
-");
-// Indicate that the installed graphics card require
-// XFree86 3.3.x to work properly
-// ---
-string versionMismatch = _("
-Your graphics card requires XFree86 V3.
-");
 
 //==========================================
 // Functions...

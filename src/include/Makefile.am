@@ -3,6 +3,6 @@
 #
 
 yncludedir = @yncludedir@/x11
-ynclude_DATA = x11_auto_setup_dialog.ycp
+ynclude_DATA = x11Dialog.ycp
 
 EXTRA_DIST = $(ynclude_DATA)

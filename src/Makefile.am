@@ -4,10 +4,10 @@
 
 SUBDIRS = include modules
 
-client_DATA =				\
+client_DATA =			\
 	x11main.ycp			\
 	x11.ycp				\
-	inst_sunfb.ycp
+	x11_proposal.ycp
 
 config_DATA = x11.y2cc
 
