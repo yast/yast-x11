@@ -52,3 +52,5 @@ clean:
 	rm -rf src/x11main/Makefile.in
 	rm -rf src/modules/Makefile
 	rm -rf src/modules/Makefile.in
+	rm -rf src/Makefile
+	rm -rf src/Makefile.in
