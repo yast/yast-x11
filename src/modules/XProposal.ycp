@@ -624,7 +624,7 @@ global define boolean changeConfiguration () ``{
 	}
 	if (Mode::cont) {
 	code = SCR::Execute ( .target.bash,
-		"/usr/X11R6/"+Display::lib+"/sax/xc.pl -y --fullscreen --noborder"+xcopt
+	"/usr/X11R6/"+Display::lib+"/sax/xc.pl -y --fullscreen --noborder "+xcopt
 	);
 	} else {
 	code = SCR::Execute ( .target.bash,
