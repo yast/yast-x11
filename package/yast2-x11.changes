@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Sep 12 10:18:35 CEST 2002 - ms@suse.de
+
+- adapt nVidia warning text according to bug (#19365)
+
+-------------------------------------------------------------------
 Tue Sep 10 15:36:56 CEST 2002 - msvec@suse.cz
 
 - provide/obsolete old translation package

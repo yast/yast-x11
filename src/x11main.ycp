@@ -56,34 +56,30 @@ we have decided to include the drivers in our distribution because of the
 high demand for 3D hardware acceleration in Linux.
 
 Because of the somewhat experimental status of OpenGL drivers, we are
-not able to offer any installation support for
-configuring 3D hardware acceleration or if any
-problems related to this should arise. Therefore, the basic setup of
-the graphical user interface X11 does not entail any 3D hardware
-configuration.
+not able to offer any installation support for configuring 3D hardware 
+acceleration or if any problems related to this should arise. 
 
-Do you want to enable 3D for the following card:
+Do you want to enable 3D for this card?\n
 ");
 // Nvidia warning to inform the user about the dummy nvidia driver
 // which is not capable of 3D but may be updated directly from the
 // nvidia FTP server using YOU (YaST2 online update)
 // ---
 string WarningNVidia = _("
-This is not an official 2D/3D/OpenGL driver from nVidia
-for licensing reasons. The 3D/OpenGL driver used if you enable 3D is not
-hardware-accelerated.
+The driver used for this card is not an official 2D/3D/OpenGL driver from 
+nVidia for licensing reasons. The 3D/OpenGL driver used if you enable 3D 
+is not hardware-accelerated.
     
-To use hardware accelerated 3D/OpenGL, update the packages
-NVIDIA_GLX and NVIDIA_kernel for SuSE Linux from the nVidia web server
-(http://www.nvidia.com). This can be done with YOU
-(YaST2 Online Update), which is started automatically if you click the
-Change... button after this message.
+To use hardware accelerated 3D/OpenGL, update the packages 
+NVIDIA_GLX and NVIDIA_kernel for SuSE Linux from the nVidia web server 
+(http://www.nvidia.com). You can also do this comfortably via 
+YOU (YaST2 Online Update).
  
 If there are problems with the 2D/3D/OpenGL driver from nVidia, consult
 the vendor, as we unfortunately do not have any influence over the
 development of nVidia drivers.
 
-Enable 3D for the following card:
+Do you want to prepare 3D for this card?\n
 ");
 
 
@@ -326,10 +322,10 @@ define string getSuggestion (boolean init) ``{
 			SCR::Execute ( .target.bash,
 				"/bin/rm -f " + D3File
 			);
-			string topic = _("3D card detected");
+			string topic = _("3D capable card detected: ");
 			if ( UI::YesNoPopup ( sformat (
-				_("%1\n%2\n%3"),
-				topic,D3Message,cardName
+				_("%1 %2%3"),
+				topic,cardName,D3Message
 			))) {
 				initString = initString + " --quiet yes";
 			} else {
