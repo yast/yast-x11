@@ -123,6 +123,7 @@ else if (func == "Packages") {
 else if (func == "Write") {
         // ret = WFM::CallFunction ("inst_x11", [true, true]);
         y2milestone("Not writing anything here, doing it in a seperate step");
+        ret = true;
 }
 
 //=================================
