@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Apr 22 12:06:08 CEST 2003 - ms@suse.de
+
+- added migrate script to migrate from XFree86 3.x to 4.x
+
+-------------------------------------------------------------------
 Wed Apr 16 13:26:11 CEST 2003 - ms@suse.de
 
 - fixed message displayed if XFree86 3.3.6 is used

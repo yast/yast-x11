@@ -39,5 +39,6 @@ Summary:	-
 @ybindir@/setVGA.pl
 @ybindir@/update_unique_keys.pl
 @ybindir@/update_xf86config
+@ybindir@/xmigrate.pl
 @plugindir@/*.so.*
 %doc @docdir@
