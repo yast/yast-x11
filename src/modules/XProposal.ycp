@@ -43,7 +43,7 @@ string  AutoInstallMapWindowManager = "kde";
 boolean configurationChanged = false;
 boolean AutoInstallMap3D = true;
 list    initResult = [];
-map		X11 = $[];
+global map		X11 = $[];
 
 //==========================================
 // Module Functions...
