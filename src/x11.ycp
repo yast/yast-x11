@@ -155,4 +155,5 @@ ret =  WFM::CallFunction (
 if ( ret == `next ) {
 	ret = finish();
 }
+return ret;
 }
