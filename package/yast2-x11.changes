@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 29 07:22:54 CEST 2004 - nashif@suse.de
+
+- Import right types from autoyast
+- Dont install x11 packages automatically (#37270)
+
+-------------------------------------------------------------------
 Thu Mar 25 07:00:21 CET 2004 - nashif@suse.de
 
 - Fixed bug #36895: Module Mode was not imported
