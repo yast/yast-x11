@@ -57,7 +57,7 @@ define any installPackages() ``{
 	// for the detected card(s)
 	// ---
 	requiredPacs = toset (
-		flatten( [required_pacs, Display::pacs_to_install] )
+		flatten( [requiredPacs, Display::pacs_to_install] )
 	);
 	// ... /
 	// create sublist of required packages which are
