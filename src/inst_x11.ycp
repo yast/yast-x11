@@ -302,7 +302,7 @@ define string getSuggestion (boolean init) ``{
 	//-------------------------------------------
 	boolean D3Active = false;
 	integer D3Status = SCR::Execute (
-		.target.bash, "/usr/bin/3Ddiag-result"
+		.target.bash, "/usr/bin/3Ddiag-result --omit-config"
 	);
 	if (D3Status == 0) {
 		D3Active = true;
