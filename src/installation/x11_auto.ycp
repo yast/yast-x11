@@ -68,7 +68,19 @@ else if (func == "Summary") {
 // Change configuration
 //---------------------------------
 else if (func == "Change") {
-	ret = X11AutoSequence();
+    ret = X11AutoSequence();
+}
+//=================================
+// true if configuration has changed
+//---------------------------------
+else if (func == "GetModified") {
+    ret =  AutoinstX11::GetModified();
+}
+//=================================
+// Set configuration as modified
+//---------------------------------
+else if (func == "SetModified") {
+    AutoinstX11::SetModified();
 }
 
 //=================================

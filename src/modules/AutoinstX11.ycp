@@ -37,9 +37,28 @@
 
 
 
+    /* default value of settings modified */
+    global boolean modified = false;
+
 
     /**
-     * Import
+     * Function sets internal variable, which indicates, that any
+     * settings were modified, to "true"
+     */
+    global define void SetModified () {
+        modified = true;
+    }
+
+    /**
+     * Functions which returns if the settings were modified
+     * @return boolean  settings were modified
+     */
+    global define boolean GetModified () {
+        return modified;
+    }
+
+    /**
+     * Import settings
      */
     global define boolean Import (map settings)
     {
@@ -138,9 +157,7 @@
     global define void readMonitorDB() ``{
 
 	all_monitors = (list<map>)SCR::Read( .target.ycp, [ static_monitors, [] ]);
-	// y2milestone("Monitors: %1", all_monitors);
 	readVendors();
-	// y2milestone("Vendors: %1", vendors);
 	return;
     }
 
