@@ -1,6 +1,6 @@
 @HEADER-COMMENT@
 
-# neededforbuild  gpp libgpp libxcrypt libxcrypt-devel yast2-devel-packages
+# neededforbuild  gpp libgpp libxcrypt libxcrypt-devel yast2-devel-packages yast2 yast2-installation yast2-storage yast2-bootloader yast2-country yast2-mouse
 
 @HEADER@
 Requires:	yast2
@@ -32,7 +32,7 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 
 %files
 %defattr(-,root,root)
-@moduledir@/*.ycp
+@moduledir@/*
 %dir @yncludedir@/x11
 @yncludedir@/x11/*
 @clientdir@/*.ycp
