@@ -24,8 +24,8 @@ import "Arch";
 import "Confirm";
 
 list    initResult = [];
-string  func  = WFM::Args(0);
-map     param = WFM::Args(1);
+string  func  = (string) WFM::Args(0);
+map     param = (map) WFM::Args(1);
 map     ret   = $[];
 
 //===================================================
@@ -57,6 +57,7 @@ if ( func == "MakeProposal" ) {
 	string  suggestFile  = "/var/cache/sax/files/suggest.ycp";
 	boolean forceReset   = param["force_reset"]:false;
 	boolean suggestExist = (SCR::Read(.target.size, suggestFile)!=-1);
+        boolean success = true;
 	if ( ! suggestExist ) {
 		forceReset = true;
 	}
@@ -161,7 +162,7 @@ else if ( func == "Description" ) {
 //---------------------------------------------------
 else if ( func == "Write" ) {
 	boolean success = true;
-	XProposal::concludeConfiguration();
+	XProposal::concludeConfiguration(true);
 	ret = $[
 		"success" : success
 	];

@@ -48,7 +48,7 @@ define any finish() ``{
 define any installPackages() ``{
 	any localReturn = `next;
 	list neededPacs = [];
-	list requiredPacs = [
+	list<string> requiredPacs = [
 		"XFree86", "XFree86-server",
 		"3ddiag", "sax2", "saxident"
 	];
@@ -64,7 +64,7 @@ define any installPackages() ``{
 	// NOT installed at the time
 	// ---
 	Pkg::TargetInit ("/", false);
-	foreach (`pac, requiredPacs, ``{
+	foreach (string pac, requiredPacs, ``{
 	if ( ! Pkg::IsProvided (pac) ) {
 		neededPacs = add ( neededPacs, pac );
 	}
@@ -76,7 +76,7 @@ define any installPackages() ``{
 	// ---
 	if ( size( neededPacs ) > 0 ) {
 		string missing = "";
-		foreach (`pac, neededPacs, ``{
+		foreach (string pac, neededPacs, ``{
 			missing = missing + pac + "\n";
 		});
 		if ( ! Popup::YesNo ( sformat (
@@ -86,7 +86,7 @@ define any installPackages() ``{
 			localReturn = nil;
 		} else {
 			Pkg::SourceStartCache (true);
-			WFM::CallFunction ( `sw_single( neededPacs ) );
+			WFM::CallFunction ("sw_single", [neededPacs]);
 		}
 	}
 	return (
@@ -131,11 +131,9 @@ if (SCR::Read(.sysconfig.bootloader.LOADER_TYPE) == "lilo") {
 //==========================================
 // call x11main.ycp
 //------------------------------------------
-ret =  WFM::CallFunction (
-	`x11main( true, true )
-);
+ret =  WFM::CallFunction ("x11main", [true, true]);
 if ( ret == `next ) {
 	ret = finish();
 }
-return ret;
+return (symbol) ret;
 }

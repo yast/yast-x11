@@ -19,13 +19,12 @@ STATUS        : Development
 textdomain "x11";
 import "Wizard";
 
-UI( ``{
 	//==========================================
 	// Create dialog for X11 automatic setup:
 	// @param enable_x11 true if GUI by default,
 	// false if text mode only
 	//------------------------------------------
-	global define X11AutoSetupDialog (
+	global define term X11AutoSetupDialog (
 		boolean	enable_x11, string	auto_mode_description
 	) ``{
 		term radio_box = nil;
@@ -88,12 +87,12 @@ UI( ``{
 	// @return multi line help text in RichText
 	// (HTML like) format
 	//------------------------------------------
-	global define X11AutoSetupDialogHelpText() ``{
+	global define string X11AutoSetupDialogHelpText() ``{
 		// ...
 		// Helper text for X11 dialog description
 		// pointing the possibility of either using X11 or textmode
 		// ---
-		global string HelpText = _("
+		string HelpText = _("
 <p>Review the current desktop settings for the <i>X Window System</i>.
 </p>
 <p> 
@@ -109,20 +108,19 @@ settings will be saved when you select <b>Next</b>.
 ");
 		return HelpText;
 	};
-});
 
 
 //=========================================
 // WFM defines...
 //-----------------------------------------
-global define SetX11Mode() ``{
+global define void SetX11Mode() ``{
 	UI::ChangeWidget(`id(`auto_mode_description),  `Enabled, true );
 	UI::ChangeWidget(`id(`change), `Enabled, true );
 	UI::ChangeWidget(`id(`reprobe),`Enabled, true );
 	UI::ChangeWidget(`id(`rb), `CurrentButton, `auto_mode );
 }
 
-global define SetTextMode() ``{
+global define void SetTextMode() ``{
 	UI::ChangeWidget(`id(`auto_mode_description),  `Enabled, false );
 	UI::ChangeWidget(`id(`change), `Enabled, false );
 	UI::ChangeWidget(`id(`reprobe),`Enabled, false );

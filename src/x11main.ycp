@@ -166,13 +166,13 @@ XProposal::HWFlag = (SCR::Read (.target.size,
 //==========================================
 // Event loop...
 //------------------------------------------
-string helpText = UI::X11AutoSetupDialogHelpText();
-term   contents = UI::X11AutoSetupDialog(
+string helpText = X11AutoSetupDialogHelpText();
+term   contents = X11AutoSetupDialog(
 	XProposal::AutoInstallMapEnableX11, suggestion
 );
 Wizard::SetContents(
 	_("Desktop Settings"),contents, helpText,
-	WFM::Args(0), WFM::Args(1)
+	(boolean) WFM::Args(0), (boolean) WFM::Args(1)
 );
 
 //==========================================
@@ -199,7 +199,7 @@ if ( Mode::autoinst ) {
 	return `next;
 }
 boolean stop = false;
-symbol ret   = nil;
+any ret   = nil;
 repeat {
 	ret = Wizard::UserInput();
 	if ( ret == `abort || ret == `cancel || ret == `back ) {
@@ -220,12 +220,12 @@ repeat {
 			SetTextMode();
 			string suggestion = getSuggestionString (false);
 			SetX11Mode();
-			term   contents = UI::X11AutoSetupDialog (
+			term   contents = X11AutoSetupDialog (
 				true, suggestion
 			);
 			Wizard::SetContents (
 				_("Desktop Settings"),contents, helpText,
-				WFM::Args(0), WFM::Args(1)
+				(boolean) WFM::Args(0), (boolean) WFM::Args(1)
 			);
 			stop = false;
 		}
@@ -237,12 +237,12 @@ repeat {
 		);
 		string suggestion = getSuggestionString (true);
 		SetX11Mode();
-		term   contents = UI::X11AutoSetupDialog (
+		term   contents = X11AutoSetupDialog (
 			true, suggestion
 		);
 		Wizard::SetContents (
 			_("Desktop Settings"),contents, helpText,
-			WFM::Args(0), WFM::Args(1)
+			(boolean) WFM::Args(0), (boolean) WFM::Args(1)
 		);
 	}
 } until (
@@ -252,5 +252,5 @@ repeat {
 	stop == true
 );
 Wizard::CloseDialog();
-return ret;
+return (symbol) ret;
 }
