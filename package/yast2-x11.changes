@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec  3 14:23:16 CET 2004 - ms@suse.de
+
+- removed isax and 3ddiag agents which are not used by anybody
+- update monitors.ycp with data from the CDB
+
+-------------------------------------------------------------------
 Wed Oct 27 12:29:18 CEST 2004 - arvin@suse.de
 
 - adapted to new Mode.ycp
