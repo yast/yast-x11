@@ -536,7 +536,8 @@ the noise.
      */
     define list get_models_for_vendor( string vendor, list<map> monitor_db )
 	{
-	list<map> vendor_monitors = filter( map monitor, monitor_db, ``( lookup( monitor, "vendor", "" ) == vendor ) );
+	list<map> vendor_monitors = filter( map monitor, monitor_db, ``(
+                    monitor["vendor"]:"" == vendor ));
 	return toset( maplist( map monitor, vendor_monitors, ``( monitor["model"]:"")) );
     };
 
@@ -630,7 +631,7 @@ the noise.
 	    AutoinstX11::monitor["monitor_vendor"] = AutoinstX11::current_vendor ;
 	}
 
-	if (  AutoinstX11::monitor["device"]:""  == "" )
+	if (  AutoinstX11::monitor["monitor_device"]:""  == "" )
 	{
 	    // monitor model not known
 	    AutoinstX11::current_model  = _("unknown model");
