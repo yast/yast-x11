@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul 26 15:13:17 CEST 2002 - ms@suse.de
+
+- fixed base package list which indicate required packages for the
+  YaST2 based configuration (x11.ycp)
+
+-------------------------------------------------------------------
 Fri Jul 26 13:33:39 CEST 2002 - ms@suse.de
 
 - add basic inst_x11.ycp to installation package (#17203)
