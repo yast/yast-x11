@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Apr 27 10:12:45 CEST 2004 - ms@suse.de
+
+- use xorg-x11 packages for requiredPacs
+
+-------------------------------------------------------------------
 Tue Apr 20 10:39:59 CEST 2004 - ms@suse.de
 
 - added singlehead/multihead status flag (#38030)
