@@ -54,7 +54,8 @@ y2debug("param=%1", param);
 // Import configuration
 //---------------------------------
 if (func == "Import") {
-	XProposal::X11 = param;
+    AutoinstX11::Import(param);
+    
 }
 
 //=================================
@@ -72,6 +73,14 @@ else if (func == "Change") {
 }
 
 //=================================
+// Reset configuration
+//---------------------------------
+else if (func == "Reset") {
+    AutoinstX11::Import($[]);
+	ret = $[];
+}
+
+//=================================
 // Return actual state
 //---------------------------------
 else if (func == "Export") {
@@ -82,6 +91,7 @@ else if (func == "Export") {
 // Write given settings
 //---------------------------------
 else if (func == "Write") {
+    y2error("empty");
 }
 
 //=================================

@@ -4,4 +4,4 @@
 # $Id$
 #
 
-SUBDIRS = clients modules xsun config installation x11main
+SUBDIRS = clients modules xsun config installation x11main data

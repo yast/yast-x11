@@ -11,28 +11,63 @@
     module "AutoinstX11";
     textdomain "autoinst";
     import "Summary";
+    import "Directory";
+    import "XProposal";
+	
 
     global map x11 = $[];
 
+    global map monitor = $[]; 
+    global map display = $[]; 
+
+    global string current_vendor = "";
+    global string current_model  = "";
+    
+    // The lists to hold vendors and models when all_monitors is taken apart.
+    //
+    global list vendors = [];
+    global list models  = [];
+
+
+    string static_monitors  = Directory::datadir + "/monitors.ycp";
+    
+    // The monitor data base
+    //
+    global list all_monitors = [];
+
+    
+    
+    
     /**
      * Import
      */
     global define boolean Import (map settings) ``{
-	x11 = settings;	
+	x11 = settings;
+	monitor = x11["monitor"]:$[];
+	display =  monitor["display"]:$[];
+	current_vendor = monitor["monitor_vendor"]:"" ;
+	current_model  = monitor["monitor_device"]:"" ;
+
+	XProposal::X11 = x11;
 	return true;
     }
 
     /**
      * Export
      */
-    global define map Export () ``{	
+    global define map Export () ``{
+
+	monitor["display"] =  display;
+	monitor["monitor_device"] =  current_model;
+	monitor["monitor_vendor"] = current_vendor;
+	x11["monitor"] = monitor;
 	return x11;
     }
 
     /**
      * Summary
      */
-    
+
     global define string Summary() ``{
 	string summary = "";
 	map m = x11["monitor"]:$[];
@@ -51,7 +86,29 @@
 
 	string horizontal = sformat("%1 - %2",  d["min_hsync"]:0 , d["max_hsync"]:0);
 	string vertical = sformat("%1 - %2",  d["min_vsync"]:0 , d["max_vsync"]:0);
+	string nc = Summary::NotConfigured ();
+	string depth = sformat ("%1", (x11["color_depth"]:-1 != -1) ? x11["color_depth"]:-1 : nc );
+	
+	summary = Summary::AddHeader(summary, _("Configure X11"));
+	summary = Summary::AddLine(summary,  (x11["configure_x11"]:false) ? _("Yes") : nc);
 
+	summary = Summary::AddHeader(summary, _("Enable 3D Support if possible"));
+	summary = Summary::AddLine(summary,  (x11["enable_3d"]:false) ? _("Yes") : nc);
+
+	summary = Summary::AddHeader(summary, _("Color Depth"));
+	summary = Summary::AddLine(summary, depth );
+
+	
+	summary = Summary::AddHeader(summary, _("Resolution"));
+	summary = Summary::AddLine(summary,  (x11["resolution"]:"" != "") ? x11["resolution"]:"" : nc);
+	
+	summary = Summary::AddHeader(summary, _("Display Manager"));
+	summary = Summary::AddLine(summary,  (x11["display_manager"]:"" != "") ? x11["display_manager"]:"" : nc);
+
+	summary = Summary::AddHeader(summary, _("Window Manager"));
+	summary = Summary::AddLine(summary,  (x11["window_manager"]:"" != "") ? x11["window_manager"]:"" : nc);
+	
+	
 	summary = Summary::AddHeader(summary, _("Monitor"));
 	summary = Summary::AddLine(summary, monitor);
 	summary = Summary::AddHeader(summary, _("Horizontal frequency"));
@@ -63,4 +120,29 @@
     }
 
 
+    /**
+     *	Get a list of all monitor vendors from the monitor database.
+     *  Add a special monitor list entry for users who don't want to install X11 at all.     
+     * 	@return list
+     */
+    define void readVendors()
+	``{
+	vendors = toset( maplist( map monitor, all_monitors, ``( monitor["vendor"]:"" )));
+	return;
+    }
+
+
+
+    global define void readMonitorDB() ``{
+	
+	all_monitors = (list)SCR::Read( .target.ycp, [ static_monitors, [] ]);
+	// y2milestone("Monitors: %1", all_monitors);
+	readVendors();
+	// y2milestone("Vendors: %1", vendors);
+	return;						
+    }
+
+
 }
+
+

@@ -11,14 +11,18 @@
 
     include "wizard/sequencer.ycp";
     import "Label";
-	import "AutoinstX11";
-	import "Wizard";
+    import "AutoinstX11";
+    import "Wizard";
+    import "Popup";
 
 
 
 
-  
-    global define term updateContents() ``{
+    /**
+     * Build main Dialog
+     * @return term
+     */
+    define term updateContents() ``{
 	map x11 = AutoinstX11::x11;
 	list resolutions        = [];
 	list resolutions_list = ["640x480", "800x600", "1024x768", "1152x864", "1280x960", "1280x1024", "1600x1200"];
@@ -72,13 +76,7 @@
 						     `id(`enable_3d),
 						     _("&Enable 3D Support if possible"),
 						     x11["enable_3d"]:false)
-					   ),
-				     `Left(
-					   `CheckBox(
-						     `id(`start_x11),
-						     // This sets the runlevel to 5.
-						     _("&Start the X Window System on boot"), x11["start_x11"]:false
-						     )),
+					   ),			
 				     `VSpacing(1),
 				     `HBox(
 					   `HWeight(50,
@@ -106,7 +104,7 @@
 					   `HWeight(70,`Empty())
 					   )
 				     )
-			       )		     
+			       )
 		       )
 		 );
 	return contents;
@@ -115,10 +113,11 @@
 
 
 
-   /**
-     * X11 Options
+    /**
+     * Main X11 Options
+     * @return symbol
      */
-    global define symbol x11Options()
+    define symbol x11Options()
 	``{
 
 
@@ -137,17 +136,13 @@ be started at boot time and what display manager should be used.</p>
 	Wizard::SetContents(caption,
 			    updateContents(), help, true, true);
 
-	
-	Wizard::ReplaceAbortButton(`Empty());
-	UI::ChangeWidget(`id(`next), `Label, Label::FinishButton());
 
-	if (!x11_enabled) {
+	if (!x11_enabled)
+	{
 	    UI::ChangeWidget(`id(`depth), `Enabled, false);
 	    UI::ChangeWidget(`id(`resolution), `Enabled, false);
 	    UI::ChangeWidget(`id(`dm), `Enabled, false);
-	    UI::ChangeWidget(`id(`enable_3d), `Enabled, false);
-	    UI::ChangeWidget(`id(`start_x11), `Enabled, false);
-	    
+	    UI::ChangeWidget(`id(`enable_3d), `Enabled, false);	    
 	}
 
 	any ret = nil;
@@ -160,16 +155,14 @@ be started at boot time and what display manager should be used.</p>
 		UI::ChangeWidget(`id(`depth), `Enabled, true);
 		UI::ChangeWidget(`id(`resolution), `Enabled, true);
 		UI::ChangeWidget(`id(`dm), `Enabled, true);
-		UI::ChangeWidget(`id(`enable_3d), `Enabled, true);
-		UI::ChangeWidget(`id(`start_x11), `Enabled, true);		
+		UI::ChangeWidget(`id(`enable_3d), `Enabled, true);		
 	    }
 	    else
 	    {
 		UI::ChangeWidget(`id(`depth), `Enabled, false);
 		UI::ChangeWidget(`id(`resolution), `Enabled, false);
 		UI::ChangeWidget(`id(`dm), `Enabled, false);
-		UI::ChangeWidget(`id(`enable_3d), `Enabled, false);
-		UI::ChangeWidget(`id(`start_x11), `Enabled, false);		
+		UI::ChangeWidget(`id(`enable_3d), `Enabled, false);		
 	    }
 
 	    if (ret == `key || ret ==`next  )
@@ -188,7 +181,7 @@ be started at boot time and what display manager should be used.</p>
 		if (is(default_dm, string))
 		{
 		    AutoinstX11::x11["display_manager"] =  default_dm;
-		    
+
 		    if (default_dm == "kdm")
 			AutoinstX11::x11["window_manager"] =  "kde";
 		    else if (default_dm == "gdm")
@@ -199,15 +192,11 @@ be started at boot time and what display manager should be used.</p>
 
 		any enable_3d	= UI::QueryWidget(`id(`enable_3d), `Value);
 		if (is(enable_3d, boolean))
-		    AutoinstX11::x11["enable_3d"] = enable_3d;
-
-		any xdm	= UI::QueryWidget(`id(`start_x11), `Value);
-		if (is(xdm, boolean))
-		    AutoinstX11::x11["start_x11"] =  xdm;
+		    AutoinstX11::x11["enable_3d"] = enable_3d;	
 	    }
 
-	    
-	} until (  ret ==`next || ret ==`back );
+
+	} until (  ret ==`next || ret ==`back || ret == `abort );
 
 
 	return (symbol)ret;
@@ -215,20 +204,636 @@ be started at boot time and what display manager should be used.</p>
 
 
 
+    /*
+     * Create dialog for monitor selection     
+     * @param list of vendors and models (each a list of strings)     
+     * @return term dialog as term to be put into Wizard::SetContents()
+     */
+    define term  X11VideoDataDialog( list vendors, list models )
+	``{
 
+	term x11_video_data_dialog =
+	    `VBox(
+		  `HBox(
+			`ReplacePoint( `id(`replace_point_vendors),
+				       `SelectionBox( `id(`vendors), `opt(`notify),
+						      // Headline for monitor vendor selection box
+						      _("&Vendor"),
+						      vendors
+						      )
+				       ),
+			`ReplacePoint( `id(`replace_point_models),
+				       `SelectionBox( `id(`models), `opt(`notify),
+						      // Headline for monitor model selection box
+						      _("M&odel"),
+						      models
+						      )
+				       )
+			),
+		  `VSpacing(0.2),
+		  `VSquash(
+			   `HBox(
+				 `HWeight( 1,
+					   `Frame(
+						  // Frame title for horizontal frequency input fields
+						  _("Horizontal frequency"),
+						  `HBox(
+							`HWeight( 35, `TextEntry( `id(`min_hsync ), `opt(`shrinkable), _("&min") ) ),
+
+							// Separator between min and max frequency fields
+							`HWeight( 10, `Bottom(`Label( _("-") ) ) ),
+							`HWeight( 35, `TextEntry( `id(`max_hsync ), `opt(`shrinkable), _("m&ax") ) ),
+
+							// Unit for horizontal frequency
+							`HWeight( 17, `Bottom(`Label( _("kHz") ) ) )
+							)
+						  )
+					   ),
+				 `HSpacing(0.8),
+				 `HWeight( 1,
+					   `Frame(
+						  // Frame title for vertical frequency input fields
+						  _("Vertical frequency"),
+						  `HBox(
+							`HWeight( 35, `TextEntry( `id(`min_vsync ), `opt(`shrinkable), _("m&in") ) ),
+
+							// Separator between min and max frequency fields
+							`HWeight( 10, `Bottom(`Label( _("-") ) ) ),
+							`HWeight( 35, `TextEntry( `id(`max_vsync ), `opt(`shrinkable), _("ma&x") ) ),
+
+							// Unit for horizontal frequency
+							`HWeight( 17, `Bottom( `Label( _("Hz") ) ) )
+							)
+						  )
+					   )
+				 )
+			   )		     
+		  );
+
+	return x11_video_data_dialog;
+    };
+
+
+    /**
+     * Get the `Value property of an arbitrary widget
+     * @param widget_id	ID of the widget, e.g. `resolution     
+     * @return the widget's `Value property
+     */
+    define any GetValue( symbol widget_id )	``{
+	return UI::QueryWidget(`id( widget_id ), `Value );
+    };
+
+
+    /**
+     * Set the `Value property of an arbitrary widget     
+     * @param widget_id	ID of the widget, e.g. `resolution
+     * @param new_value	the new value
+     */
+    define void SetValue( symbol	widget_id,
+				 any	new_value	) ``{
+	UI::ChangeWidget(`id( widget_id ), `Value, new_value );
+	return;
+    };
+
+
+    /**
+     * Get help text for video data dialog     
+     * @return string multi line help text in RichText (HTML like) format
+     */
+    define string X11VideoDataDialogHelpText()
+	``{
+	/*
+	 * Help text (HTML like) for X11 video data dialog
+	 */
+
+	// help part 1 of 8
+	string helptext = _("<p>
+Please select your monitor's <b>vendor</b> and <b>model</b>.
+</p>
+");
+
+	// help part 2 of 8
+	helptext = helptext + _("<p>
+If your monitor is not listed here, use <b>VESA</b>.
+Most monitors comply with this standard.
+</p>
+");
+
+
+	// help part 5 of 8
+	helptext = helptext + _("<p>
+Modify the monitor's frequencies in the respective input
+fields below the selection boxes.
+Refer to your monitor manual for your monitor's maximum
+frequencies. <b><i>Do not exceed</i></b> the values specified there.
+Otherwise, there is a serious risk of <b><i>damaging your monitor</i></b>.
+</p>
+");
+
+	// help part 6 of 8
+	helptext = helptext + _("<p>
+The <b>horizontal frequency</b> (in kHz) specifies how many times
+per second the monitor can write a horizontal scan line. This is a
+hard limit of the monitor, independent of the screen resolution.
+</p>
+");
+
+	// help part 7 of 8
+	helptext = helptext + _("<p>
+The <b>vertical frequency</b> (in Hz) specifies how many times per
+second the image on the screen is refreshed. This value depends on the
+screen resolution and the monitor's maximum horizontal frequency.
+</p>
+");
+
+	// help part 8 of 8
+	helptext = helptext + _("<p>
+If you experience a constant high frequency beep from your monitor,
+you might wish to use slightly lower frequency values than the maximum
+specified in your monitor's manual. This usually helps a lot to reduce
+the noise.
+</p>
+");
+	    
+	return helptext;
+
+    };	
+   
+
+    // get the sync values --> string
+    //
+    define string GetMinHsync()	``{ return (string)GetValue(`min_hsync ); };
+    define string GetMaxHsync()	``{ return (string)GetValue(`max_hsync ); };
+    define string GetMinVsync()	``{ return (string)GetValue(`min_vsync ); };
+    define string GetMaxVsync()	``{ return (string)GetValue(`max_vsync ); };
+
+    // set the sync values (every single value)
+    //
+    define void SetMinHsync( string new_value ) ``{ SetValue(`min_hsync, new_value ); };
+    define void SetMaxHsync( string new_value ) ``{ SetValue(`max_hsync, new_value ); };
+    define void SetMinVsync( string new_value ) ``{ SetValue(`min_vsync, new_value ); };
+    define void SetMaxVsync( string new_value ) ``{ SetValue(`max_vsync, new_value ); };
+
+    // set the focus to the input fields
+    //
+    define void SetFocusMinHsync() ``{ UI::SetFocus(`id(`min_hsync)); }
+    define void SetFocusMaxHsync() ``{ UI::SetFocus(`id(`max_hsync)); }
+    define void SetFocusMinVsync() ``{ UI::SetFocus(`id(`min_vsync)); }
+    define void SetFocusMaxVsync() ``{ UI::SetFocus(`id(`max_vsync)); }
+
+    // get the current vendor and model --> string
+    //
+    define string GetCurrentVendor() ``{ return (string)UI::QueryWidget(`id(`vendors), `CurrentItem); }
+    define string GetCurrentModel () ``{ return (string)UI::QueryWidget(`id(`models),  `CurrentItem); }
+
+    // set the current vendor and model
+    //
+    define void SetCurrentVendor( string new_item ) ``{ UI::ChangeWidget(`id(`vendors), `CurrentItem, new_item ); }
+    define void SetCurrentModel ( string new_item ) ``{ UI::ChangeWidget(`id(`models),  `CurrentItem, new_item ); }
+    
+    // replace the vendor list
+    //
+    define void ReplaceVendors( list new_value ) ``{
+	UI::ReplaceWidget( `id( `replace_point_vendors),
+			   `SelectionBox( `id(`vendors), `opt(`notify),
+					  // Headline for monitor vendor selection box
+					  _("Vendor"),
+					  new_value
+					  )
+			   );
+	return;
+    }
+
+    /**
+     * Replace the model list
+     * @return void
+     */
+    define  void ReplaceModels( list new_value ) ``{
+	
+	UI::ReplaceWidget( `id( `replace_point_models),
+			   `SelectionBox( `id( `models),
+					  `opt( `notify ),
+					  // Headline for monitor model selection box
+					  _("Model"),
+					  new_value
+					  )
+			   );
+	return;
+    }
+
+    // Handle `back button
+    //
+    define void SetBackState( boolean new_value )	``{ UI::ChangeWidget(`id(`back), `Enabled, new_value ); }
+    define boolean GetBackState()  			``{ return (boolean)UI::QueryWidget(`id(`back), `Enabled ); }
+
+
+
+
+
+    /**
+     * round up a value given as integer or float to the next integer (ceiling).
+     */
+    define integer ceiling( any value )
+	``{
+	if ( is( value, integer ) ) return (integer) value;	// already integer
+
+	if ( is( value, float ) )				// is float
+	{
+	    if ( tofloat( tointeger( value ) ) == value )	// is whole-numbered
+		return( tointeger( value ) );			// return as is
+	    else						// not whole-numbered
+		return( tointeger( value ) + 1 );		// round up
+	}
+	else
+	{
+	    y2error( "ceiling(): parameter error: <%1> (only integer and float allowed)", value );
+	    return( nil );
+	}
+    }
+
+
+    /**
+     * Round down a value given as integer or float to the prev. integer (floor).
+     **/
+    define integer floor( any value )
+	``{
+	if ( is( value, integer ) ) return (integer) value;	// already integer
+
+	if ( is( value, float ) )				// is float
+	{
+	    return( tointeger( value ) );			// round down
+	}
+	else
+	{
+	    y2error( "floor(): parameter error: <%1> (only integer and float allowed)", value );
+	    return( nil );
+	}
+    }
+    /*
+     * Check if the number is in the format [+]<number>[kKmMgGtT]
+     * @return boolean true or false
+     */
+    define boolean IsNumber( string input )
+	``{
+	integer n = 0;
+	while ( n < size( input ) )
+	{
+            string erg = filterchars( substring( input, n,1 ), "0123456789." );
+
+            if ( size( erg ) != 1 )
+            {
+		y2milestone("%1", n);
+		return( false );
+            }
+
+            n = n + 1;
+	}
+
+	return( true );
+    };
+
+
+    /**
+     * Get a list of all monitor models for a specified vendor from the monitor database.
+     * @return list
+     */
+    define list get_models_for_vendor( string vendor, list monitor_db )
+	``{
+	list vendor_monitors = filter( map monitor, monitor_db, ``( lookup( monitor, "vendor", "" ) == vendor ) );
+	return toset( maplist( map monitor, vendor_monitors, ``( monitor["model"]:"")) );
+    };
+
+    /**          
+     * Automagically update the frequency values for a specified model.
+     */
+    define void update_frequency_for_model( string vendor, string model)
+	``{
+	// Get the data record for this monitor
+	//
+	map monitor = (map)find( map monitor, AutoinstX11::all_monitors,
+			    ``(( monitor["vendor"]:""  == vendor)
+			       && (monitor["model"]:""  == model)) );
+
+	
+	// Set all the input fields according to this monitor's data
+	// first, assign the value to a float. the monitor data may contain
+	// integer values, but tostring expects a float.
+
+	float fsyncval = tofloat( lookup( monitor, "min_hsync", 0 ) );	
+	SetMinHsync (tostring( fsyncval, 1 ));
+	
+	fsyncval = tofloat( lookup( monitor, "max_hsync", 0 ) );
+	SetMaxHsync (tostring( fsyncval, 1 ));
+	
+	fsyncval = tofloat( lookup( monitor, "min_vsync", 0 ) );
+	SetMinVsync (tostring( fsyncval, 1 ));
+	
+	fsyncval = tofloat( lookup( monitor, "max_vsync", 0 ) );
+	SetMaxVsync (tostring( fsyncval, 1 ));
+
+	
+	return;
+    }
+
+    /*
+     * Automagically update the models list for a specified vendor.
+     * Select default first entry if unknown and update its sync values.
+     * Honor the special "No X11" entry.
+     * It is assumed that the given vendor is known i.e. is a member of the given monitor_db.
+     */
+    define void change_vendor( string vendor, list monitor_db )
+	``{
+	if ( vendor == "No X11" )
+	{
+	    ReplaceModels( [] );		
+
+	    SetMinHsync( "" );	
+	    SetMaxHsync( "" );
+	    SetMinVsync( "" );
+	    SetMaxVsync( "" );
+
+	    AutoinstX11::current_model = "";				
+	}
+	else								
+	{
+	    list models = get_models_for_vendor( vendor, monitor_db );		   
+	    ReplaceModels( models );					
+
+	    if ( models != [] )						
+	    {
+		if ( ! contains( models, AutoinstX11::current_model ) )	
+		    AutoinstX11::current_model = models[0]:"";		
+
+		SetCurrentModel( AutoinstX11::current_model );			
+		update_frequency_for_model( vendor, AutoinstX11::current_model );
+	    }
+	    else							
+	    {
+		SetMinHsync( "" );					
+		SetMaxHsync( "" );
+		SetMinVsync( "" );
+		SetMaxVsync( "" );
+
+		AutoinstX11::current_model = "";					
+	    }
+	}
+	return;
+    }
+
+    /**
+     * Read the monitor db and get vendors and models lists.
+     * Optionally extend db with probed monitor.
+     */
+    define void get_vendors_and_models() ``{		
+	if (  AutoinstX11::monitor["monitor_vendor"]: ""  == "" )
+	{
+	    // monitor vendor not known
+	    AutoinstX11::current_vendor = _("unknown vendor");
+	    AutoinstX11::monitor["monitor_vendor"] = AutoinstX11::current_vendor ;
+	}
+
+	if (  AutoinstX11::monitor["device"]:""  == "" )
+	{
+	    // monitor model not known
+	    AutoinstX11::current_model  = _("unknown model");
+	    AutoinstX11::monitor["monitor_device"] =  AutoinstX11::current_model;
+	}
+    }
+    
+    /**
+     * Display current vendor, model and associated values if possible.
+     * @return void
+     */    
+    define void display_models_and_values()
+	``{
+	if ( contains( AutoinstX11::vendors, AutoinstX11::current_vendor ) )			
+	{
+	    SetCurrentVendor( AutoinstX11::current_vendor );				
+	    change_vendor( AutoinstX11::current_vendor,  AutoinstX11::all_monitors );
+	}
+	else								
+	{
+	    AutoinstX11::current_vendor = (string) select(  AutoinstX11::vendors, 0, "" );				
+	    SetCurrentVendor( AutoinstX11::current_vendor );			
+	    change_vendor( AutoinstX11::current_vendor, AutoinstX11::all_monitors );		
+	}
+	return;
+    }
+
+    // Parse the given string assuming it is a "model" string containing VESA
+    // information formatted as e.g. "1024X768@75HZ". The values for width,
+    // height, and refresh are extracted and assigned to the X11 user_data struct
+    // along with a constant color depth of 8 bit (VESA) or 16 bit (LCD).
+    //
+    define void store_VESA_LCD( string model, boolean is_VESA )
+	``{
+	integer currentWidth      = 0;
+	integer currentHeight     = 0;
+	integer currentFrequency  = 0;
+	integer currentColorDepth = 0;
+
+	if ( is_VESA )
+	    currentColorDepth = 8;	// VESA --> always
+	else
+	    currentColorDepth = 16;	// LCD  --> always
+
+	// First find resolution string within model string.
+	// E.g. "PANORAMIC SUPERWIDE 1024X768@75HZ" --> "1024X768@75HZ"
+	//
+	list<string> res_list = splitstring( model, " " );
+
+	if ( size( res_list ) > 0 )
+	{
+	    string resolution = find(string res, res_list, ``( issubstring( res, "@") ));
+
+	    // 1. "1024X768@75HZ" --> "1024" and "768@75HZ"
+	    //
+	    list first = splitstring( resolution, "X");
+
+	    if ( size( first ) > 0 )
+	    {
+		currentWidth = tointeger( select( first, 0, "" ) );
+
+		// 2. "768@75HZ" --> "768" and "75HZ"
+		//
+		list second = splitstring( first[1]: "" , "@" );
+
+		if ( size( second ) > 0 )
+		{
+		    currentHeight    = tointeger( second[0]: "" );
+		    currentFrequency = tointeger( second[1]: "" );
+		}
+	    }
+	}
+
+	// store the new values into the X11 user_data struct
+	//
+	 AutoinstX11::display = AutoinstX11::monitor["display"]:$[];
+	AutoinstX11::display["width"] 	= currentWidth;
+	AutoinstX11::display["height"] 	= currentHeight;
+	AutoinstX11::display["frequency"] 	= currentFrequency ;
+	AutoinstX11::x11["color_depth"] = currentColorDepth;
+
+	return;
+    }
 
 
     
-    global define symbol X11AutoSequence () ``{
+
+    /**
+     * Main Monitor Dialog
+     * @return symbol
+     */
+    define symbol monitorDialog() ``{
+
+
+	AutoinstX11::readMonitorDB();
+	
+	map display =  AutoinstX11::display;
+	integer min_hsync = ceiling( display["min_hsync"]:0 );
+	integer max_hsync = floor  ( display["max_hsync"]:0 );
+	integer min_vsync = ceiling( display["min_vsync"]:0 );
+	integer max_vsync = floor  ( display["max_vsync"]:0 );
+
+	get_vendors_and_models();
+
+
+	string help_text = X11VideoDataDialogHelpText();
+
+	term contents = X11VideoDataDialog( AutoinstX11::vendors, [] );
+
+	Wizard::SetContents(
+			    _("Configure Monitor"),
+			    contents,
+			    help_text,
+			    true , true);
+
+	display_models_and_values();
+
+	// Monitor
+    
+	string min_hsync_string = "";
+	string max_hsync_string = "";
+	string min_vsync_string = "";
+	string max_vsync_string = "";
+
+	symbol ret = `none;
+	repeat {
+	    ret = (symbol) UI::UserInput();
+
+	    if ( ret == `vendors )
+	    {
+		string new_vendor = GetCurrentVendor();	
+
+		if ( new_vendor != AutoinstX11::current_vendor )		
+		{
+		    AutoinstX11::current_vendor = new_vendor;
+		    change_vendor( AutoinstX11::current_vendor, AutoinstX11::all_monitors );
+		}		
+	    }
+	    else if ( ret == `models )
+	    {
+		string new_model = GetCurrentModel();		
+
+		if ( new_model != AutoinstX11::current_model )		
+		{		    
+		    AutoinstX11::current_model = new_model;
+		    update_frequency_for_model( AutoinstX11::current_vendor,
+						AutoinstX11::current_model );  
+		}	
+	    }
+	    else if ( ret == `next )
+	    {		
+		min_hsync_string = GetMinHsync();
+		max_hsync_string = GetMaxHsync();
+		min_vsync_string = GetMinVsync();
+		max_vsync_string = GetMaxVsync();
+
+		// Check the content in the input fields. All input must be valid.
+		//
+		if ( ! IsNumber( min_hsync_string ) || size( min_hsync_string ) <= 0 )
+		{
+		    // A frequency value is not of type numerical. User must correct this.
+		    Popup::Message(_("The minimum horizontal frequency is not a numerical value.
+Try again.
+"));
+		    SetFocusMinHsync();
+		    continue;
+		}
+
+		if ( ! IsNumber( max_hsync_string ) || size( max_hsync_string ) <= 0 )
+		{
+		    // A frequency value is not of type numerical. User must correct this.
+		    Popup::Message(_("Maximum horizontal frequency is not a numerical value.\nPlease try again."));
+		    SetFocusMaxHsync();
+		    continue;
+		}
+
+		if ( ! IsNumber( min_vsync_string ) || size( min_vsync_string ) <= 0 )
+		{
+		    // A frequency value is not of type numerical. User must correct this.
+		    Popup::Message(_("The minimum vertical frequency is not a numerical value.
+Try again.
+"));
+		    SetFocusMinVsync();
+		    continue;
+		}
+
+		if ( ! IsNumber( max_vsync_string ) || size( max_vsync_string ) <= 0 )
+		{
+		    // A frequency value is not of type numerical. User must correct this.
+		    Popup::Message(_("Maximum vertical frequency is not a numerical value.\nPlease try again."));
+		    SetFocusMaxVsync();
+		    continue;
+		}
+	
+		min_hsync = ceiling( tofloat( min_hsync_string ) );
+		max_hsync = floor  ( tofloat( max_hsync_string ) );
+		min_vsync = ceiling( tofloat( min_vsync_string ) );
+		max_vsync = floor  ( tofloat( max_vsync_string ) );
+
+		AutoinstX11::display["min_hsync"] = min_hsync ;
+		AutoinstX11::display["max_hsync"] = max_hsync ;
+		AutoinstX11::display["max_vsync"] = max_vsync ;
+		AutoinstX11::display["min_vsync"] =  min_vsync ;
+
+		if (  AutoinstX11::current_vendor == " VESA" )
+		{
+		    store_VESA_LCD(  AutoinstX11::current_model, true );
+
+		}
+		else if (  AutoinstX11::current_vendor == " LCD" )
+		{
+		    store_VESA_LCD(  AutoinstX11::current_model, false );
+
+		}				
+	    }
+	} until ( ret == `next || ret == `back || ret == `abort);
+
+	return ret;
+    }
+
+
+
+    /**
+     * Sequencer
+     */
+    define symbol X11AutoSequence () ``{
 
 	map dialogs = $[
-			"x11"		:	``(   x11Options() )
+			"x11"		:	``(   x11Options() ),
+			"monitor"	:	``(   monitorDialog() )
 
 	];
 
 	map sequence = $[
 			 "ws_start"	: "x11",
 			 "x11"	:
+			 $[
+			   `abort	: `abort,
+			   `next	: "monitor"
+			 ],
+			 "monitor":
 			 $[
 			   `abort	: `abort,
 			   `next	: `next
@@ -242,8 +847,4 @@ be started at boot time and what display manager should be used.</p>
 	return ret;
     }
 
-
-  
-
- 
 }

@@ -46,5 +46,6 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 @ybindir@/update_unique_keys.pl
 @ybindir@/update_xf86config
 @ybindir@/xmigrate.pl
+@ydatadir@/monitors.ycp
 @plugindir@/*.so.*
 %doc @docdir@

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jan 28 05:14:04 CET 2004 - nashif@suse.de
+
+- Added monitor configuration for autoinstallation
+- moved monitor db and all monitor dialogs  from autoyast2
+
+-------------------------------------------------------------------
 Thu Jan  8 17:14:21 CET 2004 - ms@suse.de
 
 - added standard header according to suggestions from Michal Svec
