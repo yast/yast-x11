@@ -628,11 +628,6 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 	SCR::Execute ( .target.bash,
 		"/bin/rm -f /var/cache/sax/files/hardware.chg"
 	);
-
-	// ... /
-	// setup system runlevel 5 with this X11 configuration
-	// ---
-	setupRunlevel (5);
 }
 
 //==========================================

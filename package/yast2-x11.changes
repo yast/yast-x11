@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 22 08:24:15 CET 2004 - ms@suse.de
+
+- setupRunlevel() is now only called if X11 will be directly
+  disabled using the YaST2 X11 config dialog (#36551)
+
+-------------------------------------------------------------------
 Sun Mar 21 01:28:44 CET 2004 - nashif@suse.de
 
 - Dont ask about installing packages in autoinst mode
