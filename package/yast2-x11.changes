@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Aug 08 10:19:06 CEST 2002 - arvin@suse.de
+
+- changes for agent-probe (libhd) changes
+
+-------------------------------------------------------------------
 Wed Aug  7 11:15:06 CEST 2002 - ms@suse.de
 
 - use functions from lilo/misc.ycp to write GRUB configuration
