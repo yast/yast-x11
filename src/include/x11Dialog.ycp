@@ -30,7 +30,7 @@ UI( ``{
 	) ``{
 		term radio_box = nil;
 		radio_box =
-		`RadioButtonGroup(
+		`RadioButtonGroup(`id(`rb),
 		`VBox(
 		`Left(
 			`RadioButton(`id(`text_mode_only),
@@ -56,8 +56,12 @@ UI( ``{
 		)
 		),
 		`VSpacing( 0.8 ),
+		`HBox(
 		// PushButton: Change X11 settings
-		`PushButton(`id(`change), _("C&hange...") )
+		`PushButton(`id(`change), _("C&hange...") ),
+		// PushButton: Reprobe X11 settings
+		`PushButton(`id(`reprobe), _("Re&probe...") )
+		)
 		)
 		);
 
@@ -114,10 +118,14 @@ settings will be saved when you select <b>Next</b>.
 global define SetX11Mode() ``{
 	UI::ChangeWidget(`id(`auto_mode_description),  `Enabled, true );
 	UI::ChangeWidget(`id(`change), `Enabled, true );
+	UI::ChangeWidget(`id(`reprobe),`Enabled, true );
+	UI::ChangeWidget(`id(`rb), `CurrentButton, `auto_mode );
 }
 
 global define SetTextMode() ``{
 	UI::ChangeWidget(`id(`auto_mode_description),  `Enabled, false );
 	UI::ChangeWidget(`id(`change), `Enabled, false );
+	UI::ChangeWidget(`id(`reprobe),`Enabled, false );
+	UI::ChangeWidget(`id(`rb), `CurrentButton, `text_mode_only );
 }
 }

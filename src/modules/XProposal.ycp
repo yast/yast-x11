@@ -664,6 +664,7 @@ global define void setupRemoteControl () ``{
 	);
 	if (remote == 1) {
 		UI::ChangeWidget (`id(`change), `Enabled, false );
+		UI::ChangeWidget (`id(`reprobe),`Enabled, false );
 	}
 	}
 }

@@ -212,6 +212,21 @@ repeat {
 			stop = false;
 		}
 	}
+	if ( ret == `reprobe ) {
+		SetTextMode();
+		SCR::Execute (.target.bash,
+			"/bin/rm -f /var/cache/sax/files/*"
+		);
+		string suggestion = getSuggestionString (true);
+		SetX11Mode();
+		term   contents = UI::X11AutoSetupDialog (
+			true, suggestion
+		);
+		Wizard::SetContents (
+			_("Desktop Settings"),contents, helpText,
+			WFM::Args(0), WFM::Args(1)
+		);
+	}
 } until (
 	ret  == `next   ||
 	ret  == `back   ||
