@@ -103,7 +103,7 @@ if ( func == "MakeProposal" ) {
 				proposal = proposal + "<li>" + key + _("Enabled") + "</li>";
 			} else {
 			if (cnr > 2) {
-				proposal = proposal + "<li>" + key + _("Unavailable") + "</li>";
+				proposal = proposal + "<li>" + key + _("Unavailable in multihead environment") + "</li>";
 			} else if ( SCR::Execute (
 				.target.bash, "/usr/bin/3Ddiag --num-3dboards"
 			) == 0) {
