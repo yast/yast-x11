@@ -348,14 +348,6 @@ global define list getSuggestion (boolean init) ``{
 	}
 	}
 	// ...
-	// If we are running in a live eval system, always answer
-	// the 3D question with no, because installing missing
-	// packages is not possible there
-	// ---
-	if ( Mode::live_eval ) {
-		initString = initString + " --quiet no";
-	}
-	// ...
 	// call init.pl now and remove the profile
 	// file after this call
 	// ---
