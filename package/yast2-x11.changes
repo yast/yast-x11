@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jul 18 12:10:52 CEST 2002 - ms@suse.de
+
+- fixed inst_x11.ycp to call 3Ddiag-result with the
+  option --omit-config
+
+-------------------------------------------------------------------
 Fri Jul 12 12:41:05 CEST 2002 - arvin@suse.de
 
 - use proper namespace for Args and CallFunction (#16776)
