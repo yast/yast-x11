@@ -25,6 +25,7 @@ import "Mode";
 import "Report";
 import "Wizard";
 import "Popup";
+import "Confirm";
 
 include "x11/x11Dialog.ycp";
 
@@ -38,7 +39,6 @@ define void textMode () ``{
 	// ---
 	// y2milestone ("textMode()...");
 	// ---
-	X11Enabled = false;
 	SetTextMode();
 }
 
@@ -52,7 +52,6 @@ define void autoMode () ``{
 	// ---
 	// y2milestone ("autoMode()...");
 	// ---
-	X11Enabled = true;
 	SetX11Mode();
 	XProposal::setupRemoteControl();
 }
@@ -144,6 +143,16 @@ define string getSuggestionString ( boolean init ) ``{
 // Open Wizzard window...
 //------------------------------------------
 Wizard::OpenAcceptDialog();
+
+//==========================================
+// Check user input for HW detection...
+//------------------------------------------
+if ( Confirm::Detection (_("Graphics-Cards")) != true ) {
+	y2milestone ("Abort X11 configuration...");
+	SetTextMode();
+	XProposal::concludeConfiguration();
+	return `next;
+}
 
 //==========================================
 // Initialize...

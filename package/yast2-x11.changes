@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 28 09:38:16 CEST 2003 - ms@suse.de
+
+- removed mesasoft from require list, it was dropped (#29457)
+- make use of the Confirm::Detection dialog (#26515)
+
+-------------------------------------------------------------------
 Mon Aug 25 16:46:45 CEST 2003 - ms@suse.de
 
 - fixed broken lib specification with hwupdate call (#29197)

@@ -50,7 +50,7 @@ define any installPackages() ``{
 	any localReturn = `next;
 	list neededPacs = [];
 	list requiredPacs = [
-		"XFree86", "XFree86-server", "mesasoft",
+		"XFree86", "XFree86-server",
 		"3ddiag", "sax2", "saxident"
 	];
 	// ... /
