@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 11 10:39:47 CEST 2002 - ms@suse.de
+
+- add 3D information to suggestion
+
+-------------------------------------------------------------------
 Wed Jul 10 14:33:40 CEST 2002 - ms@suse.de
 
 - update inst_x11.ycp to include new 3D workflow
