@@ -147,7 +147,7 @@ Wizard::OpenAcceptDialog();
 //==========================================
 // Check user input for HW detection...
 //------------------------------------------
-if ( Confirm::Detection (_("Graphics-Cards")) != true ) {
+if ( Confirm::Detection (_("Graphics Cards")) != true ) {
 	y2milestone ("Abort X11 configuration...");
 	SetTextMode();
 	XProposal::concludeConfiguration();
