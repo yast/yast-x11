@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jun 21 11:19:05 CEST 2004 - ms@suse.de
+
+- HEAD development open again, version 2.10
+
+-------------------------------------------------------------------
 Tue Apr 27 10:12:45 CEST 2004 - ms@suse.de
 
 - use xorg-x11 packages for requiredPacs
