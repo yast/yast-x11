@@ -199,7 +199,12 @@ define string getSuggestion (boolean init) ``{
 		// auto install mode is active
 		//-------------------------------------------
 		if ( Mode::autoinst ) {
+			import "AutoInstall";
+			map data = AutoInstall::X11;
 			// TODO...
+			// handle the auto install map and write the
+			// needed data to the user profile
+			// ---
 		}
 		//===========================================
 		// write profile, call init.pl and read the
@@ -320,11 +325,25 @@ define string getSuggestion (boolean init) ``{
 		map currentView = allViews[cnr]:$[];
 		cnr = cnr + 1;
 		if (currentCard == $[]) {
+			// ...
+			// at the end of the suggestion text we will add the
+			// 3D status. Therefore the D3Active variable is handled
+			// if the status is false we had to check if the card
+			// or the environment is capable of using 3D
+			// ---
 			data = data + _("3D Acceleration:") + "\n";
 			if (D3Active) {
 				data = data + "  " + _("Enabled");
 			} else {
+			if (cnr > 2) {
+				data = data + "  " + _("Unavailable");
+			} else if ( SCR::Execute (
+				.target.bash, "/usr/bin/3Ddiag --num-3dboards"
+			) == 0) {
+				data = data + "  " + _("Unavailable");
+			} else {
 				data = data + "  " + _("Disabled");
+			}
 			}
 			done = true;
 		} else {
@@ -544,6 +563,10 @@ define void concludeConfiguration () ``{
 	list liloCode = SCR::Read ( .target.ycp,
 		liloCode
 	);
+	// TODO...
+	// change grub configuration too
+	// at this stage
+	// ---
 	string orig = SCR::Read( .lilo.sections.linux.vga );
 	string code = liloCode[0]:orig;
 	if (orig != code) {
