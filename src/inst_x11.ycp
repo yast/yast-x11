@@ -39,8 +39,57 @@ string  suggestion = "";
 list    initResult = [];
 
 //==========================================
+// Global Message Strings
+//------------------------------------------
+string Warning3D = _("
+All 3D drivers in Linux are in developmental phases and are
+therefore, in part, still regarded as experimental. Nevertheless,
+we have decided to include the drivers in our distribution because of the
+high demand for 3D hardware acceleration in Linux.
+
+Because of the somewhat experimental status of OpenGL drivers, we are
+not able to offer any installation support for
+configuring 3D hardware acceleration or if any
+problems related to this should arise. Therefore, the basic setup of
+the graphical user interface X11 does not entail any 3D hardware
+configuration.
+
+Do you want to enable 3D for the following card:
+");
+
+string WarningNVidia = _("
+Please be aware that this is not an official 2D/3D/OpenGL driver from nVidia
+due to licensing reasons. The 3D/OpenGL driver used if you enable 3D is not
+hardware-accelerated.
+    
+If you want to use hardware accelerated 3D/OpenGL, update the packages
+NVIDIA_GLX and NVIDIA_kernel for SuSE Linux from the nVidia Webserver
+(http://www.nvidia.com). You can also do this comfortably via YOU
+(YaST2 Online Update) which is started automatically if you click on the
+Change... button after this message is gone.
+ 
+If there are  problems with the 2D/3D/OpenGL driver from nVidia, consult
+the vendor, as we unfortunately do not have any influence over the
+development of nVidia drivers.
+
+Do you want to enable 3D for the following card:
+");
+
+
+//==========================================
 // Functions...
 //------------------------------------------
+//---[ getCardDriver ]----//
+define boolean isNVidiaCard () ``{
+	integer status = SCR::Execute ( .target.bash,
+		"/usr/X11R6/lib/sax/api/tools/getNVCard"
+	);
+	if (status == 1) {
+		return (true);
+	}
+	return (false);
+}
+
 //---[ getSuggestion ]----//
 define string getSuggestion (boolean init) ``{
 	// ...
@@ -199,6 +248,10 @@ define string getSuggestion (boolean init) ``{
 			// called
 			// ---
 			string D3File = "/var/cache/sax/files/3dname";
+			string D3Message = Warning3D;
+			if ( isNVidiaCard() ) {
+				D3Message = WarningNVidia;
+			}
 			integer question = SCR::Execute ( .target.bash,
 				"/usr/X11R6/lib/sax/sysp.pl -s server -n > " + D3File
 			);
@@ -209,8 +262,8 @@ define string getSuggestion (boolean init) ``{
 			);
 			string topic = _("3D card detected");
 			if ( UI::YesNoPopup ( sformat (
-				_("%1\nDo you want to enable 3D for the following card:\n%2"),
-				topic,cardName
+				_("%1\n%2\n%3"),
+				topic,D3Message,cardName
 			))) {
 				initString = initString + " --quiet yes";
 			} else {
@@ -525,7 +578,7 @@ define boolean changeConfiguration () ``{
 	// y2milestone ("changeConfiguration()...");
 	// ---
 	configurationChanged = true;
-	string xcopt = "--nointro";
+	string xcopt = "--nointro -w 1";
 	integer code = 0;
 	// ...
 	// if there is no hardware.chg file we are able to read the
@@ -545,7 +598,7 @@ define boolean changeConfiguration () ``{
 	if (Mode::cont) {
 		xcopt = xcopt + " --nocheckpacs";
 	}
-	if (! Mode::normal) {
+	if (Mode::cont) {
 	code = SCR::Execute ( .target.bash,
 		"/usr/X11R6/lib/sax/xc.pl --fullscreen " + xcopt
 	);
@@ -623,7 +676,7 @@ if ( Mode::autoinst ) {
 	return `next;
 }
 boolean stop = false;
-symbol ret = nil;
+symbol ret   = nil;
 repeat {
 	ret = Wizard::UserInput();
 	if ( ret == `abort || ret == `cancel || ret == `back ) {
