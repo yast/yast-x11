@@ -154,11 +154,6 @@ global define list getSuggestion (boolean init) ``{
 			userLine = userLine + Keyboard::XkbOptions;
 			userProfile = userProfile + userLine + "\n";
 		}
-		if (Keyboard::MapName != "") {
-			userLine = "InputDevice->0->Option->MapName    = ";
-			userLine = userLine + Keyboard::MapName;
-			userProfile = userProfile + userLine + "\n";
-		}
 		if (Keyboard::XkbKeyCodes != "") {
 			userLine = "InputDevice->0->Option->XkbKeyCodes= ";
 			userLine = userLine + Keyboard::XkbKeyCodes;
