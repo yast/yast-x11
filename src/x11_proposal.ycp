@@ -143,6 +143,7 @@ if ( func == "MakeProposal" ) {
 // Run SaX2 to change the configuration...
 //---------------------------------------------------
 else if ( func == "AskUser" ) {
+	y2milestone ("Calling SaX2 for configuration changes...");
 	XProposal::changeConfiguration();
 }
 //===================================================

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep 12 13:23:28 CEST 2003 - ms@suse.de
+
+- added removal of reinit flag file in changeConfiguration()
+  This will tell the diag.pl sysp script to check 3D with
+  3Ddiag-result to display the correct status (#30534)
+
+-------------------------------------------------------------------
 Thu Sep 11 11:26:33 CEST 2003 - ms@suse.de
 
 - really fixed bug (#26515)

@@ -605,6 +605,9 @@ global define boolean changeConfiguration () ``{
 	// ---
 	configurationChanged = true;
 	string xcopt = "--nointro";
+	SCR::Execute ( .target.bash,
+		"/bin/rm -f /var/cache/sax/files/reinit"
+	);
 	if (Mode::cont) {
 		xcopt = xcopt + " -w 0";
 	}
