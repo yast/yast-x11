@@ -157,7 +157,8 @@ define string getSuggestionString ( boolean init ) ``{
 //==========================================
 // Open Wizzard window...
 //------------------------------------------
-Wizard::OpenAcceptDialog();
+if (!Mode::autoinst)
+    Wizard::OpenAcceptDialog();
 
 //==========================================
 // Initialize...
@@ -176,13 +177,16 @@ XProposal::HWFlag = (SCR::Read (.target.size,
 //------------------------------------------
 string helpText = X11AutoSetupDialogHelpText();
 term   contents = X11AutoSetupDialog(
-	XProposal::AutoInstallMapEnableX11, suggestion
-);
-Wizard::SetContents(
-	_("Desktop Settings"),contents, helpText,
-	(boolean) WFM::Args(0), (boolean) WFM::Args(1)
-);
+            XProposal::AutoInstallMapEnableX11, suggestion
+            );
 
+if (!Mode::autoinst) {
+    Wizard::SetContents(
+            _("Desktop Settings"),contents, helpText,
+            (boolean) WFM::Args(0), (boolean) WFM::Args(1)
+            );
+
+}
 //==========================================
 // Installed system, choose correct mode
 //------------------------------------------
@@ -202,7 +206,8 @@ XProposal::setupRemoteControl();
 //==========================================
 // conclude directly if auto install mode
 //------------------------------------------
-if ( Mode::autoinst ) {
+if ( Mode::autoinst )
+{
 	XProposal::concludeConfiguration ( X11Enabled );
 	return `next;
 }

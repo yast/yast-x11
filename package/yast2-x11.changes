@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 29 16:22:16 CEST 2004 - nashif@suse.de
+
+- Do not show configuration dialog in autoinst mode.
+
+-------------------------------------------------------------------
 Tue Jul 27 18:00:58 CEST 2004 - nashif@suse.de
 
 - Dont force color depth for LCD/VESA
