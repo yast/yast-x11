@@ -3,7 +3,7 @@
 # neededforbuild  autoconf automake dejagnu expect tcl yast2-core yast2-core-devel yast2-devtools yast2-testsuite
 
 @HEADER@
-Requires:	yast2 yast2-lib-wizard yast2-lib-sequencer
+Requires:	yast2
 
 BuildArchitectures:	noarch
 
