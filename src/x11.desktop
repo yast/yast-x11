@@ -11,10 +11,11 @@ X-SuSE-YaST-Call=x11
 X-SuSE-YaST-Group=Hardware
 X-SuSE-YaST-Argument=
 X-SuSE-YaST-RootOnly=true
-X-SuSE-YaST-AutoInst=
+X-SuSE-YaST-AutoInst=configure
 X-SuSE-YaST-Geometry=
 X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoinstResource=
+X-SuSE-YaST-AutoinstClient=autoinst_x11
 
 Icon=x11
 Exec=/sbin/yast2 x11 
