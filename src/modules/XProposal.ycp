@@ -49,17 +49,6 @@ global map		X11 = $[];
 //==========================================
 // Module Functions...
 //------------------------------------------
-//---[ isNVidiaCard ]----//
-define boolean isNVidiaCard () ``{
-	integer status = (integer) SCR::Execute ( .target.bash,
-		"/usr/X11R6/" + Display::lib + "/sax/api/tools/getNVCard"
-	);
-	if (status == 1) {
-		return (true);
-	}
-	return (false);
-}
-
 //---[ cleanSweep ]-----//
 define void cleanSweep () ``{
 	// ...
@@ -268,7 +257,7 @@ global define list getSuggestion (boolean init) ``{
 	SCR::Execute ( .target.bash,
 		"/bin/rm -f " + suggestFile
 	);
-	string initCommand = "/usr/X11R6/" + Display::lib + "/sax/init.pl";
+	string initCommand = "/usr/share/sax/init.pl";
 	string initString  = initCommand + " --suggest";
 	if ( haveProfile ) {
 		initString = initString + " -b " + profileFile;
@@ -294,7 +283,7 @@ global define list getSuggestion (boolean init) ``{
 	if ( (! Mode::autoinst ()) && (! Mode::live_eval) ) {
 	map displayInfo = UI::GetDisplayInfo();
 	if (displayInfo["TextMode"]:false) {
-		string hwupdate = "/usr/X11R6/" + Display::lib +"/sax/tools/hwupdate";
+		string hwupdate = "/sbin/hwupdate";
 		string config   = "/var/cache/sax/files/config";
 		integer update  = SCR::Execute ( .target.bash,
 			hwupdate + " --test"
@@ -312,7 +301,7 @@ global define list getSuggestion (boolean init) ``{
 				D3Message = XMessages::WarningNVidia;
 			}
 			integer question = SCR::Execute ( .target.bash,
-				"/usr/X11R6/" + Display::lib + "/sax/sysp.pl -s server -n > "
+				"/sbin/sysp -s server -n > "
 				+ D3File
 			);
 			if (question == 1) {
@@ -406,7 +395,7 @@ global define list resetSuggestion () ``{
 	foreach (string mod, moduleISaX,``{
 		string modFile = tmpdir + "/" + mod;
 		SCR::Execute ( .target.bash,
-			"/usr/X11R6/" + Display::lib + "/sax/tools/isax -y -l "
+			"/sbin/isax -y -l "
 			+ mod + ">" + modFile
 		);
 		map modResult = (map)SCR::Read ( .target.ycp,
@@ -493,7 +482,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 	if (configurationChanged == false) {
 	if ( (Stage::cont ()) || (! configExist) || (HWFlag) ) {
 	SCR::Execute ( .target.bash,
-		"/usr/X11R6/" + Display::lib + "/sax/xc.pl --auto"
+		"/usr/share/sax/xc.pl --auto"
 	);
 	}
 	}
@@ -522,7 +511,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 		));
 		if (
 			((currentManager == "kdm")  && (Pkg::IsProvided ("kdebase3-kdm")))||
-			((currentManager == "gdm2") && (Pkg::IsProvided ("gdm2"))) ||
+			((currentManager == "gdm") && (Pkg::IsProvided ("gdm"))) ||
 			((currentManager == "xdm")  && (Pkg::IsProvided ("xorg-x11")))
 		) {
 			// Trusted displaymanager already set...
@@ -534,7 +523,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 			displayManager = "kdm";
 			windowManager = "kde";
 		}
-		else if (Pkg::IsProvided ("gdm2")) {
+		else if (Pkg::IsProvided ("gdm")) {
 			// KDE is not installed but Gnome...
 			displayManager = "gdm";
 			windowManager = "gnome";
@@ -607,7 +596,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 	// remind to have a look at the keyboard module to fix
 	// the X11SetLanguage() call
 	// ---
-	string hwupdate = "/usr/X11R6/" + Display::lib +"/sax/tools/hwupdate";
+	string hwupdate = "/sbin/hwupdate";
 	SCR::Execute ( .target.bash,
 		hwupdate + " --all"
 	);
@@ -662,11 +651,11 @@ global define boolean changeConfiguration () ``{
 	}
 	if (Stage::cont ()) {
 	code = (integer)SCR::Execute ( .target.bash,
-	"/usr/X11R6/"+Display::lib+"/sax/xc.pl -y --fullscreen --noborder "+xcopt
+	"/usr/share/sax/xc.pl -y --fullscreen --noborder "+xcopt
 	);
 	} else {
 	code = (integer)SCR::Execute ( .target.bash,
-		"/usr/X11R6/"+ Display::lib + "/sax/xc.pl -y " + xcopt
+		"/usr/share/sax/xc.pl -y " + xcopt
 	);
 	}
 	if (code == 0) {
@@ -690,7 +679,7 @@ global define void setupRemoteControl () ``{
 	map displayInfo = UI::GetDisplayInfo();
 	if (displayInfo["TextMode"]:false) {
 	integer remote = (integer)SCR::Execute ( .target.bash,
-		"/usr/X11R6/" + Display::lib + "/sax/tools/whois"
+		"/sbin/whois"
 	);
 	if (remote == 1) {
 		UI::ChangeWidget (`id(`change), `Enabled, false );

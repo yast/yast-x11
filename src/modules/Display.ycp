@@ -127,7 +127,7 @@ list videoprobelist = [];	// List of all probed videocards
 //------------------------------------------------
 //---[ get_lib_prefix ]---//
 define void get_lib_prefix () ``{
-	string testFile = "/usr/X11R6/lib/sax/init.pl";
+	string testFile = "/usr/share/sax/init.pl";
 	boolean islib = (SCR::Read(.target.size, testFile)!=-1);
 	if (islib) {
 		lib = "lib";
