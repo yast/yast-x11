@@ -41,7 +41,8 @@
     /**
      * Import
      */
-    global define boolean Import (map settings) ``{
+    global define boolean Import (map settings)
+    {
 	x11 = settings;
 	monitor = x11["monitor"]:$[];
 	display =  monitor["display"]:$[];
@@ -55,7 +56,8 @@
     /**
      * Export
      */
-    global define map Export () ``{
+    global define map Export ()
+    {
 
 	monitor["display"] =  display;
 	monitor["monitor_device"] =  current_model;
@@ -67,8 +69,8 @@
     /**
      * Summary
      */
-
-    global define string Summary() ``{
+    global define string Summary()
+    {
 	string summary = "";
 	map m = x11["monitor"]:$[];
 	string my_current_vendor = m["monitor_vendor"]:"";
