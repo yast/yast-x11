@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul 31 14:48:42 CEST 2002 - ms@suse.de
+
+- lib64 path fixes for x11main. Add get_lib_prefix() function
+  to Display.ycp module (#17331)
+
+-------------------------------------------------------------------
 Tue Jul 30 12:22:43 CEST 2002 - ms@suse.de
 
 - moved helper scripts from the tools to the scripts directory

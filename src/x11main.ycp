@@ -25,6 +25,7 @@ import "Report";
 import "Wizard";
 import "Mouse";
 import "Keyboard";
+import "Display";
 
 include "ui/common_popups.ycp";
 include "x11/x11_auto_setup_dialog.ycp";
@@ -88,7 +89,7 @@ Do you want to enable 3D for the following card:
 //---[ getCardDriver ]----//
 define boolean isNVidiaCard () ``{
 	integer status = SCR::Execute ( .target.bash,
-		"/usr/X11R6/lib/sax/api/tools/getNVCard"
+		"/usr/X11R6/" + Display::lib + "/sax/api/tools/getNVCard"
 	);
 	if (status == 1) {
 		return (true);
@@ -229,7 +230,7 @@ define string getSuggestion (boolean init) ``{
 	SCR::Execute ( .target.bash,
 		"/bin/rm -f " + suggestFile
 	);
-	string initCommand = "/usr/X11R6/lib/sax/init.pl";
+	string initCommand = "/usr/X11R6/" + Display::lib + "/sax/init.pl";
 	string initString  = initCommand + " --suggest";
 	if ( haveProfile ) {
 		initString = initString + " -b " + profileFile;
@@ -246,7 +247,7 @@ define string getSuggestion (boolean init) ``{
 	// ---
 	map displayInfo = UI::GetDisplayInfo();
 	if (displayInfo["TextMode"]:false) {
-		string hwupdate = "/usr/X11R6/lib/sax/tools/hwupdate";
+		string hwupdate = "/usr/X11R6/" + Display::lib +"/sax/tools/hwupdate";
 		string config   = "/var/cache/sax/files/config";
 		integer update  = SCR::Execute ( .target.bash,
 			hwupdate + " --test"
@@ -264,7 +265,8 @@ define string getSuggestion (boolean init) ``{
 				D3Message = WarningNVidia;
 			}
 			integer question = SCR::Execute ( .target.bash,
-				"/usr/X11R6/lib/sax/sysp.pl -s server -n > " + D3File
+				"/usr/X11R6/" + Display::lib + "/sax/sysp.pl -s server -n > "
+				+ D3File
 			);
 			if (question == 1) {
 			string cardName = SCR::Read(.target.string, D3File );
@@ -406,7 +408,8 @@ define string resetSuggestion () ``{
 	foreach (`mod, moduleISaX,``{
 		string modFile = tmpdir + "/" + mod;
 		SCR::Execute ( .target.bash,
-			"/usr/X11R6/lib/sax/tools/isax -y -l " + mod + ">" + modFile
+			"/usr/X11R6/" + Display::lib + "/sax/tools/isax -y -l "
+			+ mod + ">" + modFile
 		);
 		map modResult = SCR::Read ( .target.ycp,
 			modFile
@@ -527,7 +530,7 @@ define void concludeConfiguration () ``{
 	if (configurationChanged == false) {
 	if ( (Mode::cont) || (! configExist) || (HWFlag) ) {
 	SCR::Execute ( .target.bash,
-		"/usr/X11R6/lib/sax/xc.pl --auto"
+		"/usr/X11R6/" + Display::lib + "/sax/xc.pl --auto"
 	);
 	}
 	}
@@ -678,11 +681,11 @@ define boolean changeConfiguration () ``{
 	}
 	if (Mode::cont) {
 	code = SCR::Execute ( .target.bash,
-		"/usr/X11R6/lib/sax/xc.pl --fullscreen " + xcopt
+		"/usr/X11R6/" + Display::lib + "/sax/xc.pl --fullscreen " + xcopt
 	);
 	} else {
 	code = SCR::Execute ( .target.bash,
-		"/usr/X11R6/lib/sax/xc.pl " + xcopt
+		"/usr/X11R6/"+ Display::lib + "/sax/xc.pl " + xcopt
 	);
 	}
 	if (code == 0) {
@@ -706,7 +709,7 @@ define void setupRemoteControl () ``{
 	map displayInfo = UI::GetDisplayInfo();
 	if (displayInfo["TextMode"]:false) {
 	integer remote = SCR::Execute ( .target.bash,
-		"/usr/X11R6/lib/sax/tools/whois"
+		"/usr/X11R6/" + Display::lib + "/sax/tools/whois"
 	);
 	if (remote == 1) {
 		UI::ChangeWidget (`id(`change), `Enabled, false );

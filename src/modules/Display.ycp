@@ -13,6 +13,7 @@ DESCRIPTION   : Provide information regarding the display adapter.
               : access via Display::<var-name>.
               : ---
               : boolean xserver_is_unknown
+              : string lib
               : map xserver
               : map xserver_3d
               : boolean has_3d
@@ -105,6 +106,9 @@ global boolean has_vga = false;
 // ...
 // List of X11 packages to be installed for X11.
 global list pacs_to_install = [];
+// ...
+// library path prefix
+global string lib = "lib";
 
 string display_data_file = "/var/lib/YaST2/Display_data.ycp";
 list videoprobelist = [];	// List of all probed videocards
@@ -124,6 +128,7 @@ global define void Display() ``{
 	// Saved data:		- continue_mode and restoring data successful.
 	// Newly probed data:	- any other case (?)
 	// ---
+	get_lib_prefix();
 	if ( ! ( Mode::cont && Restore() ) && ! Mode::config ) {
 		probe_settings();
 	}
@@ -307,6 +312,17 @@ global define boolean Restore() ``{
 //================================================
 // Local Functions...
 //------------------------------------------------
+//---[ get_lib_prefix ]---//
+define get_lib_prefix () ``{
+	string testFile = "/usr/X11R6/lib/sax/init.pl";
+	boolean islib = (SCR::Read(.target.size, testFile)!=-1);
+	if (islib) {
+		lib = "lib";
+	} else {
+		lib = "lib64";
+	}
+}
+
 //---[ extract_packages ]---//
 define extract_packages( map drivermap, map xpacs ) ``{
 	// ...
