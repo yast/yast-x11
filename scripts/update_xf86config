@@ -1,5 +1,5 @@
 #! /bin/sh
-# Update mouse protocol entries in XFree86 config files. 
+# Update mouse protocol entries in X11 config files. 
 # Called by YaST2 if a wheel mouse was detected.
 #
 # Authors:
@@ -77,7 +77,7 @@ function updateMouse {
 # main part below
 # ---
 #====================================
-# handle XFree86 4.x case
+# handle XOrg 4.x case
 #------------------------------------
 configFile="/etc/X11/XF86Config"
 if [ -f "$configFile" ];then

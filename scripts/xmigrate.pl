@@ -6,11 +6,11 @@
 # Marcus Schaefer <ms@suse.de>
 #
 # Perl Skript to update/migrate a XFree86 v3 based system
-# into a XFree86 4.x based system
+# into a XOrg 4.x based system
 #
 # Details:
 # --------
-# 1) Check if the Card is supported from XFree86 4.x
+# 1) Check if the Card is supported from XOrg 4.x
 # 2) Obtain the most important information from the
 #    existing 3.x config file
 # 3) Create a SaX2 profile with the 3.x data
@@ -112,7 +112,7 @@ sub getSyncRange {
 #---[ isSupported ]---#
 sub isSupported {
 #-------------------------------------------------
-# check if the card is supported from XFree86 4.x
+# check if the card is supported from XOrg 4.x
 #
 	my $class = "Unclassified";
 	my $sysp  = "/usr/X11R6/lib/sax/sysp.pl -c";

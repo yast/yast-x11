@@ -111,7 +111,7 @@ if ( ! X11Version::have_x11 () ) {
 }
 
 //==========================================
-// check XFree86 version
+// check X11 version
 //------------------------------------------
 if ( X11Version::version == "3" ) {
 	Popup::Error ( XMessages::versionMismatch );

@@ -92,7 +92,10 @@ else if (func == "Export") {
 else if (func == "Packages") {
     // Workaround: shouled be decalred in one place
     // dont install x11 packages (#37270)
-    // ret = $["install":["XFree86", "XFree86-server", "3ddiag", "sax2", "saxident" ] ];
+    // ret = $[
+	//	"install":["xorg-x11", "xorg-x11-server", "xorg-x11-server-glx",
+	//	"3ddiag", "sax2", "sax2-ident", "sax2-gui", "sax2-tools" ]
+	// ];
     ret = $[];
 }
 

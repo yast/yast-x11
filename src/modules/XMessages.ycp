@@ -37,7 +37,7 @@ Install them now?
 ");
 
 // Indicate that the installed graphics card require
-// XFree86 3.3.x to work properly
+// X11 3.3.x to work properly
 // ---
 global string versionMismatch = _("
 Only a special driver for XFree86 3.3.6 is available for your graphics card.
@@ -45,7 +45,7 @@ Only a special driver for XFree86 3.3.6 is available for your graphics card.
 The configuration of graphics cards that were previously only supported by
 XFree86 3.3.6 will undergo a fundamental change, as XFree86 is no longer
 included in versions from &product;. However, the 'vesa' driver of
-XFree86 4.x allows almost all affected graphics cards to be run with higher
+XOrg 4.x allows almost all affected graphics cards to be run with higher
 resolution and color depth settings. To start the configuration, enter
 'sax2-vesa' on the command line.
 ");

@@ -530,7 +530,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 		if (
 			((currentManager == "kdm")  && (Pkg::IsProvided ("kdebase3-kdm")))||
 			((currentManager == "gdm2") && (Pkg::IsProvided ("gdm2"))) ||
-			((currentManager == "xdm")  && (Pkg::IsProvided ("XFree86")))
+			((currentManager == "xdm")  && (Pkg::IsProvided ("xorg-x11")))
 		) {
 			// Trusted displaymanager already set...
 			needSysconfigUpdate = false;

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jul 21 15:04:04 CEST 2004 - ms@suse.de
+
+- XOrg/XFree86 name clash fixes
+
+-------------------------------------------------------------------
 Wed Jul 21 14:37:31 CEST 2004 - arvin@suse.de
 
 - added openssl-devel to neededforbuild
