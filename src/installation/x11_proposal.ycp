@@ -98,7 +98,7 @@ if ( func == "MakeProposal" ) {
 		map currentView = allViews[cnr]:$[];
 		cnr = cnr + 1;
 		if (currentCard == $[]) {
-			string key = _("3D Acceleration:");
+			string key = _("3D Acceleration:") + " ";
 			if (XProposal::D3Active) {
 				proposal = proposal + "<li>" + key + _("Enabled") + "</li>";
 			} else {
