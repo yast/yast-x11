@@ -20,11 +20,27 @@ textdomain "x11";
 import "XProposal";
 import "Report";
 import "Mode";
+import "Arch";
 
 list    initResult = [];
 string  func  = WFM::Args(0);
 map     param = WFM::Args(1);
 map     ret   = $[];
+
+//===================================================
+// Handle Arch flag
+//---------------------------------------------------
+if ( ! Arch::x11_setup_needed ) {
+	boolean success = true;
+	ret = $[
+		"rich_text_title"       : "",
+		"menu_title"            : "",
+		"id"                    : "",
+		"preformatted_proposal" : "",
+		"success" :             : success
+	];
+	return ret;
+}
 
 //===================================================
 // Make proposal for installation/configuration...
