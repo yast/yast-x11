@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 16 17:24:05 CET 2004 - ms@suse.de
+
+- additionally check package for current used displaymanager
+  refers to Bug: (#33895)
+
+-------------------------------------------------------------------
 Mon Feb 16 15:27:00 CET 2004 - ms@suse.de
 
 - Check the current displaymanager setting If it is not set to one

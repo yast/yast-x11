@@ -537,9 +537,9 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 			.sysconfig.displaymanager.DISPLAYMANAGER
 		));
 		if (
-			(currentManager == "kdm")  ||
-			(currentManager == "gdm2") ||
-			(currentManager == "xdm")
+			((currentManager == "kdm")  && (Pkg::IsProvided ("kdebase3-kdm")))||
+			((currentManager == "gdm2") && (Pkg::IsProvided ("gdm2"))) ||
+			((currentManager == "xdm")  && (Pkg::IsProvided ("XFree86")))
 		) {
 			// Trusted displaymanager already set...
 			needSysconfigUpdate = false;
