@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Aug 31 00:23:31 CEST 2004 - nashif@suse.de
+
+- use modified flag (#43904)
+
+-------------------------------------------------------------------
 Thu Aug 26 21:37:26 CEST 2004 - nashif@suse.de
 
 - During autoinstall, run X11 as an additional workflow step
