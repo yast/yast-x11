@@ -55,3 +55,4 @@ clean:
 	rm -rf src/Makefile
 	rm -rf src/Makefile.in
 	rm -f `find -name *.ybc`
+	rm -f Makefile.am.common
