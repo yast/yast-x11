@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr 20 10:39:59 CEST 2004 - ms@suse.de
+
+- added singlehead/multihead status flag (#38030)
+- fixed return value of proposal if no hardware could be detected
+  because of missing requirements (#35367)
+
+-------------------------------------------------------------------
 Sat Apr 17 01:59:24 CEST 2004 - nashif@suse.de
 
 - #38775: dont configure monitor if x11 is not to be configured
