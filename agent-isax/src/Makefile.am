@@ -2,6 +2,8 @@
 # Makefile.am for y2a_xf86/src
 #
 
+AM_CXXFLAGS = -DY2LOG=\"agent-isax\"
+
 plugin_LTLIBRARIES = libpy2ag_xf86config.la
 noinst_LTLIBRARIES = liby2ag_xf86config.la
 
@@ -16,4 +18,3 @@ libpy2ag_xf86config_la_SOURCES =			\
 libpy2ag_xf86config_la_LDFLAGS = -version-info 2:0
 
 INCLUDES = -I$(includedir)
-
