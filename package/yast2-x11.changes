@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Aug  5 12:28:45 CEST 2004 - jsuchome@suse.cz
+
+- removed live_eval mode (nashif)
+
+-------------------------------------------------------------------
 Thu Jul 29 16:22:16 CEST 2004 - nashif@suse.de
 
 - Do not show configuration dialog in autoinst mode.
