@@ -62,6 +62,9 @@ define void cleanSweep () ``{
 	SCR::Execute ( .target.bash,
 		"/bin/rm -f /etc/X11/XF86Config"
 	);
+	SCR::Execute ( .target.bash,
+		"/bin/rm -f /var/cache/sax/files/*"
+	);
 	SCR::Execute ( .target.remove,
 		"/var/X11R6/bin/X"
 	);
@@ -71,7 +74,6 @@ define void cleanSweep () ``{
 // Global Variables...
 //------------------------------------------
 global boolean AutoInstallMapEnableX11 = true;
-global boolean X11Enabled = true;
 global boolean D3Active   = false;
 global boolean HWFlag     = false;
 
@@ -443,9 +445,13 @@ global define void abortConfiguration () ``{
 	// ---
 	// y2milestone ("abortConfiguration()...");
 	// ---
-	SCR::Execute ( .target.bash,
-		"/bin/mv /etc/X11/XF86Config.YaST2save /etc/X11/XF86Config"
-	);
+	string configFile = "/etc/X11/XF86Config";
+	boolean configExist = (SCR::Read(.target.size, configFile)!=-1);
+	if (configExist) {
+		SCR::Execute ( .target.bash,
+			"/bin/mv /etc/X11/XF86Config.YaST2save /etc/X11/XF86Config"
+		);
+	}
 	// ...
 	// if there was a hardware.chg file before startup
 	// we should recreate the file because the user
@@ -459,9 +465,18 @@ global define void abortConfiguration () ``{
 }
 
 //==========================================
+// setup System runlevel (inittab)...
+//------------------------------------------
+global define void setupRunlevel (integer level) ``{
+	y2milestone ("setting default runlevel to %1",level);
+	SCR::Write (.etc.inittab.id, sformat ("%1:initdefault:", level));
+	SCR::Write (.etc.inittab, nil);
+}
+
+//==========================================
 // concludeConfiguration...
 //------------------------------------------
-global define void concludeConfiguration () ``{
+global define void concludeConfiguration (boolean X11Enabled) ``{
 	// ...
 	// callback function if the user selected the next button.
 	// Ensure a valid configuration file has been written. If
@@ -475,7 +490,7 @@ global define void concludeConfiguration () ``{
 	// clean sweep if we don`t want to use X11
 	// ---
 	if (! X11Enabled) {
-		cleanSweep (); return;
+		setupRunlevel (3); cleanSweep (); return;
 	}
 	// ... /
 	// save and link configuration if not already
@@ -591,6 +606,11 @@ global define void concludeConfiguration () ``{
 	SCR::Execute ( .target.bash,
 		"/bin/rm -f /var/cache/sax/files/hardware.chg"
 	);
+
+	// ... /
+	// setup system runlevel 5 with this X11 configuration
+	// ---
+	setupRunlevel (5);
 }
 
 //==========================================

@@ -30,6 +30,11 @@ import "Confirm";
 include "x11/x11Dialog.ycp";
 
 //==========================================
+// Globals...
+//------------------------------------------
+boolean X11Enabled = true;
+
+//==========================================
 // textMode...
 //------------------------------------------
 define void textMode () ``{
@@ -39,6 +44,7 @@ define void textMode () ``{
 	// ---
 	// y2milestone ("textMode()...");
 	// ---
+	X11Enabled = false;
 	SetTextMode();
 }
 
@@ -52,6 +58,7 @@ define void autoMode () ``{
 	// ---
 	// y2milestone ("autoMode()...");
 	// ---
+	X11Enabled = true;
 	SetX11Mode();
 	XProposal::setupRemoteControl();
 }
@@ -169,6 +176,17 @@ Wizard::SetContents(
 );
 
 //==========================================
+// Installed system, choose correct mode
+//------------------------------------------
+if ((! Mode::autoinst) && (! Mode::cont)) {
+	string configFile = "/etc/X11/XF86Config";
+	boolean configExist = (SCR::Read(.target.size, configFile)!=-1);
+	if (! configExist) {
+		textMode();
+	}
+}
+
+//==========================================
 // Check if yast2 was called remotely
 //------------------------------------------
 XProposal::setupRemoteControl();
@@ -177,7 +195,7 @@ XProposal::setupRemoteControl();
 // conclude directly if auto install mode
 //------------------------------------------
 if ( Mode::autoinst ) {
-	XProposal::concludeConfiguration();
+	XProposal::concludeConfiguration ( X11Enabled );
 	return `next;
 }
 boolean stop = false;
@@ -194,7 +212,7 @@ repeat {
 		autoMode();
 	}
 	if ( ret == `next ) {
-		XProposal::concludeConfiguration();
+		XProposal::concludeConfiguration ( X11Enabled );
 	}
 	if ( ret == `change ) {
 		stop = XProposal::changeConfiguration();

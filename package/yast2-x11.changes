@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct 17 11:36:23 CEST 2003 - ms@suse.de
+
+- added setupRunlevel() function to set the appropriate
+  runlevel according to the X11 setup (#32366)
+
+-------------------------------------------------------------------
 Wed Oct 15 11:51:09 CEST 2003 - ms@suse.de
 
 - added Reprobe button
