@@ -2,7 +2,7 @@
 Mon Jul 22 12:30:29 CEST 2002 - ms@suse.de
 
 - add check if card is capable of 3D and change the
-  the 3D status message according to the result of this test
+  3D status message according to the result of this test
 
 -------------------------------------------------------------------
 Thu Jul 18 12:10:52 CEST 2002 - ms@suse.de
