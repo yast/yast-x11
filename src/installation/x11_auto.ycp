@@ -40,14 +40,14 @@ y2debug("param=%1", param);
 //=================================
 // Import configuration
 //---------------------------------
-else if (func == "Import") {
+if (func == "Import") {
 	XProposal::X11 = param;
 }
 
 //=================================
 // Create a summary
 //---------------------------------
-if(func == "Summary") {
+else if (func == "Summary") {
 	ret = AutoinstX11::Summary();
 }
 
