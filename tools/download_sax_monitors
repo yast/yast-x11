@@ -1,5 +1,0 @@
-#!/bin/sh
-#
-# Download the SaX2 monitor database from the development server
-#
-wget -Yoff http://developdb.suse.de/monitordb/saxmonitors.php3 -O Monitors

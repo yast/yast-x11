@@ -574,7 +574,7 @@ define void concludeConfiguration () ``{
 		//=================================
 		// Change LILO configuration...
 		// --------------------------------
-		string orig = SCR::Read( .lilo.sections.linux.vga );
+		string orig = SCR::Read ( .lilo.sections.linux.vga );
 		string code = liloCode[0]:orig;
 		if (orig != code) {
 			SCR::Write( .lilo.sections.linux.vga, code );
@@ -588,7 +588,20 @@ define void concludeConfiguration () ``{
 		//=================================
 		// Change GRUB configuration...
 		// --------------------------------
-		// TODO...
+		string orig = SCR::Read ( .grub.sections.linux.vga );
+		string code = liloCode[0]:orig;
+		if (orig != code) {
+			string tmpdir = SCR::Read ( .target.tmpdir );
+			string kernel = SCR::Read ( .grub.sections.linux.kernel );
+			string result = tmpdir + "/" + kernelline;
+			SCR::Execute ( .target.bash,
+				"/usr/lib/YaST2/bin/setVGA "
+				+ kernel + " " + code + "> " + result
+			);
+			string update = SCR::Read ( .target.string, result );
+			SCR::Write( .grub.sections.linux.kernel, update );
+			SCR::Write( .grub, nil );
+		}
 		}
 	}
 	// ... /
