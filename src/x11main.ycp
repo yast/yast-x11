@@ -29,6 +29,7 @@ import "Display";
 
 include "ui/common_popups.ycp";
 include "x11/x11_auto_setup_dialog.ycp";
+include "lilo/misc.ycp";
 
 //==========================================
 // Globals...
@@ -655,19 +656,10 @@ define void concludeConfiguration () ``{
 		//=================================
 		// Change GRUB configuration...
 		// --------------------------------
-		string orig = SCR::Read ( .grub.sections.linux.vga );
+		string orig = getGrubKernelParam ("linux","vga");
 		string code = liloCode[0]:orig;
 		if (orig != code) {
-			string tmpdir = SCR::Read ( .target.tmpdir );
-			string kernel = SCR::Read ( .grub.sections.linux.kernel );
-			string result = tmpdir + "/" + kernelline;
-			SCR::Execute ( .target.bash,
-				"/usr/lib/YaST2/bin/setVGA.pl "
-				+ kernel + " " + code + "> " + result
-			);
-			string update = SCR::Read ( .target.string, result );
-			SCR::Write( .grub.sections.linux.kernel, update );
-			SCR::Write( .grub, nil );
+			setGrubKernelParam ("linux", "vga", code);
 		}
 		}
 	}
