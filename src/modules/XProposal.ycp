@@ -519,16 +519,34 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 	// installed system
 	// ---
 	string displayManager = "kdm";
-	string windowManager = "kde";
+	string windowManager  = "kde";
 	if ( Mode::autoinst ) {
 		displayManager = AutoInstallMapDisplayManager;
-		windowManager = AutoInstallMapWindowManager;
+		windowManager  = AutoInstallMapWindowManager;
 	}
+	boolean needSysconfigUpdate = true;
 	if ( ! Mode::cont )
 	{
+		// ... /
 		// we are within the installed SuSE Linux system
+		// if no trusted displaymanager have been set
+		// we need to update the displaymanager according
+		// to the provided packages
+		// ---
+		string currentManager = (string) eval (SCR::Read(
+			.sysconfig.displaymanager.DISPLAYMANAGER
+		));
+		if (
+			(currentManager == "kdm")  ||
+			(currentManager == "gdm2") ||
+			(currentManager == "xdm")
+		) {
+			// Trusted displaymanager already set...
+			needSysconfigUpdate = false;
+		}
+		if ( needSysconfigUpdate )
 		if (Pkg::IsProvided ("kdebase3-kdm")) {
-			// KDE is installed
+			// KDE is installed...
 			displayManager = "kdm";
 			windowManager = "kde";
 		}
@@ -578,6 +596,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 	// update sysconfig variables after reboot during
 	// the installation process
 	// ---
+	if ( needSysconfigUpdate ) {
 	if ( (! Mode::cont) || (Mode::autoinst) ) {
 		SCR::Write(
 			.sysconfig.displaymanager.DISPLAYMANAGER, displayManager
@@ -594,6 +613,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 		SCR::Write(
 			.sysconfig.windowmanager, nil
 		);
+	}
 	}
 	Display::Save();
 

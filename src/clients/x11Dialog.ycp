@@ -32,7 +32,7 @@ import "Wizard";
 	// @param enable_x11 true if GUI by default,
 	// false if text mode only
 	//------------------------------------------
-	global define term X11AutoSetupDialog (
+	define term X11AutoSetupDialog (
 		boolean	enable_x11, string	auto_mode_description
 	) ``{
 		term radio_box = nil;
@@ -95,7 +95,7 @@ import "Wizard";
 	// @return multi line help text in RichText
 	// (HTML like) format
 	//------------------------------------------
-	global define string X11AutoSetupDialogHelpText() ``{
+	define string X11AutoSetupDialogHelpText() ``{
 		// ...
 		// Helper text for X11 dialog description
 		// pointing the possibility of either using X11 or textmode
@@ -118,14 +118,14 @@ settings will be saved when you select <b>Next</b>.</p>
 //=========================================
 // WFM defines...
 //-----------------------------------------
-global define void SetX11Mode() ``{
+define void SetX11Mode() ``{
 	UI::ChangeWidget(`id(`auto_mode_description),  `Enabled, true );
 	UI::ChangeWidget(`id(`change), `Enabled, true );
 	UI::ChangeWidget(`id(`reprobe),`Enabled, true );
 	UI::ChangeWidget(`id(`rb), `CurrentButton, `auto_mode );
 }
 
-global define void SetTextMode() ``{
+define void SetTextMode() ``{
 	UI::ChangeWidget(`id(`auto_mode_description),  `Enabled, false );
 	UI::ChangeWidget(`id(`change), `Enabled, false );
 	UI::ChangeWidget(`id(`reprobe),`Enabled, false );

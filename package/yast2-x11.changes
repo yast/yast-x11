@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Feb 16 15:27:00 CET 2004 - ms@suse.de
+
+- Check the current displaymanager setting If it is not set to one
+  of the trusted displaymanagers xdm,kdm,gdm2 yast2 x11 will setup
+  the displaymanager/windowmanager according to the provided
+  packages (#33895)
+
+-------------------------------------------------------------------
 Sat Feb 07 20:22:10 CET 2004 - arvin@suse.de
 
 - removed config files (*.y2cc)
