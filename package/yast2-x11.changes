@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 28 11:31:37 CET 2003 - ms@suse.de
+
+- fixed ycp coded package requirements for x11 module
+  ( needed because of xf86 package renames)
+
+-------------------------------------------------------------------
 Mon Jan 27 10:06:35 CET 2003 - ms@suse.de
 
 - removed 3D question, answer all questions with "no" which
