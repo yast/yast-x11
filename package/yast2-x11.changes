@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan 21 12:54:04 CET 2003 - ms@suse.de
+
+- add 3Ddiag flag file to be created in x11_proposal.ycp
+
+-------------------------------------------------------------------
 Fri Nov 29 13:04:30 CET 2002 - ms@suse.de
 
 - fixed usage of XMessages module

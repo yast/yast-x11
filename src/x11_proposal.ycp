@@ -30,6 +30,13 @@ map     ret   = $[];
 // Make proposal for installation/configuration...
 //---------------------------------------------------
 if ( func == "MakeProposal" ) {
+	//.../
+	// create 3Ddiag flag file which is needed to
+	// give a correct answer on the 3D question
+	//----
+	SCR::Execute (
+		.target.bash, "/usr/bin/touch /var/lib/YaST2/omit_nvidia_check"
+	);
 	string  suggestFile  = "/var/cache/sax/files/suggest.ycp";
 	boolean forceReset   = param["force_reset"]:false;
 	boolean suggestExist = (SCR::Read(.target.size, suggestFile)!=-1);
