@@ -17,10 +17,17 @@
      * Build main Dialog
      * @return term
      */
-    define term updateContents() ``{
+    define term updateContents()
+    {
 	map x11 = AutoinstX11::x11;
 	list resolutions        = [];
-	list<string> resolutions_list = ["640x480", "800x600", "1024x768", "1152x864", "1280x960", "1280x1024", "1600x1200"];
+	list<string> resolutions_list = ["640x480",
+        "800x600",
+        "1024x768",
+        "1152x864",
+        "1280x960",
+        "1280x1024",
+        "1600x1200"];
 	list<map> depths_list = [
 			    $[
 			      "desc"	:_("8 Bit / 256 Colors"),
@@ -51,7 +58,9 @@
 	list color_depths       = [];
 
 	foreach(map d, depths_list , ``{
-	    color_depths=add(color_depths, `item( `id(d["depth"]:16), d["desc"]:_("16 Bit / 64 K Colors") , ( d["depth"]:16 == x11["color_depth"]:16)));
+	    color_depths=add(color_depths,
+                `item( `id(d["depth"]:16), d["desc"]:_("16 Bit / 64 K Colors") ,
+                    ( d["depth"]:16 == x11["color_depth"]:16)));
 	});
         list displaymanager =
             [
@@ -110,14 +119,12 @@
     }
 
 
-
-
     /**
      * Main X11 Options
      * @return symbol
      */
     define symbol x11Options()
-	``{
+	{
 
 
 	string caption = _("X11 Configuration");
@@ -164,36 +171,33 @@ be started at boot time and what display manager should be used.</p>
 		UI::ChangeWidget(`id(`enable_3d), `Enabled, false);
 	    }
 
-	    if (ret == `key || ret ==`next  )
+	    if ( ret ==`next  )
 	    {
 		AutoinstX11::x11["configure_x11"]	= (boolean)UI::QueryWidget(`id(`enable_x11), `Value);
                 if (!AutoinstX11::x11["configure_x11"]:false)
+                {
                     ret = `back;
+                }
 
-		any depth	= UI::QueryWidget(`id(`depth), `Value);
-		if (is(depth, integer))
-		    AutoinstX11::x11["color_depth"] =  depth ;
+		integer depth	= (integer)UI::QueryWidget(`id(`depth), `Value);
+                y2debug("color_depth: %1", depth );
+	        AutoinstX11::x11["color_depth"] =  depth ;
 
-		any resol	= UI::QueryWidget(`id(`resolution), `Value);
-		if (is(resol, string))
-		    AutoinstX11::x11["resolution"] =  resol;
+		string resol	= (string)UI::QueryWidget(`id(`resolution), `Value);
+	        AutoinstX11::x11["resolution"] =  resol;
 
-		any default_dm	= UI::QueryWidget(`id(`dm), `Value);
-		if (is(default_dm, string))
-		{
-		    AutoinstX11::x11["display_manager"] =  default_dm;
+		string default_dm = (string)UI::QueryWidget(`id(`dm), `Value);
+                AutoinstX11::x11["display_manager"] =  default_dm;
 
-		    if (default_dm == "kdm")
-			AutoinstX11::x11["window_manager"] =  "kde";
-		    else if (default_dm == "gdm")
-			AutoinstX11::x11["window_manager"] =  "gnome";
-		    else if (default_dm == "xdm")
-			AutoinstX11::x11["window_manager"] =  "twm";
-		}
+                if (default_dm == "kdm")
+                    AutoinstX11::x11["window_manager"] =  "kde";
+                else if (default_dm == "gdm")
+                    AutoinstX11::x11["window_manager"] =  "gnome";
+                else if (default_dm == "xdm")
+                    AutoinstX11::x11["window_manager"] =  "twm";
 
-		any enable_3d	= UI::QueryWidget(`id(`enable_3d), `Value);
-		if (is(enable_3d, boolean))
-		    AutoinstX11::x11["enable_3d"] = enable_3d;
+		boolean enable_3d = (boolean)UI::QueryWidget(`id(`enable_3d), `Value);
+	        AutoinstX11::x11["enable_3d"] = enable_3d;
 	    }
 
 
@@ -211,7 +215,7 @@ be started at boot time and what display manager should be used.</p>
      * @return term dialog as term to be put into Wizard::SetContents()
      */
     define term  X11VideoDataDialog( list vendors, list models )
-	``{
+	{
 
 	term x11_video_data_dialog =
 	    `VBox(
@@ -280,7 +284,8 @@ be started at boot time and what display manager should be used.</p>
      * @param widget_id	ID of the widget, e.g. `resolution
      * @return the widget's `Value property
      */
-    define any GetValue( symbol widget_id )	``{
+    define any GetValue( symbol widget_id )
+        {
 	return UI::QueryWidget(`id( widget_id ), `Value );
     };
 
@@ -291,7 +296,8 @@ be started at boot time and what display manager should be used.</p>
      * @param new_value	the new value
      */
     define void SetValue( symbol	widget_id,
-				 any	new_value	) ``{
+				 any	new_value	)
+    {
 	UI::ChangeWidget(`id( widget_id ), `Value, new_value );
 	return;
     };
@@ -302,7 +308,7 @@ be started at boot time and what display manager should be used.</p>
      * @return string multi line help text in RichText (HTML like) format
      */
     define string X11VideoDataDialogHelpText()
-	``{
+	{
 	/*
 	 * Help text (HTML like) for X11 video data dialog
 	 */
@@ -409,7 +415,8 @@ the noise.
      * Replace the model list
      * @return void
      */
-    define  void ReplaceModels( list new_value ) ``{
+    define  void ReplaceModels( list new_value )
+    {
 
 	UI::ReplaceWidget( `id( `replace_point_models),
 			   `SelectionBox( `id( `models),
@@ -425,7 +432,7 @@ the noise.
     // Handle `back button
     //
     define void SetBackState( boolean new_value )
-    ``{
+    {
 	if ( new_value )
 	    Wizard::EnableBackButton();
 	else
@@ -433,7 +440,10 @@ the noise.
     }
 
     // CAUTION: This no longer works with the new wizard - no way to query that value!
-    define boolean GetBackState()  			``{ return (boolean)UI::QueryWidget(`id(`back), `Enabled ); }
+    define boolean GetBackState()
+    {
+        return (boolean)UI::QueryWidget(`id(`back), `Enabled );
+    }
 
 
 
@@ -443,7 +453,7 @@ the noise.
      * round up a value given as integer or float to the next integer (ceiling).
      */
     define integer ceiling( any value )
-	``{
+	{
 	if ( is( value, integer ) ) return (integer) value;	// already integer
 
 	if ( is( value, float ) )				// is float
@@ -465,7 +475,7 @@ the noise.
      * Round down a value given as integer or float to the prev. integer (floor).
      **/
     define integer floor( any value )
-	``{
+	{
 	if ( is( value, integer ) ) return (integer) value;	// already integer
 
 	if ( is( value, float ) )				// is float
@@ -483,7 +493,7 @@ the noise.
      * @return boolean true or false
      */
     define boolean IsNumber( string input )
-	``{
+	{
 	integer n = 0;
 	while ( n < size( input ) )
 	{
@@ -507,7 +517,7 @@ the noise.
      * @return list
      */
     define list get_models_for_vendor( string vendor, list<map> monitor_db )
-	``{
+	{
 	list<map> vendor_monitors = filter( map monitor, monitor_db, ``( lookup( monitor, "vendor", "" ) == vendor ) );
 	return toset( maplist( map monitor, vendor_monitors, ``( monitor["model"]:"")) );
     };
@@ -516,7 +526,7 @@ the noise.
      * Automagically update the frequency values for a specified model.
      */
     define void update_frequency_for_model( string vendor, string model)
-	``{
+	{
 	// Get the data record for this monitor
 	//
 	map monitor = (map)find( map monitor, AutoinstX11::all_monitors,
@@ -551,7 +561,7 @@ the noise.
      * It is assumed that the given vendor is known i.e. is a member of the given monitor_db.
      */
     define void change_vendor( string vendor, list<map> monitor_db )
-	``{
+	{
 	if ( vendor == "No X11" )
 	{
 	    ReplaceModels( [] );
@@ -593,7 +603,8 @@ the noise.
      * Read the monitor db and get vendors and models lists.
      * Optionally extend db with probed monitor.
      */
-    define void get_vendors_and_models() ``{
+    define void get_vendors_and_models()
+    {
 	if (  AutoinstX11::monitor["monitor_vendor"]: ""  == "" )
 	{
 	    // monitor vendor not known
@@ -614,7 +625,7 @@ the noise.
      * @return void
      */
     define void display_models_and_values()
-	``{
+	{
 	if ( contains( AutoinstX11::vendors, AutoinstX11::current_vendor ) )
 	{
 	    SetCurrentVendor( AutoinstX11::current_vendor );
@@ -635,16 +646,11 @@ the noise.
     // along with a constant color depth of 8 bit (VESA) or 16 bit (LCD).
     //
     define void store_VESA_LCD( string model, boolean is_VESA )
-	``{
+	{
 	integer currentWidth      = 0;
 	integer currentHeight     = 0;
 	integer currentFrequency  = 0;
-	integer currentColorDepth = 0;
 
-	if ( is_VESA )
-	    currentColorDepth = 8;	// VESA --> always
-	else
-	    currentColorDepth = 16;	// LCD  --> always
 
 	// First find resolution string within model string.
 	// E.g. "PANORAMIC SUPERWIDE 1024X768@75HZ" --> "1024X768@75HZ"
@@ -677,11 +683,10 @@ the noise.
 
 	// store the new values into the X11 user_data struct
 	//
-	 AutoinstX11::display = AutoinstX11::monitor["display"]:$[];
-	AutoinstX11::display["width"] 	= currentWidth;
-	AutoinstX11::display["height"] 	= currentHeight;
-	AutoinstX11::display["frequency"] 	= currentFrequency ;
-	AutoinstX11::x11["color_depth"] = currentColorDepth;
+	AutoinstX11::display = AutoinstX11::monitor["display"]:$[];
+	AutoinstX11::display["width"]	= currentWidth;
+	AutoinstX11::display["height"]	= currentHeight;
+	AutoinstX11::display["frequency"]	= currentFrequency ;
 
 	return;
     }
@@ -693,9 +698,8 @@ the noise.
      * Main Monitor Dialog
      * @return symbol
      */
-    define symbol monitorDialog() ``{
-
-
+    define symbol monitorDialog()
+    {
 	AutoinstX11::readMonitorDB();
 
 	map display =  AutoinstX11::display;

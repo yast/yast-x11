@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul 27 18:00:58 CEST 2004 - nashif@suse.de
+
+- Dont force color depth for LCD/VESA
+
+-------------------------------------------------------------------
 Wed Jul 21 15:04:04 CEST 2004 - ms@suse.de
 
 - XOrg/XFree86 name clash fixes
