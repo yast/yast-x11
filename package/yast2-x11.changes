@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Aug 13 11:40:05 CEST 2002 - arvin@suse.de
+
+- fixed detection of required packages
+
+-------------------------------------------------------------------
 Fri Aug  9 13:40:05 CEST 2002 - ms@suse.de
 
 - add card driver name to suggestion (#17578)

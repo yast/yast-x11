@@ -367,12 +367,12 @@ define pacs_and_servers( list display_list ) ``{
 		    have_voodoo_special = true;
 		}
 	    }
-	});
 
-	// Extract all packages needed for this display controller.
-	list pacs = dpycontroller["requires"]:[];
-	foreach (`pac, pacs, ``{
-	    x11pacs = add (x11pacs, pac);
+	    // Extract all packages needed for this display controller.
+	    list pacs = dpycontroller["requires"]:[];
+	    foreach (`pac, pacs, ``{
+		x11pacs = add (x11pacs, pac);
+	    });
 	});
 
 	// Now setup xserver and xserver_3d for the *active*
