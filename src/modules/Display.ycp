@@ -66,6 +66,8 @@ STATUS        : Development
 module "Display";
 
 import "Mode";
+import "Stage";
+import "Linuxrc";
 
 //================================================
 // Global Variables...
@@ -370,7 +372,7 @@ global define void Display() ``{
 	// Newly probed data:	- any other case (?)
 	// ---
 	get_lib_prefix();
-	if ( ! ( Mode::cont && Restore() ) && ! Mode::config ) {
+	if ( ! ( Stage::cont () && Restore() ) && ! Mode::config () ) {
 		probe_settings();
 	}
 	return;
@@ -408,7 +410,7 @@ global define void Configure() ``{
 	// implemented as distinct function (aside from Save()) to be callable
 	// at the right place.
 	// ---
-	if ( Mode::update ) {
+	if ( Mode::update () ) {
 		return;
 	}
 	// ...
@@ -473,7 +475,7 @@ global define void Configure() ``{
 	    SCR::Write( .probe.status.configured, unique_key, `yes );
 	    y2milestone("Marked display <%1> as configured", unique_key );
 
-	    if ( ! Mode::serial_console )
+	    if ( ! Linuxrc::serial_console () )
 	    {
 		SCR::Write( .probe.status.needed, unique_key, `yes );
 		y2milestone("Marked display <%1> as needed", unique_key );
@@ -491,7 +493,7 @@ global define void Save() ``{
 	// ...
 	// Save the current data into a file to be read after a reboot
 	// ---
-	if ( Mode::update ) {
+	if ( Mode::update () ) {
 	    return;
 	}
 	map display_data =

@@ -30,6 +30,7 @@ textdomain "x11";
 
 import "XProposal";
 import "Mode";
+import "Stage";
 import "Report";
 import "Wizard";
 import "Popup";
@@ -157,7 +158,7 @@ define string getSuggestionString ( boolean init ) ``{
 //==========================================
 // Open Wizzard window...
 //------------------------------------------
-if (Mode::autoinst)
+if (Mode::autoinst ())
 {
     Wizard::OpenNextBackDialog();
     Wizard::HideAbortButton();
@@ -167,7 +168,7 @@ if (Mode::autoinst)
 else
 {
     Wizard::OpenAcceptDialog();
-} 
+}
 
 //==========================================
 // Initialize...
@@ -197,7 +198,7 @@ Wizard::SetContents(
 //==========================================
 // Installed system, choose correct mode
 //------------------------------------------
-if ((! Mode::autoinst) && (! Mode::cont)) {
+if ((! Mode::autoinst ()) && (! Stage::cont ())) {
 	string configFile = "/etc/X11/XF86Config";
 	boolean configExist = (SCR::Read(.target.size, configFile)!=-1);
 	if (! configExist) {
@@ -213,7 +214,7 @@ XProposal::setupRemoteControl();
 //==========================================
 // conclude directly if auto install mode
 //------------------------------------------
-if ( Mode::autoinst )
+if ( Mode::autoinst () )
 {
 	XProposal::concludeConfiguration ( X11Enabled );
 	return `next;

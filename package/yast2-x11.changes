@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Oct 27 12:29:18 CEST 2004 - arvin@suse.de
+
+- adapted to new Mode.ycp
+
+-------------------------------------------------------------------
 Mon Oct 11 16:42:22 CEST 2004 - jsrain@suse.cz
 
 - updated for Arch:: interface change

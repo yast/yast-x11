@@ -29,6 +29,7 @@ module "XProposal";
 textdomain "x11";
 
 import "Mode";
+import "Stage";
 import "Mouse";
 import "Keyboard";
 import "XMessages";
@@ -111,7 +112,7 @@ global define list getSuggestion (boolean init) ``{
 	string userLine    = "";
 
 	if (init) {
-	if (Mode::cont) {
+	if (Stage::cont ()) {
 		//===========================================
 		// get currently available mouse information
 		//-------------------------------------------
@@ -194,7 +195,7 @@ global define list getSuggestion (boolean init) ``{
 		// Include special information if the YaST2
 		// auto install mode is active
 		//-------------------------------------------
-		if ( Mode::autoinst ) {
+		if ( Mode::autoinst () ) {
 			map data = X11;
 			boolean configure_x11 = data["configure_x11"]:false;
 			// ...
@@ -290,7 +291,7 @@ global define list getSuggestion (boolean init) ``{
 	// call hwupdate --test and check for the existance of the
 	// storage binary file "/var/cache/sax/files/config"
 	// ---
-	if ( (! Mode::autoinst) && (! Mode::live_eval) ) {
+	if ( (! Mode::autoinst ()) && (! Mode::live_eval) ) {
 	map displayInfo = UI::GetDisplayInfo();
 	if (displayInfo["TextMode"]:false) {
 		string hwupdate = "/usr/X11R6/" + Display::lib +"/sax/tools/hwupdate";
@@ -340,7 +341,7 @@ global define list getSuggestion (boolean init) ``{
 	// flag and set the answer for the 3D question to init.pl
 	// via the --quiet option
 	// ---
-	if ( Mode::autoinst ) {
+	if ( Mode::autoinst () ) {
 	if (AutoInstallMap3D) {
 		initString = initString + " --quiet yes";
 	} else {
@@ -490,7 +491,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 	boolean configExist = (SCR::Read(.target.size, configFile)!=-1);
 
 	if (configurationChanged == false) {
-	if ( (Mode::cont) || (! configExist) || (HWFlag) ) {
+	if ( (Stage::cont ()) || (! configExist) || (HWFlag) ) {
 	SCR::Execute ( .target.bash,
 		"/usr/X11R6/" + Display::lib + "/sax/xc.pl --auto"
 	);
@@ -503,12 +504,12 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 	// ---
 	string displayManager = "kdm";
 	string windowManager  = "kde";
-	if ( Mode::autoinst ) {
+	if ( Mode::autoinst () ) {
 		displayManager = AutoInstallMapDisplayManager;
 		windowManager  = AutoInstallMapWindowManager;
 	}
 	boolean needSysconfigUpdate = true;
-	if ( ! Mode::cont )
+	if ( ! Stage::cont () )
 	{
 		// ... /
 		// we are within the installed SuSE Linux system
@@ -580,7 +581,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 	// the installation process
 	// ---
 	if ( needSysconfigUpdate ) {
-	if ( (! Mode::cont) || (Mode::autoinst) ) {
+	if ( (! Stage::cont ()) || (Mode::autoinst ()) ) {
 		SCR::Write(
 			.sysconfig.displaymanager.DISPLAYMANAGER, displayManager
 		);
@@ -637,7 +638,7 @@ global define boolean changeConfiguration () ``{
 	SCR::Execute ( .target.bash,
 		"/bin/rm -f /var/cache/sax/files/reinit"
 	);
-	if (Mode::cont) {
+	if (Stage::cont ()) {
 		xcopt = xcopt + " -w 0";
 	}
 	integer code = 0;
@@ -656,10 +657,10 @@ global define boolean changeConfiguration () ``{
 	if (! HWFlag) {
 		xcopt = xcopt + " --sysconfig";
 	}
-	if (Mode::cont) {
+	if (Stage::cont ()) {
 		xcopt = xcopt + " --nocheckpacs";
 	}
-	if (Mode::cont) {
+	if (Stage::cont ()) {
 	code = (integer)SCR::Execute ( .target.bash,
 	"/usr/X11R6/"+Display::lib+"/sax/xc.pl -y --fullscreen --noborder "+xcopt
 	);
