@@ -23,6 +23,11 @@ Summary:	-
 
 @INSTALL@
 
+%ifarch s390 s390x
+rm -f $RPM_BUILD_ROOT@configdir@/x11.y2cc
+rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
+%endif
+
 @CLEAN@
 
 %files

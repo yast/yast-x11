@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug 04 12:33:20 CEST 2003 - arvin@suse.de
+
+- added desktop files
+- fixed build an s390 and s390x
+
+-------------------------------------------------------------------
 Wed Jun 25 18:17:22 CEST 2003 - arvin@suse.de
 
 - make it build with new checks
