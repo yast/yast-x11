@@ -510,7 +510,12 @@ global define void concludeConfiguration () ``{
 	if ( ! Mode::cont )
 	{
 		// we are within the installed SuSE Linux system
-		if (!Pkg::IsProvided ("kdebase3-kdm") && Pkg::IsProvided ("gdm2")) {
+		if (Pkg::IsProvided ("kdebase3-kdm")) {
+			// KDE is installed
+			displayManager = "kdm";
+			windowManager = "kde";
+		}
+		else if (Pkg::IsProvided ("gdm2")) {
 			// KDE is not installed but Gnome...
 			displayManager = "gdm";
 			windowManager = "gnome";
