@@ -14,6 +14,14 @@ DESCRIPTION   : This script is a wrapper for x11main.ycp
               :
 STATUS        : Development
 **************/
+/**
+ * File:        x11main/x11.ycp
+ * Package:     X11 Configuration
+ * Summary:     Main Module started if yast2 x11 is called
+ * Authors:     Marcus Schaefer <ms@suse.de>
+ *
+ * $Id$
+ */
 {
 textdomain "x11";
 

@@ -14,6 +14,14 @@ DESCRIPTION   : Proposal function dispatcher for
               :
 STATUS        : Development
 **************/
+/**
+ * File:        installation/x11_proposal.ycp
+ * Package:     X11 Configuration
+ * Summary:     Installation Proposal for X11 stuff
+ * Authors:     Marcus Schaefer <ms@suse.de>
+ *
+ * $Id$
+ */
 {
 textdomain "x11";
 

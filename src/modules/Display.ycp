@@ -54,6 +54,14 @@ DESCRIPTION   : Provide information regarding the display adapter.
               :
 STATUS        : Development
 **************/
+/**
+ * File:        modules/Display.ycp
+ * Package:     X11 Configuration
+ * Summary:     Display driver handling
+ * Authors:     Marcus Schaefer <ms@suse.de>
+ *
+ * $Id$
+ */
 {
 module "Display";
 

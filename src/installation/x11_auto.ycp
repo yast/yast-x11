@@ -14,6 +14,14 @@ DESCRIPTION   : Autoinstallation client dispatcher for
               :
 STATUS        : Development
 **************/
+/**
+ * File:        installation/x11_auto.ycp
+ * Package:     X11 Configuration
+ * Summary:     X11 auto client
+ * Authors:     Marcus Schaefer <ms@suse.de>
+ *
+ * $Id$
+ */
 {
 textdomain "x11";
 

@@ -11,6 +11,8 @@
 
     include "wizard/sequencer.ycp";
     import "Label";
+	import "AutoinstX11";
+	import "Wizard";
 
 
 

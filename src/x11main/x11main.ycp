@@ -17,6 +17,14 @@ DESCRIPTION   : This script setup the base workflow
               :
 STATUS        : Development
 **************/
+/**
+ * File:        x11main/x11main.ycp
+ * Package:     X11 Configuration
+ * Summary:     Second stage functions after x11.ycp has been loaded
+ * Authors:     Marcus Schaefer <ms@suse.de>
+ *
+ * $Id$
+ */
 {
 textdomain "x11";
 

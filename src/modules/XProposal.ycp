@@ -1,5 +1,5 @@
 /**************
-FILE          : Proposal.ycp
+FILE          : XProposal.ycp
 ***************
 PROJECT       : YaST2
               :
@@ -15,6 +15,14 @@ DESCRIPTION   : Provide global workflow functions to create
               :
 STATUS        : Development
 **************/
+/**
+ * File:        modules/XProposal.ycp
+ * Package:     X11 Configuration
+ * Summary:     Global function to generate/write X11 configuration
+ * Authors:     Marcus Schaefer <ms@suse.de>
+ *
+ * $Id$
+ */
 {
 module "XProposal";
 

@@ -15,6 +15,14 @@ DESCRIPTION   : UI part of the automatic X11 configuration
               :
 STATUS        : Development
 **************/
+/**
+ * File:        clients/x11Dialog.ycp
+ * Package:     X11 Configuration
+ * Summary:     GUI for X11 dialog
+ * Authors:     Marcus Schaefer <ms@suse.de>
+ *
+ * $Id$
+ */
 {
 textdomain "x11";
 import "Wizard";
@@ -94,17 +102,14 @@ import "Wizard";
 		// ---
 		string HelpText = _("
 <p>Review the current desktop settings for the <i>X Window System</i>.
-</p>
-<p> 
+
 If you do not like them, you can <b>Change</b> the settings. You also have 
 the choice to select <b>Text Mode Only</b> to skip the X 
 configuration entirely. 
-</p> 
-<p>
+
 If you do that, you can always run <i>SaX2</i> 
 later. If you choose <b>Graphical Desktop Environment</b>, the current 
-settings will be saved when you select <b>Next</b>.
-</p>
+settings will be saved when you select <b>Next</b>.</p>
 ");
 		return HelpText;
 	};
