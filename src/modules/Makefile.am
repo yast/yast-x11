@@ -5,7 +5,8 @@
 module_DATA = 		\
 	Display.ycp 	\
 	XMessages.ycp 	\
-	XProposal.ycp
+	XProposal.ycp	\
+	AutoinstX11.ycp
 
 EXTRA_DIST = $(module_DATA)
 

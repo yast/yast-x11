@@ -20,6 +20,8 @@ textdomain "x11";
 import "AutoinstX11";
 import "XProposal";
 
+include "x11/autoDialog.ycp";
+
 y2milestone("X11 AutoInstall mode activated...");
 
 any ret = nil;
@@ -55,7 +57,7 @@ else if (func == "Summary") {
 // Change configuration
 //---------------------------------
 else if (func == "Change") {
-	ret = AutoinstX11::X11AutoSequence();
+	ret = X11AutoSequence();
 }
 
 //=================================
