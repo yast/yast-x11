@@ -2,6 +2,7 @@
 Sat Feb 28 14:42:42 CET 2004 - kkaempf@suse.de
 
 - use counted YCodePtr
+- x11.y2cc -> x11.desktop in "make dist"
 
 -------------------------------------------------------------------
 Mon Feb 16 17:24:05 CET 2004 - ms@suse.de
