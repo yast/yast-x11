@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 11 05:47:26 CET 2005 - nashif@suse.de
+
+- Fixed monitor database
+
+-------------------------------------------------------------------
 Fri Dec  3 14:23:16 CET 2004 - ms@suse.de
 
 - removed isax and 3ddiag agents which are not used by anybody

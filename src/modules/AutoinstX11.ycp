@@ -7,9 +7,8 @@
  * $Id$
  */
 {
-
-    module "AutoinstX11";
     textdomain "x11";
+    module "AutoinstX11";
     import "Summary";
     import "Directory";
     import "XProposal";
