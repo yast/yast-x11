@@ -8,3 +8,5 @@ module_DATA = 		\
 	XProposal.ycp
 
 EXTRA_DIST = $(module_DATA)
+
+include $(top_srcdir)/Makefile.am.common
