@@ -1,11 +1,12 @@
 -------------------------------------------------------------------
 Tue Oct 22 14:29:30 CEST 2002 - ms@suse.de
 
+- fixed build
 - moved sun module to single directory xsun
-- add extra message modul XMessages.ycp
-- add extra proposal modul to be able to have single x11 module
-  running in combination with an installation proposal
-  XProposal.ycp
+- add extra message module XMessages.ycp
+- add extra proposal module to be able to have the x11 module
+  working as standalone module as well as running it in combination 
+  with an installation proposal -> XProposal.ycp
 - clean dialog code -> x11Dialog.ycp
 
 -------------------------------------------------------------------
