@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sat Feb 07 20:22:10 CET 2004 - arvin@suse.de
+
+- removed config files (*.y2cc)
+
+-------------------------------------------------------------------
 Wed Jan 28 05:14:04 CET 2004 - nashif@suse.de
 
 - Added monitor configuration for autoinstallation

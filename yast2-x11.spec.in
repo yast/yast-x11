@@ -24,7 +24,6 @@ Summary:	-
 @INSTALL@
 
 %ifarch s390 s390x
-rm -f $RPM_BUILD_ROOT@configdir@/x11.y2cc
 rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 %endif
 
@@ -38,7 +37,6 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 @clientdir@/*.ycp
 @scrconfdir@/*.scr
 %ifnarch s390 s390x
-@configdir@/*.y2cc
 @desktopdir@/*.desktop
 %endif
 @ybindir@/mkttflinks
