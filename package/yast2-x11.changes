@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Aug  9 13:40:05 CEST 2002 - ms@suse.de
+
+- add card driver name to suggestion (#17578)
+
+-------------------------------------------------------------------
 Thu Aug 08 10:19:06 CEST 2002 - arvin@suse.de
 
 - changes for agent-probe (libhd) changes
