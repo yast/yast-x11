@@ -349,7 +349,7 @@ You can manually configure X11 later (using <b><i>sax</i></b>) if you wish.
  	     y2milestone("Option: %1", option );
              if (option == nil)
              {
-                UI::MessagePopup(_("Choose one of the
+                Popup::Message(_("Choose one of the
 options to continue.
 "));
                 continue;

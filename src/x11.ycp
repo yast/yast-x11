@@ -21,8 +21,8 @@ import "XMessages";
 import "Display";
 import "Wizard";
 import "X11Version";
+import "Popup";
 
-include "ui/common_popups.ycp";
 
 //==========================================
 // Globals...
@@ -79,7 +79,7 @@ define any installPackages() ``{
 		foreach (`pac, neededPacs, ``{
 			missing = missing + pac + "\n";
 		});
-		if ( ! UI::YesNoPopup ( sformat (
+		if ( ! Popup::YesNo ( sformat (
 			XMessages::pacsMissing,
 			missing
 		))) {
@@ -104,7 +104,7 @@ if ( ! X11Version::have_x11 () ) {
 // check XFree86 version
 //------------------------------------------
 if ( X11Version::version == "3" ) {
-	UI::ErrorPopup ( XMessages::versionMismatch );
+	Popup::Error ( XMessages::versionMismatch );
     return `auto;
 }
 

@@ -24,8 +24,8 @@ import "XProposal";
 import "Mode";
 import "Report";
 import "Wizard";
+import "Popup";
 
-include "ui/common_popups.ycp";
 include "x11/x11Dialog.ycp";
 
 //==========================================
