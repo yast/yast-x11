@@ -16,6 +16,7 @@
 
     import "Arch";
     import "Wizard";
+    import "Popup";
 
 
    //
@@ -337,7 +338,7 @@ You can manually configure X11 later (using <b><i>sax</i></b>) if you wish.
 
 	  y2milestone("UserInput: %1", ret );
 
-	  if ( ret == `abort && WFM::CallFunction(`inst_confirm_abort(`incomplete) ) )
+	  if ( ret == `abort && Popup::ConfirmAbort(`incomplete) )
 	      return `abort;
 
 	  if ( ret == `cancel )

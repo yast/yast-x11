@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Sep 01 10:44:44 CEST 2003 - arvin@suse.de
+
+- used Popup::ConfirmAbort
+
+-------------------------------------------------------------------
 Thu Aug 28 09:38:16 CEST 2003 - ms@suse.de
 
 - removed mesasoft from require list, it was dropped (#29457)
