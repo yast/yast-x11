@@ -2,6 +2,6 @@
 # Makefile.am for x11/scripts
 #
 
-bin_SCRIPTS = mkttflinks
+ybin_SCRIPTS = mkttflinks
 
-EXTRA_DIST = $(bin_SCRIPTS)
+EXTRA_DIST = $(ybin_SCRIPTS)
