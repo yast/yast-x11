@@ -40,7 +40,7 @@ with YaST then starting the program with the command 'sax'.
 // General 3D warning to provide the user with information
 // about the currently driver status and usability
 // ---
-string Warning3D = _("
+global string Warning3D = _("
 All 3D drivers in Linux are in developmental phases and are
 therefore, in part, still regarded as experimental. Nevertheless,
 we have decided to include the drivers in our distribution because of the
@@ -57,7 +57,7 @@ Do you want to enable 3D for this card?\n
 // which is not capable of 3D but may be updated directly from the
 // nvidia FTP server using YOU (YaST2 online update)
 // ---
-string WarningNVidia = _("
+global string WarningNVidia = _("
 The driver used for this card is not an official 2D/3D/OpenGL driver from 
 nVidia for licensing reasons. The 3D/OpenGL driver used if you enable 3D 
 is not hardware-accelerated.
