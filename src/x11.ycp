@@ -37,13 +37,13 @@ any ret = nil;
 string pacsMissing = _("
 The following packages are missing.
 %1
-Install now ?
+Install them now ?
 ");
 // Indicate that the installed graphics card require
 // XFree86 3.3.x to work properly
 // ---
 string versionMismatch = _("
-Your graphics card required XFree86 V3 to be used
+Your graphics card requires XFree86 V3.
 ");
 
 //==========================================

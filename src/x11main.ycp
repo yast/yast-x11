@@ -69,21 +69,21 @@ Do you want to enable 3D for the following card:
 // nvidia FTP server using YOU (YaST2 online update)
 // ---
 string WarningNVidia = _("
-Please be aware that this is not an official 2D/3D/OpenGL driver from nVidia
-due to licensing reasons. The 3D/OpenGL driver used if you enable 3D is not
+This is not an official 2D/3D/OpenGL driver from nVidia
+for licensing reasons. The 3D/OpenGL driver used if you enable 3D is not
 hardware-accelerated.
     
-If you want to use hardware accelerated 3D/OpenGL, update the packages
-NVIDIA_GLX and NVIDIA_kernel for SuSE Linux from the nVidia Webserver
-(http://www.nvidia.com). You can also do this comfortably via YOU
-(YaST2 Online Update) which is started automatically if you click on the
-Change... button after this message is gone.
+To use hardware accelerated 3D/OpenGL, update the packages
+NVIDIA_GLX and NVIDIA_kernel for SuSE Linux from the nVidia web server
+(http://www.nvidia.com). This can be done with YOU
+(YaST2 Online Update), which is started automatically if you click the
+Change... button after this message.
  
-If there are  problems with the 2D/3D/OpenGL driver from nVidia, consult
+If there are problems with the 2D/3D/OpenGL driver from nVidia, consult
 the vendor, as we unfortunately do not have any influence over the
 development of nVidia drivers.
 
-Do you want to enable 3D for the following card:
+Enable 3D for the following card:
 ");
 
 
@@ -443,9 +443,9 @@ define string getSuggestion (boolean init) ``{
 			}
 			data = data + moniHsync + " " + _("kHz") + " / "
 				+ moniVsync + " " + _("Hz") + " ]" + "\n";
-			data = data + "  " + _("Resolution(s):")
+			data = data + "  " + _("Resolutions:")
 				+ " " + resolution + "\n";
-			data = data + "  " + _("Colordepth:")
+			data = data + "  " + _("Color depth:")
 				+ " " + colorDepth + " " + _("bit") + "\n\n";
 		}
 	} until (
