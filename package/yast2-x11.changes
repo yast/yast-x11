@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar  5 15:23:21 CET 2003 - ms@suse.de
+
+- moved cfg_displaymanager.scr to yast2 package (#24669)
+
+-------------------------------------------------------------------
 Wed Feb 26 09:57:19 CET 2003 - ms@suse.de
 
 - disable use of pre-detected mouse information
