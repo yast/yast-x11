@@ -199,7 +199,7 @@ Wizard::SetContents(
 // Installed system, choose correct mode
 //------------------------------------------
 if ((! Mode::autoinst ()) && (! Stage::cont ())) {
-	string configFile = "/etc/X11/XF86Config";
+	string configFile = "/etc/X11/xorg.conf";
 	boolean configExist = (SCR::Read(.target.size, configFile)!=-1);
 	if (! configExist) {
 		textMode();
