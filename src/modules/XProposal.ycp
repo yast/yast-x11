@@ -35,6 +35,7 @@ string  AutoInstallMapWindowManager = "kde";
 boolean configurationChanged = false;
 boolean AutoInstallMap3D = true;
 list    initResult = [];
+map		X11 = $[];
 
 //==========================================
 // Module Functions...
@@ -186,9 +187,7 @@ global define list getSuggestion (boolean init) ``{
 		// auto install mode is active
 		//-------------------------------------------
 		if ( Mode::autoinst ) {
-			import "AutoInstall";
-			y2milestone ("AutoInstall mode activated...");
-			map data = AutoInstall::X11;
+			map data = X11;
 			boolean configure_x11 = data["configure_x11"]:false;
 			// ...
 			// Check if X11 should be configured or not via

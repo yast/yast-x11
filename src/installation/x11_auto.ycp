@@ -19,7 +19,7 @@ textdomain "x11";
 
 import "XProposal";
 
-y2milestone("X11 auto started");
+y2milestone("X11 AutoInstall mode activated...");
 
 any ret = nil;
 string func = "";
@@ -35,6 +35,13 @@ if(size(Args()) > 0 && is(Args(0), string)) {
 }
 y2debug("func=%1",  func);
 y2debug("param=%1", param);
+
+//=================================
+// Import configuration
+//---------------------------------
+else if (func == "Import") {
+	XProposal::X11 = param;
+}
 
 //=================================
 // Create a summary
@@ -58,13 +65,6 @@ else if (func == "Change") {
 }
 
 //=================================
-// Import configuration
-//---------------------------------
-else if (func == "Import") {
-	ret == XProposal::getSuggestionString (true);
-}
-
-//=================================
 // Return actual state
 //---------------------------------
 else if (func == "Export") {
@@ -75,8 +75,6 @@ else if (func == "Export") {
 // Write given settings
 //---------------------------------
 else if (func == "Write") {
-	XProposal::concludeConfiguration (true);
-	ret = true;
 }
 
 //=================================
@@ -88,7 +86,7 @@ else {
 }
 
 y2debug("ret=%1", ret);
-y2milestone("X11 auto finished");
+y2milestone("X11 AutoInstall mode done...");
 
 return ret;
 
