@@ -300,7 +300,7 @@ define string getSuggestion (boolean init) ``{
 	//===========================================
 	// call 3Ddiag-result to get 3D status
 	//-------------------------------------------
-	boolean D3Active = "false";
+	boolean D3Active = false;
 	integer D3Status = SCR::Execute (
 		.target.bash, "/usr/bin/3Ddiag-result"
 	);
@@ -594,7 +594,10 @@ define boolean changeConfiguration () ``{
 	// y2milestone ("changeConfiguration()...");
 	// ---
 	configurationChanged = true;
-	string xcopt = "--nointro -w 1";
+	string xcopt = "--nointro";
+	if (Mode::cont) {
+		xcopt = xcopt + " -w 2";
+	}
 	integer code = 0;
 	// ...
 	// if there is no hardware.chg file we are able to read the
