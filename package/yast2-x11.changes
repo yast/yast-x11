@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar 10 00:19:23 CET 2004 - kkaempf@suse.de
+
+- fix typing
+
+-------------------------------------------------------------------
 Tue Mar  9 23:20:40 CET 2004 - ms@suse.de
 
 - removed very old pacs requirement from Display.ycp
