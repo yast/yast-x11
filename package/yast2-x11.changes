@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sat Apr 17 01:59:24 CEST 2004 - nashif@suse.de
+
+- #38775: dont configure monitor if x11 is not to be configured
+  for autoinstallation
+
+-------------------------------------------------------------------
 Wed Apr  7 14:19:20 CEST 2004 - ms@suse.de
 
 - added libusb to requiredPacs (#38337)
