@@ -2,7 +2,7 @@
 # Makefile.am for y2c_x11/src
 #
 
-SUBDIRS = include modules
+SUBDIRS = include modules xsun
 
 client_DATA =			\
 	x11main.ycp			\
