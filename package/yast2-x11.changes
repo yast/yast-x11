@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May 19 16:47:49 CEST 2003 - ms@suse.de
+
+- fixed bad "no proposal" message (#26918)
+
+-------------------------------------------------------------------
 Tue Apr 22 12:06:08 CEST 2003 - ms@suse.de
 
 - added migrate script to migrate from XFree86 3.x to 4.x

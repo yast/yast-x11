@@ -36,7 +36,7 @@ if ( (! Arch::x11_setup_needed) || (! Mode::x11_setup_needed) ) {
 		"rich_text_title"       : "",
 		"menu_title"            : "",
 		"id"                    : "",
-		"preformatted_proposal" : "",
+		"preformatted_proposal" : "<b> </b>",
 		"success"               : success
 	];
 	return ret;
