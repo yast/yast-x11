@@ -102,9 +102,7 @@ define any installPackages() ``{
 		))) {
 			localReturn = nil;
 		} else {
-			if ( WFM::CallFunction ( `sw_single( neededPacs ) ) != `next) {
-			localReturn = nil;
-			}
+			WFM::CallFunction ( `sw_single( neededPacs ) );
 		}
 	}
 	return (

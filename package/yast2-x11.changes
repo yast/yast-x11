@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Sep 25 11:13:01 CEST 2002 - ms@suse.de
+
+- fixed 3D handling in autoinstall mode (#20095)
+
+-------------------------------------------------------------------
 Thu Sep 12 10:18:35 CEST 2002 - ms@suse.de
 
 - adapt nVidia warning text according to bug (#19365)
