@@ -54,8 +54,7 @@ y2debug("param=%1", param);
 // Import configuration
 //---------------------------------
 if (func == "Import") {
-        AutoinstX11::Import(param);
-
+        ret = AutoinstX11::Import(param);
 }
 
 //=================================

@@ -53,6 +53,13 @@
 	foreach(map d, depths_list , ``{
 	    color_depths=add(color_depths, `item( `id(d["depth"]:16), d["desc"]:_("16 Bit / 64 K Colors") , ( d["depth"]:16 == x11["color_depth"]:16)));
 	});
+        list displaymanager =
+            [
+            `item(`id	("kdm"), _("KDM"),
+                    (x11["display_manager"]:"kdm" == "kdm")),
+            `item(`id("gdm"), _("GDM"), (
+                        x11["display_manager"]:"kdm" == "gdm"))
+            ];
 
 	term contents =
 	    `Top(
@@ -91,10 +98,7 @@
 			       `VBox(
 				     `HBox(
 					   `HWeight(30, `ComboBox(`id(`dm), _("&Display Manager"),
-								  [
-								   `item(`id	("kdm"), _("KDM"), (x11["display_manager"]:"kdm" == "kdm")),
-								   `item(`id("gdm"), _("GDM"), (x11["display_manager"]:"kdm" == "gdm"))
-								   ]
+                                                   displaymanager
 								  )),
 					   `HWeight(70,`Empty())
 					   )
@@ -163,6 +167,8 @@ be started at boot time and what display manager should be used.</p>
 	    if (ret == `key || ret ==`next  )
 	    {
 		AutoinstX11::x11["configure_x11"]	= (boolean)UI::QueryWidget(`id(`enable_x11), `Value);
+                if (!AutoinstX11::x11["configure_x11"]:false)
+                    ret = `back;
 
 		any depth	= UI::QueryWidget(`id(`depth), `Value);
 		if (is(depth, integer))
