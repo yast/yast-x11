@@ -58,7 +58,7 @@ define any installPackages() ``{
 	any localReturn = `next;
 	list<string> neededPacs = [];
 	list<string> requiredPacs = [
-		"XFree86", "XFree86-server",
+		"XFree86", "XFree86-server","libusb",
 		"3ddiag", "sax2", "saxident"
 	];
 	// ... /
