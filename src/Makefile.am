@@ -11,4 +11,6 @@ client_DATA =			\
 
 config_DATA = x11.y2cc
 
-EXTRA_DIST = $(client_DATA) $(config_DATA)
+desktop_DATA = x11.desktop
+
+EXTRA_DIST = $(client_DATA) $(config_DATA) $(desktop_DATA)
