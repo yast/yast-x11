@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Nov 13 12:29:38 CET 2003 - ms@suse.de
+
+- make use of &product; (#31257)
+
+-------------------------------------------------------------------
 Wed Oct 22 17:33:25 CEST 2003 - ms@suse.de
 
 - fixed bootloader update if lilocode.ycp exist. The current
