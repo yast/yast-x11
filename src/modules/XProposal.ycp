@@ -266,6 +266,12 @@ global define list getSuggestion (boolean init) ``{
 		initString = initString + " -b " + profileFile;
 	}
 
+	//=================================================
+	// We decided not to ask any 3D question
+	//-------------------------------------------------
+	initString = initString + " --quiet no";
+
+	/*
 	// ...
 	// if YaST2 is running in [normal] textmode init.pl will eventually
 	// print the 3D question on stdout. To prevent this we will implement
@@ -321,6 +327,7 @@ global define list getSuggestion (boolean init) ``{
 		}
 	}
 	}
+	*/
 	// ...
 	// I we are in auto install mode check for the enable_3d
 	// flag and set the answer for the 3D question to init.pl
