@@ -144,14 +144,6 @@ define list pacs_and_servers( list<map> display_list ) ``{
 	//	unknown_server, unique_key, x11pacs_to_install, xserver, xserver_3d
 	// ]
 	//
-	string default_alias = "VGA16";
-	list default_srvlist = [ "xvga16", "XF86_VGA16" ];
-
-	if ( has_fbdev ) {
-	    default_alias = "FBDEV";
-	    default_srvlist = [ "xfbdev", "XF86_FBDev" ];
-	}
-
 	// Do we fail to recognize the server?
 	boolean unknown_server = true;
 

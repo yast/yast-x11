@@ -379,15 +379,6 @@ global define list getSuggestion (boolean init) ``{
 		suggestFile
 	);
 	//===========================================
-	// if auto install mode is active, check
-	// if 3D is disabled via install description
-	//-------------------------------------------
-	if ( Mode::autoinst ) {
-	if (! AutoInstallMap3D) {
-		SCR::Execute ( .target.bash, "/usr/X11R6/bin/switch2mesasoft" );
-	}
-	}
-	//===========================================
 	// call 3Ddiag-result to get 3D status
 	//-------------------------------------------
 	D3Active = false;
