@@ -24,9 +24,8 @@ import "Mode";
 import "Mouse";
 import "Keyboard";
 import "XMessages";
+import "Bootloader";
 import "Display";
-
-include "lilo/misc.ycp";
 
 //==========================================
 // Module Globals...
@@ -528,36 +527,17 @@ global define void concludeConfiguration () ``{
 	// ... /
 	// rewrite lilo.conf if lilocode.ycp exist
 	// ---
-	string loaderType = SCR::Read (
-		.sysconfig.bootloader.LOADER_TYPE
-	);
 	string liloCodeFile = "/var/cache/sax/files/lilocode.ycp";
 	boolean updateNeeded = (SCR::Read (.target.size, liloCodeFile)!=-1);
 	if (updateNeeded) {
-		list liloCode = SCR::Read ( .target.ycp, liloCodeFile );
-		if (loaderType == "lilo") {
-		//=================================
-		// Change LILO configuration...
-		// --------------------------------
-		string orig = SCR::Read ( .lilo.sections.linux.vga );
+		//=====================================
+		// Change Bootloader configuration...
+		// ------------------------------------
 		string code = liloCode[0]:orig;
+		string orig = Bootloader::getKernelParam ("linux","vga");
 		if (orig != code) {
-			SCR::Write( .lilo.sections.linux.vga, code );
-			SCR::Write( .lilo, nil );
-			integer status = SCR::Execute( .target.bash, "/sbin/lilo" );
-			if ( status != 0 ) {
-				y2error ("Calling /sbin/lilo failed: %1", status );
-			}
-		}
-		} else if (loaderType == "grub") {
-		//=================================
-		// Change GRUB configuration...
-		// --------------------------------
-		string orig = getGrubKernelParam ("linux","vga");
-		string code = liloCode[0]:orig;
-		if (orig != code) {
-			setGrubKernelParam ("linux", "vga", code);
-		}
+			Bootloader::setKernelParam ("linux", "vga", code);
+			Bootloader::Write();
 		}
 	}
 	// ... /
