@@ -557,26 +557,33 @@ define void concludeConfiguration () ``{
 	// ... /
 	// rewrite lilo.conf if lilocode.ycp exist
 	// ---
-	string liloCode = "/var/cache/sax/files/lilocode.ycp";
-	boolean updateNeeded = (SCR::Read(.target.size, liloCode)!=-1);
-	if (updateNeeded) {
-	list liloCode = SCR::Read ( .target.ycp,
-		liloCode
+	string loaderType = SCR::Read (
+		.sysconfig.bootloader.LOADER_TYPE
 	);
-	// TODO...
-	// change grub configuration too
-	// at this stage
-	// ---
-	string orig = SCR::Read( .lilo.sections.linux.vga );
-	string code = liloCode[0]:orig;
-	if (orig != code) {
-		SCR::Write( .lilo.sections.linux.vga, code );
-		SCR::Write( .lilo, nil );
-		integer status = SCR::Execute( .target.bash, "/sbin/lilo" );
-		if ( status != 0 ) {
-			y2error ("Calling /sbin/lilo failed: %1", status );
+	string liloCodeFile = "/var/cache/sax/files/lilocode.ycp";
+	boolean updateNeeded = (SCR::Read (.target.size, liloCodeFile)!=-1);
+	if (updateNeeded) {
+		list liloCode = SCR::Read ( .target.ycp, liloCodeFile );
+		if (loaderType == "lilo") {
+		//=================================
+		// Change LILO configuration...
+		// --------------------------------
+		string orig = SCR::Read( .lilo.sections.linux.vga );
+		string code = liloCode[0]:orig;
+		if (orig != code) {
+			SCR::Write( .lilo.sections.linux.vga, code );
+			SCR::Write( .lilo, nil );
+			integer status = SCR::Execute( .target.bash, "/sbin/lilo" );
+			if ( status != 0 ) {
+				y2error ("Calling /sbin/lilo failed: %1", status );
+			}
 		}
-	}
+		} else if (loaderType == "grub") {
+		//=================================
+		// Change GRUB configuration...
+		// --------------------------------
+		// TODO...
+		}
 	}
 	// ... /
 	// Update the console Keyboard using the keyboard
