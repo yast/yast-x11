@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar  2 10:14:00 CET 2005 - ms@suse.de
+
+- fixed occurances of XF86Config instead of xorg.conf (#67089)
+
+-------------------------------------------------------------------
 Tue Mar  1 11:39:56 CET 2005 - ms@suse.de
 
 - fixed keyboard driver name, must be "kbd" (#66546)
