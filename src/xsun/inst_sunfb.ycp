@@ -103,7 +103,7 @@
       {
           map keyboards_archi = select ( description, 1, $[] );
 
-          map keyboard_archi = lookup ( keyboards_archi, Arch::architecture, $[] );
+          map keyboard_archi = lookup ( keyboards_archi, Arch::architecture (), $[] );
           map keyboard_model = lookup ( keyboard_archi, xkbmodel, $[] );
           if ( size(keyboard_model) > 0 )
           {
