@@ -22,6 +22,7 @@ import "Display";
 import "Wizard";
 import "X11Version";
 import "Popup";
+import "Pkg";
 
 
 //==========================================
@@ -64,7 +65,8 @@ define any installPackages() ``{
 	// create sublist of required packages which are
 	// NOT installed at the time
 	// ---
-    foreach (`pac, requiredPacs, ``{
+	Pkg::TargetInit ("/", false);
+	foreach (`pac, requiredPacs, ``{
 	if ( ! Pkg::IsProvided (pac) ) {
 		neededPacs = add ( neededPacs, pac );
 	}
@@ -85,6 +87,7 @@ define any installPackages() ``{
 		))) {
 			localReturn = nil;
 		} else {
+			Pkg::SourceStartCache (true);
 			WFM::CallFunction ( `sw_single( neededPacs ) );
 		}
 	}

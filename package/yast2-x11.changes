@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Sep 19 10:07:41 CEST 2003 - ms@suse.de
+
+- fixed package check in x11.ycp (#31185)
+
+-------------------------------------------------------------------
 Fri Sep 12 13:23:28 CEST 2003 - ms@suse.de
 
 - added removal of reinit flag file in changeConfiguration()
