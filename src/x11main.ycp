@@ -739,11 +739,11 @@ define boolean changeConfiguration () ``{
 	}
 	if (Mode::cont) {
 	code = SCR::Execute ( .target.bash,
-		"/usr/X11R6/" + Display::lib + "/sax/xc.pl --fullscreen " + xcopt
+		"/usr/X11R6/" + Display::lib + "/sax/xc.pl -y --fullscreen " + xcopt
 	);
 	} else {
 	code = SCR::Execute ( .target.bash,
-		"/usr/X11R6/"+ Display::lib + "/sax/xc.pl " + xcopt
+		"/usr/X11R6/"+ Display::lib + "/sax/xc.pl -y " + xcopt
 	);
 	}
 	if (code == 0) {
