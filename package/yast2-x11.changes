@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Aug 30 12:03:56 CEST 2002 - ms@suse.de
+
+- add option --yast to xapi call within x11main.ycp (#18262)
+
+-------------------------------------------------------------------
 Tue Aug 27 20:00:00 CEST 2002 - jsuchome@suse.cz
 
 - provide/obsolete old translation packages
