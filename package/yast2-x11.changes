@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jul 10 14:33:40 CEST 2002 - ms@suse.de
+
+- update inst_x11.ycp to include new 3D workflow
+
+-------------------------------------------------------------------
 Thu Jul 04 20:46:56 CEST 2002 - arvin@suse.de
 
 - moved non binary files to /usr/share/YaST2
