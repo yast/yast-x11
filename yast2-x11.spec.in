@@ -1,5 +1,6 @@
 @HEADER-COMMENT@
-# neededforbuild yast2-devel-packages
+
+# neededforbuild  yast2-devel-packages
 
 @HEADER@
 Requires:	yast2
@@ -16,9 +17,9 @@ Summary:	Configuration of X11
 
 @PREP@
 
-@BUILD-YCP@
+@BUILD@
 
-@INSTALL-YCP@
+@INSTALL@
 
 @CLEAN@
 
