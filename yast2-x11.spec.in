@@ -1,0 +1,31 @@
+@HEADER-COMMENT@
+
+# neededforbuild yast2-devtools  autoconf automake yast2-testsuite dejagnu expect tcl yast2-core
+
+@HEADER@
+Requires:	yast2 yast2-lib-wizard yast2-lib-sequencer
+
+BuildArchitectures:	noarch
+
+Summary:	Configuration of x11
+
+%description
+-
+
+@PREP@
+
+@BUILD-YCP@
+
+@INSTALL-YCP@
+
+@CLEAN@
+
+%files
+%defattr(-,root,root)
+@moduledir@/*.ycp
+%dir @yncludedir@/x11
+@yncludedir@/x11/*
+@clientdir@/*.ycp
+@scrconfdir@/*.scr
+@configdir@/*.y2cc
+%doc @docdir@

@@ -1,0 +1,133 @@
+/**************
+FILE          : x11.ycp
+***************
+PROJECT       : YaST2
+              :
+AUTHOR        : Marcus Schäfer <ms@suse.de>
+              :
+BELONGS TO    : YaST2
+              : (X11 integration part using SaX2/ISaX)
+              :
+DESCRIPTION   : This script is a wrapper for inst_x11.ycp
+              : defining what to do after the main dialog
+              : is finished
+              :
+STATUS        : Development
+**************/
+{
+textdomain "x11";
+
+import "Display";
+import "Wizard";
+import "X11Version";
+
+include "ui/common_popups.ycp";
+
+//==========================================
+// Globals...
+//------------------------------------------
+any ret = nil;
+
+//==========================================
+// Functions...
+//------------------------------------------
+//---[ finish ]----//
+define any finish() ``{
+	any localReturn = `next;
+	UI::BusyCursor();
+	SCR::Execute (.target.bash, "/sbin/SuSEconfig --module xdm");
+	SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
+	SCR::Execute (.target.bash, "/sbin/SuSEconfig --module gdm");
+	UI::NormalCursor();
+	return localReturn;
+}
+
+//==========================================
+// installPackages()...
+//------------------------------------------
+define any installPackages() ``{
+	any localReturn = `next;
+	list neededPacs = [];
+	list requiredPacs = [
+		"xf86", "xloader", "xmodules", "mesasoft",
+		"3ddiag", "sax2", "yast2-ui-qt", "yast2-menu"
+	];
+	// ... /
+	// setup contents of requiredPacs plus required pacs
+	// for the detected card(s)
+	// ---
+	requiredPacs = toset (
+		flatten( [required_pacs, Display::pacs_to_install] )
+	);
+	// ... /
+	// create sublist of required packages which are
+	// NOT installed at the time
+	// ---
+    foreach (`pac, requiredPacs, ``{
+	if ( ! SCR::Read(.targetpkg.installed, pac) ) {
+		neededPacs = add ( neededPacs, pac );
+	}
+	});
+	// ... /
+	// if there are packages left in the neededPacs list
+	// we need to install them now. ask the user for
+	// installing these packages
+	// ---
+	if ( size( neededPacs ) > 0 ) {
+		string missing = "";
+		foreach (`pac, neededPacs, ``{
+			missing = missing + pac + "\n";
+		});
+		if ( ! UI::YesNoPopup ( sformat (
+			_("The following packages are missing.\n%1\nInstall now ?"),
+			missing
+		))) {
+			localReturn = nil;
+		} else {
+			if ( CallFunction ( `sw_single( neededPacs ) ) != `next) {
+			localReturn = nil;
+			}
+		}
+	}
+	return (
+		localReturn
+	);
+}
+
+//==========================================
+// check XFree86 version
+//------------------------------------------
+if ( X11Version::version == "3" ) {
+	UI::ErrorPopup(
+		_("Your graphics card required XFree86 V3 to be used")
+	);
+    return nil;
+}
+
+//==========================================
+// install eventually missing packages...
+//------------------------------------------
+if (installPackages() == nil) {
+	return( nil );
+}
+
+//==========================================
+// Save touched configuration files...
+//------------------------------------------
+SCR::Execute (.target.bash,
+	"/bin/cp /etc/X11/XF86Config /etc/X11/XF86Config.YaST2save"
+);
+SCR::Execute (.target.bash,
+	"/bin/cp /etc/lilo.conf /etc/lilo.conf.YaST2save"
+);
+
+//==========================================
+// call inst_x11.ycp
+//------------------------------------------
+ret =  CallFunction (
+	`inst_x11( true, true )
+);
+if ( ret == `next ) {
+	ret = finish();
+}
+}

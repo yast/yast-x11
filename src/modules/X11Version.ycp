@@ -1,0 +1,125 @@
+/**
+ * Module: 		X11Version.ycp
+ *
+ * Authors: 		Thomas Roelz <tom@suse.de>
+ *
+ * Purpose:		Provides a function to determine the _used_ XFree-version in a running system.
+ *			(formerly was part of the X11-module but now outsourced to be usable standalone).
+ *
+ * $Id$
+ *
+ * This module provides the following data for public access via X11Version::<var-name>:
+ * =====================================================================================
+ *
+ * string version	Is set in the Constructor to	""	-	No X11 found
+ *							"3"	-	XFree86 Version 3.x
+ *							"4"	-	XFree86 Version 4.x
+ *
+ * This module provides the following functions for public access via X11Version::<func-name>(...):
+ * ================================================================================================
+ *
+ * GetVersion()		- Get version of XFree and assign global variable.
+ *
+ */
+
+{
+    module "X11Version";
+    textdomain "x11";
+    
+    
+
+    // ---------------------------------------------------------------------------------------
+    // START: Globally defined data
+    // ---------------------------------------------------------------------------------------
+
+    global string version = "";
+    
+    // ---------------------------------------------------------------------------------------
+    // END: Globally defined data
+    // ---------------------------------------------------------------------------------------
+
+    
+    // ---------------------------------------------------------------------------------------
+    // START: Globally defined functions
+    // ---------------------------------------------------------------------------------------
+
+    /**
+     * X11Version()
+     *
+     * The module constructor.
+     * Sets some proprietary module data defined globally for public access.
+     * This is done only once (and automatically) when the module is loaded for the first time.
+     *
+     * This only sets the global version variable to "", "3" or "4".
+     *
+     * @param 	-
+     *
+     * @return  -	
+     *
+     * @see	-
+     */
+    global define void X11Version()
+	``{
+	// Get the version of XFree used in the system.
+	//
+	GetVersion();
+	
+	return;
+    }
+
+
+
+    /**
+     * GetVersion()
+     *
+     * Set the global variable version to	""	-	No X11 found
+     *						"3"	-	XFree86 Version 3.x
+     *						"4"	-	XFree86 Version 4.x
+     *
+     * NOTE: This is highly dependent on the X11-infrastructure and must be accommodated to
+     *       any changes there.
+     *
+     * @param 	-
+     *
+     * @return  The content of the global variable "version".
+     *
+     * @see	-
+     */
+    global define void GetVersion()
+	``{
+	version = "";	// init
+	
+	// Take a look into the system....
+	// This delivers nil if the argument is a file (not a link) or if the
+	// link target doesn't exist.
+	//
+	string x_link = SCR::Read( .target.symlink, "/var/X11R6/bin/X" );
+
+	y2milestone( "Symlink: <%1>", x_link );
+	
+	if ( x_link != nil )
+	{
+	    // Should be s.th. like /usr/X11R6/bin/... if X11 is used in the system
+	    //
+	    if ( issubstring( x_link, "/usr/X11R6/bin" ) )
+	    {
+		// OK, X11 is there. Find out which one.
+		//
+		if ( issubstring( x_link, "XFree86" ) )
+		    version = "4";
+		else
+		    version = "3";
+	    }
+	}
+	
+	y2milestone( "xfree_version: <%1>", version );
+
+	return( version );
+    }
+    
+    // ---------------------------------------------------------------------------------------
+    // END: Globally defined functions
+    // ---------------------------------------------------------------------------------------
+
+}
+// - EOF -

@@ -1,0 +1,58 @@
+/**
+ * File:
+ *   x11_write.ycp
+ *
+ * Module:
+ *   Configuration of x11
+ *
+ * Summary:
+ *   Writing only client
+ *
+ * Authors:
+ *   Thomas Roelz <tom@suse.de>
+ *
+ * $Id$
+ *
+ * This is a write-only client. It takes its arguments and just
+ * write the settings.
+ *
+ * ********************************************************
+ * ***           This is not yet finished               ***
+ * *** It will be a wrapper for autoinst but is used    ***
+ * *** neither in the installation workflow nor in the  ***
+ * *** controlcenter                                    ***
+ * ********************************************************
+ */ 
+
+/** 
+ * @param first a map of x11 settings
+ * @return boolean success of operation
+ * @example map mm = $[ "FAIL_DELAY" : "77" ];
+ * @example any ret = CallModule("x11_write",[mm]);
+ */
+
+{
+
+textdomain "x11";
+include "x11/io.ycp";
+
+list args = Args();
+
+if(size(args)<=0) {
+    y2error("NOT writing, probably some mistake...");
+    return false;
+}
+
+if(!is(Args(0),map)) {
+    y2error("Bad argument for x11 write: %1", Args(0));
+    return false;
+}
+
+map settings = select( args, 0, $[] );
+y2debug("Only writing... (%1)",settings);
+
+list ret1 = X11Write(settings);
+list ret2 = X11Finish();
+return flatten([ret1,ret2]);
+
+} /* EOF */

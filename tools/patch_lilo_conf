@@ -1,0 +1,407 @@
+#!/usr/bin/perl -w
+#
+# patch_illo_conf - patch an /etc/lilo.conf file to make it consistent:
+#	- check each boot image for existence (and non-zero file size)
+#	- add "optional" to all that don't exist so /sbin/lilo doesn't fail
+#	- remove entry for /boot/vmlinuz_22 (from SuSE 7.1) if not present
+#	- remove entry for /boot/vmlinuz_24 (from SuSE 7.1) if not present
+#
+# Usage:
+#	patch_lilo_conf [-dv] [root-prefix] [file]
+#
+#	-v	verbose (default)
+#	-s	silent
+#	-d	debug
+#	-h	help (usage message)
+#
+# Example:
+#
+#	patch_lilo_conf /mnt /etc/lilo.conf
+#	patch_lilo_conf / /etc/lilo.conf
+#
+#
+# Author:  Stefan Hundhammer <sh@suse.de>
+#
+# $Id$
+
+use strict;
+use English;
+use File::Basename;
+use Getopt::Std;
+use vars qw( $opt_d $opt_h $opt_s $opt_v );
+
+
+# Forward declarations.
+
+sub main();
+
+
+# Global variables.
+
+my $verbose		= 0;
+my $debug		= 0;
+my $root_prefix		= "";
+my $src;
+my $tmp;
+my $prog_name = basename( $0 );
+
+
+# Forward declarations.
+
+sub main();
+
+
+# Call the main function and exit.
+# DO NOT enter any other code outside a sub -
+# any variables would otherwise be global.
+
+
+main();
+exit 0;
+
+
+#-----------------------------------------------------------------------------
+
+
+sub main()
+{
+    # Extract command line options.
+    # This will set a variable opt_? for any option,
+    # e.g. opt_v if option '-v' is passed on the command line.
+
+    getopts('dhvs');
+
+    usage()		if $opt_h;
+    $verbose	= 1 	if $opt_v;
+    $verbose	= 0 	if $opt_s;
+    $debug	= 1 	if $opt_d;
+
+    usage() unless $#ARGV == 1;		# Note: Perl is off by 1 here!
+    $root_prefix = shift @ARGV;
+    $src	 = shift @ARGV;
+
+    if ( $root_prefix eq "/" )
+    {
+	$root_prefix = "";
+    }
+    else
+    {
+	logf( "Using root prefix $root_prefix\n" );
+    }
+
+
+    # Set up files
+
+    $tmp = $src . ".tmp";
+    open( SRC, $src ) or die "Can't open $src";
+    open( OUT, ">" . $tmp ) or die "Can't open $tmp";
+
+
+    # Do the patching
+
+    patch_lilo_conf();
+
+
+    # Clean up
+
+    close( SRC );
+    close( OUT );
+
+    if ( ! $debug )
+    {
+	rename ( $src, $src . ".old" );
+	rename ( $tmp, $src ) or warning ( "Can't rename $tmp to $src" );
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+# Do the patching
+#
+# Parameters:
+#	---
+#
+
+sub patch_lilo_conf()
+{
+    my $line;
+
+
+    # Verbatim copy global section at the file header
+
+    while ( ( $line = <SRC> ) !~ /^\s*((image)|(other))\s*=/ )
+    {
+	print OUT $line;
+    }
+
+
+    # Process all the image/other sections
+
+    my $section;
+    my $os_type;
+    my $boot_image;
+
+    while ( $line )
+    {
+	if ( $line =~ /^\s*((image)|(other))\s*=/ )	# section start
+	{
+	    if ( defined $section )	# if we have an old section in store, process it first
+	    {
+		process_section( $section, $os_type, $boot_image );
+	    }
+
+	    $section = $line;
+	    ( $os_type, $boot_image ) = get_boot_image( $line );
+	}
+	else				# somewhere within a section
+	{
+	    $section .= $line;		# just add the line, it will be processed later
+	}
+
+	$line = <SRC>;			# read next line
+    }
+
+
+    # Process the last section
+
+    process_section( $section, $os_type, $boot_image );
+}
+
+
+#-----------------------------------------------------------------------------
+
+# Process one lilo.conf section
+#
+# Parameters:
+#	$section	all the text lines of the section
+#	$os_type	OS type: "image" (for Linux) or "other"
+#	$boot_image	name/path of the image to boot
+#
+# Return value:
+#	---
+
+sub process_section()
+{
+    my ( $section_verbatim, $os_type, $boot_image ) = @_;
+    my $section_stripped = $section_verbatim;
+
+    $section_stripped =~ s/#.*$//mg;	# strip comments (m: multi-line input)
+
+    if ( -s $root_prefix . $boot_image )	# boot image exists and is non-zero
+    {
+	if ( $boot_image =~ m:^/boot/vmlinuz$: ||		# one of our default kernels
+	     $boot_image =~ m:^/boot/vmlinuz.suse$: )
+	{
+	    my $initrd = $boot_image;
+	    $initrd =~ s/vmlinuz/initrd/ ;
+
+	    if ( -s $initrd )		# have corresponding initrd
+	    {
+		if ( $section_verbatim =~ /initrd.*$initrd/ )
+		{
+		    logf( "Image $boot_image and initrd $initrd\tOK" );
+		    print OUT $section_verbatim;
+		}
+		else
+		{
+		    logf( "Image $boot_image - adding \"initrd=$initrd\" entry" );
+
+		    copy_and_insert_after( $section_verbatim, 
+					   '^\s*image\s*=', 
+					   '^\s*initrd\s*=',	# line to delete
+					   "  initrd = $initrd   # automatically added by $prog_name\n" );
+		}
+	    }
+	    else	# no corresponding intitrd
+	    {
+		logf( "Image $boot_image\t- no corresponding initrd" );
+		print OUT $section_verbatim;
+	    }
+	}
+	else	# some other kernel, non-SuSE
+	{
+	    logf( "Image $boot_image\tOK" );
+	    print OUT $section_verbatim;
+	}
+    }
+    else					# boot image doesn't exist or has size 0
+    {
+	if ( $section_stripped =~ /optional/ )	# section declared as optional?
+	{
+	    logf( "Image $boot_image declared as optional\t- copying verbatim" );
+	    print OUT $section_verbatim;	# don't touch it - copy verbatim
+	}
+	else					# section not optional
+	{
+	    if ( $boot_image =~ /vmlinuz_24/ ||
+		 $boot_image =~ /vmlinuz_22/   )
+	    {
+		# SuSE Linux 7.1 created this automatically, so we may remove it
+		logf( "Deleting section $boot_image" );
+	    }
+	    else	# Anything else: add "optional" and leave it alone
+	    {
+		logf( "Image $boot_image not found\t- adding \"optional\"" );
+
+		copy_and_insert_after( $section_verbatim, 
+				       '^\s*((image)|(other))\s*=', 
+				       '',	# line to delete
+				       "  optional   # automatically added by $prog_name\n" );
+	    }
+	}
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+# Extract boot image name/path and type from an "image =" or "other =" line
+#
+# Parameters:
+#	$line		The line to extract from
+#
+# Return value:
+#	$os_type	"image" or "other"
+#	$boot_image	the name/path of the boot image
+
+sub get_boot_image()
+{
+    my ( $line ) = @_;
+
+    chomp $line;			# remove trainling newline
+    $line =~ s/#.*$//;			# remove any comment
+    $line =~				# set $1, $2 etc. match variables
+	m{
+	    ^				# beginning of line
+	    \s*				# maybe whitespace
+	    (				# $1 start
+	     (?:image) |		# "?:": don't store match in $1, $2, ...
+	     (?:other)
+	     )				# $1 end
+	    \s*				# maybe whitespace
+	    =				# literal "=" sign
+	    \s*				# maybe whitespace
+	    (				# $2 start
+	     \S+			# any number of non-whitespace
+	     )				# $2 end
+	}x;
+
+    my $os_type		= $1;
+    my $boot_image	= $2;
+
+    return ( $os_type, $boot_image );
+}
+
+
+#-----------------------------------------------------------------------------
+
+# Insert a line after line matching $after_regexp
+#
+# Parameters:
+#	$orig_lines		original lines to copy from
+#	$after_regexp		line to search for / to insert after
+#	$line_to_delete_regexp	line to delete (regexp)
+#	$line_to_insert		line to insert (with trailing newline!)
+#	
+# Return value:
+#	
+
+sub copy_and_insert_after()
+{
+    my ( $orig_lines, $after_regexp, $line_to_delete_regexp, $line_to_insert ) = @_;
+
+    my $line;
+
+    foreach $line ( split( /\n/, $orig_lines ) )
+    {
+	print OUT $line . "\n"
+	    unless ( length( $line_to_delete_regexp ) > 0 && $line =~ /$line_to_delete_regexp/ );
+
+	if ( $line =~ /$after_regexp/ )
+	{
+	    print OUT $line_to_insert;
+	}
+    }
+
+    print OUT "\n";
+}
+
+
+
+#-----------------------------------------------------------------------------
+
+
+# Log a message to stdout if verbose mode is set
+# (command line option '-v').
+#
+# Parameters:
+#	Messages to write (any number).
+
+sub logf()
+{
+    my $msg;
+
+    if ( $verbose )
+    {
+	foreach $msg( @_ )
+	{
+	    print $msg . " ";
+	}
+
+	$OUTPUT_AUTOFLUSH = 1;	# inhibit buffering
+	print "\n";
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Log a debugging message to stdout if debug mode is set
+# (command line option '-d').
+#
+# Parameters:
+#	Messages to write (any number).
+
+sub deb()
+{
+    my $msg;
+
+    if ( $debug )
+    {
+	foreach $msg( @_ )
+	{
+	    print $msg . " ";
+	}
+
+	$OUTPUT_AUTOFLUSH = 1;	# inhibit buffering
+	print "\n";
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Print usage message and abort program.
+#
+# Parameters:
+#	---
+
+sub usage()
+{
+    die "Usage: $prog_name [-dhsv] [root-prefix] [file]\n"		.
+	"\t-d debug\n"							.
+	"\t-h help (this message)\n"					.
+	"\t-s silent (turn verbose off)\n"				.
+	"\t-v verbose (default)\n"					.
+	"\n"								.
+	"Examples:\n"							.
+	"\t$prog_name /mnt /mnt/etc/lilo.conf\n"			.
+	"\t$prog_name / /etc/lilo.conf\n";
+}
+
+
+
+# EOF

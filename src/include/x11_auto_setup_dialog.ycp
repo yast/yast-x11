@@ -1,0 +1,255 @@
+/**
+ * $Id$
+ *
+ * Module:		x11_auto_setup_dialog.ycp
+ *
+ * Purpose:		UI part of the automatic X11 configuration
+ *
+ * Author:		Stefan Hundhammer <sh@suse.de>
+ *			extended by Thomas Roelz <tom@suse.de>
+ */
+{
+    textdomain "x11";
+    
+    import "Wizard";
+
+    
+    UI( ``{
+
+	/*
+	 * Create dialog for X11 automatic setup:
+	 *
+	 * ( ) text mode only
+	 *
+	 * ( ) graphical desktop environment
+	 *
+	 *     1024x768, 16 bit, 65535 colors, 82 Hz
+	 *     3D hardware acceleration
+	 *     Iiyama VisionMaster Pro 450
+	 *
+	 *            [Change...]
+	 *
+	 *
+	 * @param enable_x11		true if GUI by default, false if text mode only
+	 *
+	 *
+	 * @param auto_mode_description user readable string that describes the automatic settings
+	 *
+	 * @return dialog as term to put into Wizard::SetContents()
+	 */
+
+	global define X11AutoSetupDialog( boolean	enable_x11,
+					  string	auto_mode_description )
+	    ``{
+	    term radio_box = nil;
+
+	    radio_box =
+		`RadioButtonGroup(
+				  `VBox(
+					`Left( `RadioButton(`id(`text_mode_only),
+							    `opt(`notify),
+							    // Radio button: Disable X11 alltogether
+							    _("&Text mode only -- no graphical desktop"), ! enable_x11 ) ),
+					`VSpacing( 1 ),
+					
+					`Left( `RadioButton(`id(`auto_mode),
+							    `opt(`notify),
+							    // RadioButton: Select X11 (reasonable defaults suggested below)
+							    _("&Graphical desktop environment"), enable_x11 ) ),
+					`VSpacing( 0.3 ),
+					`Left(
+					      `HBox(
+						    `HSpacing( 4 ),
+						    `Label(`id(`auto_mode_description), `opt(`outputField), auto_mode_description )
+						    )
+					      ),
+					`VSpacing( 0.8 ),
+
+					// PushButton: Change X11 settings
+					`PushButton(`id(`change), _("&Change...") )
+					)
+				  );
+
+
+	    term x11_setup_mode_dialog =
+		`HVCenter(
+			  `HVSquash(
+				    `Frame( "",
+					    `VBox(
+						  `HBox(
+							`HSpacing( 1 ),
+							radio_box,
+							`HSpacing( 3 )
+							),
+						  `VSpacing( 0.5 )
+						  )
+					    )
+				    )
+			  );
+
+
+	    return x11_setup_mode_dialog;
+	};
+
+	
+	/*
+	 * Get help text for Resolution dialog
+	 *
+	 * @return multi line help text in RichText (HTML like) format
+	 */
+
+	global define X11AutoSetupDialogHelpText() ``{
+	    /*
+	     * Help text (HTML like) for X11 automatic setup
+	     *
+	     * Dialog layout:
+	     *
+	     *
+	     *
+	     * ( ) text mode only
+	     *
+	     * ( ) graphical desktop environment
+	     *
+	     *     1024x768, 16 bit / 65535 colors,
+	     *     82 Hz
+	     *     3D acceleration
+	     *     Monitor: Iiyama VisionMaster Pro 450
+	     *
+	     *            [Change...]
+	     *
+	     * ---
+	     *
+	     * Notice: The one and only official name of the windowing system is
+	     * "The X Window System" or short "X11" - NOT "X Windows".
+	     */
+
+	    string help_text =  _("<p>
+Please look at the current desktop settings for the <i>X Window System</i>.
+If you don't like them, you can <b>Change</b> the settings.
+</p>");
+	    
+	    // Help text (HTML-like), continued
+	    help_text = help_text +  _("<p>
+You can select <b>Text mode only</b> to skip X Window configuration
+altogether. If you do that, you can always run <i>SaX</i> or <i>SaX2</i>
+later. 
+</p>
+");
+	    
+	    // Help text (HTML-like), continued
+	    help_text = help_text +  _("<p>
+If you choose <b>Graphical desktop environment</b>, the current settings will
+be tested when you select <b>Next</b>. Follow the instructions that appear.
+</p>
+");
+	    return help_text;
+	};
+    });
+
+    
+    //
+    // WFM defines
+    //
+    
+    global define SetX11Mode()
+	``{
+	UI::ChangeWidget(`id(`auto_mode_description),  `Enabled, true );
+	UI::ChangeWidget(`id(`change), `Enabled, true );
+    }
+
+    global define SetTextMode()
+	``{
+	UI::ChangeWidget(`id(`auto_mode_description),  `Enabled, false );
+	UI::ChangeWidget(`id(`change), `Enabled, false );
+    }
+
+
+
+    // Display a warning if we use the fbdev device
+    //
+    UI(``{
+	global define DisplayFbdevWarning()
+	    ``{
+	    // Advise the user that the framebuffer device server is used.
+	    string message = _("
+A special X server for your graphics adapter
+could not be detected.
+
+For this reason, the framebuffer device with
+standard VESA resolutions will be used.
+
+This mode cannot be tested because it  
+will not be activated until the next reboot.
+");
+
+	    OpenDialog(
+		       `opt(`decorated),
+		       `HBox(
+			     `HSpacing(1),
+			     `VBox(
+				   `VSpacing(0.2),
+				   `Label( message ),
+				   // check box: User can decide if he wants to see this warning again
+				   `CheckBox(`id(`box), _("Don't tell me &again."), false),
+				   `VSpacing(0.2),
+				   // ok pushbutton: confirm the dialog
+				   `PushButton(`opt(`default), _("&OK")),
+				   `VSpacing(0.2)
+				   ),
+			     `HSpacing(1)
+			     )
+		       );
+	    UserInput();
+
+	    boolean dont_tell_me = UI::QueryWidget(`id(`box), `Value );
+
+	    CloseDialog();
+
+	    return( ! dont_tell_me );	// invert
+	}
+    });
+
+
+
+    // Display a warning if we use the standard VGA server.
+    //
+    UI(``{
+	global define DisplayVgaWarning()
+	    ``{
+	    // Advise the user that the standard VGA server will be used.
+	    string message = _("
+A special X server for your graphics adapter
+could not be determined.
+
+Therefore, the standard VGA X server with
+standard VESA resolutions will be used.\n");
+
+	    OpenDialog(
+		       `opt(`decorated),
+		       `HBox(
+			     `HSpacing(1),
+			     `VBox(
+				   `VSpacing(0.2),
+				   `Label( message ),
+				   // check box: User can decide if he wants to see this warning again
+				   `CheckBox(`id(`box), _("Don't tell me &again."), false),
+				   `VSpacing(0.2),
+				   // ok pushbutton: confirm the dialog
+				   `PushButton(`opt(`default), _("&OK")),
+				   `VSpacing(0.2)
+				   ),
+			     `HSpacing(1)
+			     )
+		       );
+	    UserInput();
+
+	    boolean dont_tell_me = UI::QueryWidget(`id(`box), `Value );
+
+	    CloseDialog();
+
+	    return( ! dont_tell_me );	// invert
+	}
+    });
+}		// End of include block
+
+// - EOF -

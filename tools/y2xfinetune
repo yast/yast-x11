@@ -1,0 +1,133 @@
+#!/bin/bash
+# Copyright (c) 1996-2001 SuSE GmbH Nuernberg, Germany.  
+# Copyright (c) 2002 SuSE Linux AG Nuernberg, Germany.  
+# All rights reserved.
+#
+# Author: Marcus Schaefer <ms@suse.de>, 1999
+#
+# X startup script   
+# Usage:  y2xfinetune XSERVER config-file
+# XSERVER is the name of a binary relative to /usr/X11R6/bin/
+#
+# Exit code:
+# 
+# 0: xfine has run successful. The user selected "Save settings"
+# 1: xfine has run successful, but the user canceled.
+# 2: Wrong arguments or not root, bug from caller
+# 3: xfine failed for some reason
+#
+
+# make sure that X11 binaries are found
+PATH=$PATH:/usr/X11R6/bin
+
+XSERVER=$1
+CONFIG=$2
+LANG=$3
+XSERVER_PATH=/usr/X11R6/bin/$XSERVER
+XIDLE="/usr/X11R6/bin/xidle"
+XBOUND="/usr/X11R6/bin/xbound"
+
+if [ -z "$LANG" ];then
+LANG="en"
+fi
+
+# are you root ;)
+# ---------------
+if [ ! $UID = "0" ];then
+ echo "$0: only root can do this... abort" 
+ exit 2
+fi
+
+
+# test parameters
+# -----------------------
+
+if [ -z "$XSERVER" ];then
+ echo "$0: no server file specified... abort"
+ exit 2
+fi
+if [ ! -f "$XSERVER_PATH" ];then
+ echo "$0: server $XSERVER does not exist... abort"
+ exit 2
+fi
+
+if [ -z "$CONFIG" ];then
+ echo "$0: no config file specified... abort"
+ exit 2
+fi
+if [ ! -f "$CONFIG" ];then
+ echo "$0: config $CONFIG does not exist... abort"
+ exit 2
+fi
+
+
+# Getting Display 
+#-----------------
+if [ -z "$DISPLAY" ]; then
+ export DISPLAY=:0
+ DISPNUM=0
+else
+ DISPNUM=${DISPNUM##*:}
+ DISPNUM=${DISPNUM%%.*}
+ DISPNUM=$(( DISPNUM + 1 ))
+fi
+export DISPLAY=:$DISPNUM
+
+rm -f /tmp/.X11-unix/X$DISPNUM
+$XSERVER_PATH -xf86config $CONFIG $DISPLAY &
+SPID=$!
+
+# wait until Server is up 
+#-------------------------
+sleep 1
+until [ -S /tmp/.X11-unix/X$DISPNUM ]
+do
+  sleep 1
+done
+
+# run some tiny xterms as corner markers
+# set blue background
+# run xfine
+# ---------
+
+xterm -geometry 1x1-0-0 -bg grey -fg grey &
+XPID1=$!
+xterm -geometry 1x1-0+0 -bg grey -fg grey &
+XPID2=$!
+xterm -geometry 1x1+0-0 -bg grey -fg grey &
+XPID3=$!
+xterm -geometry 1x1+0+0 -bg grey -fg grey &
+XPID4=$!
+xsetroot -solid darkslateblue
+xsetroot -cursor_name top_left_arrow
+
+$XBOUND &
+XBPID=$!
+$XIDLE -p $SPID
+xfine -l $LANG -f $CONFIG
+
+XRET=$?
+killall xidle 2>/dev/null
+kill $XPID1
+kill $XPID2
+kill $XPID3
+kill $XPID4
+kill $XBPID
+kill $SPID
+case $XRET in
+ 1 )
+   # User cancelled
+   cp "$CONFIG" /etc/XF86Config.pre
+   rm -rf "$CONFIG"
+   exit 1
+   ;;
+
+ 3 )
+   # User saved and is content
+   exit 0
+   ;;
+
+ * )
+   exit 3
+   ;;
+esac

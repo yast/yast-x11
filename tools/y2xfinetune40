@@ -1,0 +1,128 @@
+#!/bin/bash
+# Copyright (c) 1996 SuSE Linux AG Nuernberg, Germany.  
+# All rights reserved.
+#
+# Author: Marcus Schaefer <ms@suse.de>, 2000
+#
+# X startup script   
+# Usage:  y2xfinetune config-file
+#
+# Exit code:
+# 
+# 0: xfine was successful. The user selected "Save settings"
+# 1: xfine was successful, but the user canceled.
+# 2: non root request
+# 3: given config reference file not found
+# 4: xfine failed for some reason ( should not happen )
+#
+
+# make sure that X11 binaries are found
+# ---------------------------------------
+PATH=$PATH:/usr/X11R6/bin
+XSRV="/usr/X11R6/bin/XFree86"
+MARK="/usr/X11R6/lib/sax/tools/corner"
+XFINE="/usr/X11R6/lib/xfine/xfine.pl"
+XIDLE="/usr/X11R6/bin/xidle"
+XBOUND="/usr/X11R6/bin/xbound"
+[ "$LANG" ] && LANG=${LANG%%[.@]*}
+
+# test on root...
+# -----------------
+if [ ! $UID = "0" ];then
+ echo "$0: only root can do this... abort" 
+ exit 2
+fi
+
+# getting parameters...
+# ----------------------
+if [ -z "$1" ];then
+ echo "$0: warning no reference configuration"
+ echo "$0: assuming /etc/X11/XF86Config"
+ CONFIG="/etc/X11/XF86Config"
+else
+ CONFIG=$1
+fi
+
+# test parameters
+# -----------------------
+if [ ! -f "$CONFIG" ];then
+ echo "$0: reference config $CONFIG does not exist... abort"
+ exit 3
+fi
+
+# Getting Display... 
+#--------------------
+if [ -z "$DISPLAY" ]; then
+ export DISPLAY=:0
+ DISPNUM=0
+else
+ DISPNUM=${DISPNUM##*:}
+ DISPNUM=${DISPNUM%%.*}
+ DISPNUM=$(( DISPNUM + 1 ))
+fi
+export DISPLAY=:$DISPNUM
+
+rm -f /tmp/.X11-unix/X$DISPNUM
+$XSRV -ac -xf86config $CONFIG $DISPLAY &
+export DISPLAY=$DISPLAY
+SPID=$!
+
+# wait until Server is up 
+#-------------------------
+PROC="/proc/$PID/status"
+INTR="0"
+while true; do
+ if ([ -f $PROC ] || [ $INTR = 2 ]);then
+  break
+ else
+  sleep 2
+  INTR=`expr $INTR + 1` 
+ fi
+done
+
+# /.../
+# run some tiny simple X11-Windows
+# as corner marks and set the root window background
+# to blue before calling XFine2
+# ---------
+$MARK -g 10x15-0-0 & 
+XPID1=$!
+$MARK -g 10x15-0+0 & 
+XPID2=$!
+$MARK -g 10x15+0-0 & 
+XPID3=$!
+$MARK -g 10x15+0+0 & 
+XPID4=$!
+
+xsetroot -solid darkslateblue
+xsetroot -cursor_name top_left_arrow
+
+$XBOUND &
+XBPID=$!
+$XIDLE -p $SPID
+XRET=`$XFINE -l -c $CONFIG`
+
+killall xidle 2>/dev/null
+kill $XPID1
+kill $XPID2
+kill $XPID3
+kill $XPID4
+kill $XBPID
+kill $SPID
+case $XRET in
+ 1 )
+   # User cancelled
+   # ---------------
+   exit 1
+   ;;
+
+ 2 )
+   # User saved and is content
+   # ---------------------------
+   exit 0
+   ;;
+
+ * )
+   exit 4
+   ;;
+esac

@@ -1,0 +1,754 @@
+/**
+ * File:
+ *   Display.ycp
+ *
+ * Module:
+ *   Display
+ *
+ * Summary:
+ *   Provide information regarding the display adapter.
+ *
+ * Authors:
+ *   Thomas Roelz <tom@suse.de>
+ *
+ * $Id$
+ *
+ * Usage:
+ * ------
+ * This module provides the following data for public access via Display::<var-name>.
+ *
+ *      !!! These are to be used READ_ONLY !!!
+ *
+ * Set in the constructor after the first import:
+ *
+ *	boolean xserver_is_unknown
+ *	map xserver
+ *	map xserver_3d
+ *	boolean has_3d
+ *	string unique_key
+ *	integer bus_id
+ *	integer slot_id
+ *	integer func_id
+ *	string video_card_name
+ *	list fbdev_resol
+ *	boolean has_fbdev
+ *	boolean has_vga
+ *	list pacs_to_install
+ *
+ * This module provides the following functions for public access via Display::<func-name>(...)
+ *
+ *	Display()			- Module constructor.
+ *			  		  If saved module data exists in continue mode, these are read in.
+ *			 		  Otherwise Hardware is probed.
+ *
+ *	Check()				- Check for consistency with other modules.
+ *
+ *	Probe()				- Force new hardware probing and set public data accordingly.
+ *
+ *	Configure()			- Set libhd configuration flags
+ *
+ *	Save()				- Save module data to /var/lib/YaST2/Display_data.ycp
+ *
+ *	Restore()			- Load module data from /var/lib/YaST2/Display_data.ycp
+ *
+ */
+
+{
+    module "Display";
+
+    import "Mode";
+    import "Installation";
+
+
+    
+    // ---------------------------------------------------------------------------------------
+    // START: Globally defined data to be accessed via Display::<variable>
+    // ---------------------------------------------------------------------------------------
+    
+    // Flag xserver_is_unknown (true, false)
+    //
+    // Indicating if we found an xserver for the graphics card.
+    //
+    global boolean xserver_is_unknown = true;
+
+    // X-server data for the 2D case.
+    //
+    global map xserver = $[];
+
+    // X-server data for the 3D case.
+    //
+    global map xserver_3d = $[];
+
+    // Flag has_3d (true, false)
+    //
+    // Indicating if we do have 3d acceleration hardware.
+    //
+    global boolean has_3d = false;
+
+    // The unique vendor key of the graphics card.
+    //
+    global string unique_key = "";
+
+    // Hardware bus_id
+    //
+    global integer bus_id = 0;
+
+    // Hardware slot_id
+    //
+    global integer slot_id = 0;
+
+    // Hardware func_id
+    //
+    global integer func_id = 0;
+
+    // The name of the graphics card.
+    //
+    global string video_card_name = "";
+    
+    // List fbdev_resol
+    //
+    // List of framebuffer resolutions (if any).
+    //
+    global list fbdev_resol = [];
+    
+    // Flag has_fbdev (true, false)
+    //
+    // Indicating if we do have a framebuffer device.
+    //
+    global boolean has_fbdev = false;
+    
+    // Flag has_vga (true, false)
+    //
+    // Indicating if we do have a vga card installed.
+    //
+    global boolean has_vga = false;
+
+    // List of X11 packages to be installed for X11.
+    //
+    global list pacs_to_install = [];
+
+    // ---------------------------------------------------------------------------------------
+    // END: Globally defined data to be accessed via Display::<variable>
+    // ---------------------------------------------------------------------------------------
+
+    
+
+    // ---------------------------------------------------------------------------------------
+    // START: Locally defined data
+    // ---------------------------------------------------------------------------------------
+    
+    string display_data_file = "/var/lib/YaST2/Display_data.ycp";
+
+    list videoprobelist = [];	// List of all probed videocards
+    
+    // ---------------------------------------------------------------------------------------
+    // END: Locally defined data
+    // ---------------------------------------------------------------------------------------
+    
+    
+
+    // ---------------------------------------------------------------------------------------
+    // START: Globally defined functions
+    // ---------------------------------------------------------------------------------------
+
+    /**
+     * Display()
+     *
+     * The module constructor.
+     * Sets the proprietary module data defined globally for public access.
+     * This is done only once (and automatically) when the module is loaded for the first time.
+     *
+     * @param 	-
+     *
+     * @return  -
+     *
+     * @see	Probe()
+     */
+    global define void Display()
+	``{
+	// We have two possible sources of information:
+	//
+	// Saved data:		- continue_mode and restoring data successful.
+	// Newly probed data:	- any other case (?)
+	//
+	if ( ! ( Mode::cont && Restore() ) && ! Mode::config )
+	{
+	    // On module entry probe the hardware and set all those data needed for public access.
+	    //
+	    probe_settings();
+	}
+
+	return;
+    }	// Display()
+
+
+    /**
+     * Check()
+     *
+     * Check current configuration
+     * This function should be called to check consistency with
+     * other modules (mentioned as Depends in the header)
+     * @return	0	if no change
+     * 		1	change due to dependency with other module
+     *		2	inconsistency detected
+     *
+     */
+    global define boolean Check()
+    ``{
+	// No dependencies so far.
+	//
+	return 0;
+    }
+
+
+    /**
+     * Probe()
+     *
+     * Allow for intentional probing by applications.
+     *
+     * @param 	-
+     *
+     * @return  -
+     *
+     * @see	Display()
+     */
+    global define void Probe()
+	``{
+	probe_settings();
+    }	// Probe()
+
+
+    /**
+     * Configure()
+     *
+     * Mark the configured device hardware as configured and all devices that
+     * may have been removed with configured=no and needed=no to avoid nagging
+     * configuration poups during boot time. This functionality is implemented
+     * as distinct function (aside from Save()) to be callable at the right place.
+     *
+     * @param 	-
+     *
+     * @return  -
+     *
+     * @see	Save()
+     */
+    global define void Configure()
+	``{
+	
+	if ( Mode::update )
+	{
+	    // do nothing
+	    return;
+	}
+
+	// As a preliminary step mark all cards except the one to be configured
+	// as configured = no and needed = no. Afterwards this one card will be
+	// marked as configured = yes and needed = yes. This has to be done to
+	// prevent any problems that may occur if the user plugs in and out different
+	// graphics cards. Otherwise the config popup may nag the user again and again.
+	//
+	// In order to get a list of *ALL* cards that have ever been connected to
+	// the system we must do a *manual* probing (accessing the libhd database).
+	// Doing only a "normal" probing would deliver only the *currently* attached
+	// cards which in turn would not allow to "unmark" all cards that may have
+	// been removed.
+	//
+	videoprobelist = SCR::Read( .probe.display.manual );	// Manual probing
+
+	integer list_size = size( videoprobelist );
+	
+	if ( list_size > 0 )
+	{
+	    integer i = 0;
+
+	    while ( i < list_size )	// Loop over all video cards
+	    {
+		map    current_video = videoprobelist[i]:$[];
+		string current_key   = current_video["unique_key"]:"";
+
+		if ( current_key != "" )
+		{
+		    // OK, there is a key to mark...
+		    //
+		    if ( current_key != unique_key )
+		    {
+			// OK, this key is _not_ the key of the video card to be configured.
+			// ==> Mark with "no".
+			//
+			SCR::Write( .probe.status.configured, current_key, `no );
+			y2milestone("Marked display <%1> as configured = no", current_key );
+			
+			SCR::Write( .probe.status.needed, current_key, `no );
+			y2milestone("Marked display <%1> as needed = no", current_key );
+		    }
+		    else
+		    {
+			y2milestone("Skipping active key <%1> --> to be configured", current_key );
+		    }
+		}
+
+		i = i + 1;	// next video card
+	    }
+	}
+	else
+	{
+	    y2milestone("No probed video cards. Not unconfiguring any cards");
+	}
+	
+	// Only if the display has been probed in this run the unique_key
+	// is not empty. Only in this case mark the device as "configured".
+	// In any other case the device should already be configured and
+	// the marking can't be done because the unique_key is missing.
+	// ==> Only mark if successfully probed!
+	//
+	if ( unique_key != "" )
+	{
+	    SCR::Write( .probe.status.configured, unique_key, `yes );
+	    y2milestone("Marked display <%1> as configured", unique_key );
+
+	    if ( ! Mode::serial_console )
+	    {
+		SCR::Write( .probe.status.needed, unique_key, `yes );
+		y2milestone("Marked display <%1> as needed", unique_key );
+	    }
+	}
+	else
+	{
+	    y2milestone("NOT marking display as configured (no unique_key)");
+	}
+	
+	return;
+    }	// Configure()
+
+
+    /**
+     * Save()
+     *
+     * Save the current data into a file to be read after a reboot.
+     *
+     * @param 	-
+     *
+     * @return  -
+     *
+     * @see	Restore()
+     */
+    global define void Save()
+	``{
+	
+	if ( Mode::update )
+	{
+	    // do nothing
+	    return;
+	}
+	
+	// Assemble map containing all the public data.
+	//
+	map display_data =
+	    $[
+	      "xserver_is_unknown"	: xserver_is_unknown,
+	      "xserver"			: xserver,
+	      "xserver_3d"		: xserver_3d,
+	      "has_3d"			: has_3d,
+	      "unique_key"		: unique_key,
+	      "bus_id"			: bus_id,
+	      "slot_id"			: slot_id,
+	      "func_id"			: func_id,
+	      "video_card_name"		: video_card_name,
+	      "fbdev_resol"		: fbdev_resol,
+	      "has_fbdev"		: has_fbdev,
+	      "has_vga"			: has_vga,
+	      "pacs_to_install"		: pacs_to_install
+	    ];
+
+	// Write it to the file.
+	//
+	SCR::Write( .target.ycp, display_data_file, display_data );
+
+	y2milestone( "Saved display data: <%1>", display_data );
+	
+	return;
+    }	// Save()
+
+    
+    /**
+     * Restore()
+     *
+     * Restore the the current data from a file that has been saved before.
+     *
+     * @param 	-
+     *
+     * @return  true	- Data base file found. Restore successful.
+     *		false	- No data base file found.
+     *
+     * @see	Save()
+     */
+    global define boolean Restore()
+	``{
+	map display_data = SCR::Read( .target.ycp, display_data_file );
+
+	if ( display_data == nil )	// No saved data base.
+	{
+	    y2milestone( "No saved display data" );
+
+	    return false;
+	}
+	else	// saved data base found
+	{
+	    y2milestone( "Found saved display data: <%1>", display_data );
+
+	    // Restore public data.
+	    //
+	    xserver_is_unknown 	= display_data["xserver_is_unknown"]:true;
+	    xserver 		= display_data["xserver"]:$[];
+	    xserver_3d 		= display_data["xserver_3d"]:$[];
+	    has_3d 		= display_data["has_3d"]:false;
+	    unique_key 		= display_data["unique_key"]:"";
+	    bus_id 		= display_data["bus_id"]:0;
+	    slot_id 		= display_data["slot_id"]:0;
+	    func_id 		= display_data["func_id"]:0;
+	    video_card_name	= display_data["video_card_name"]:"";
+	    fbdev_resol		= display_data["fbdev_resol"]:[];
+	    has_fbdev 		= display_data["has_fbdev"]:false;
+	    has_vga 		= display_data["has_vga"]:false;
+	    pacs_to_install 	= display_data["pacs_to_install"]:[];
+
+	    return true;
+	}
+    }	// Restore()
+	
+    // ---------------------------------------------------------------------------------------
+    // END: Globally defined functions
+    // ---------------------------------------------------------------------------------------
+
+
+    
+    // ---------------------------------------------------------------------------------------
+    // START: Locally defined functions
+    // ---------------------------------------------------------------------------------------
+    
+    /*
+     * extract_packages()
+     *
+     * Determine X11 server, X11 version, and packages to install.
+     * Extract packages mentioned in driverlist, add them to pacs_to_install.
+     *
+     * @param 	map drivermap
+     *		map xpacs
+     *
+     * @return  list of packages to install
+     *
+     * @see
+     */
+    
+    define extract_packages( map drivermap, map xpacs )
+	``{
+	list pacs_to_inst = [];
+
+	y2debug("drivermap: %1", drivermap);
+
+	string version = drivermap["version"]:"0";
+	list packages  = drivermap["packages"]:[];
+
+	foreach (`package, packages,
+	``{
+	    pacs_to_inst = add( pacs_to_inst, package );
+	});
+
+	// Evaluate alias name mentioned as "server" for version 3.
+
+	if ( version == "3" )
+	{
+	    // Get server entry from .probe.
+	    // This is just an alias for /usr/lib/YaST2/xserver.ycp.
+	    //
+	    string xserveralias = drivermap["server"]:"VGA16";
+
+	    // Now look up correct package/server pair
+	    // and fall back to default xnames if not found.
+	    //
+	    list xnames = xpacs[xserveralias]:[ "xvga16", "XF86_VGA16" ];
+
+	    // Add the x-server package name to the list of pacs.
+	    //
+	    pacs_to_inst = add( pacs_to_inst, xnames[0]:"" );
+	}
+
+	return pacs_to_inst;
+    }; // extract_packages()
+
+
+
+    /*
+     * pacs_and_servers()
+     *
+     * Check displaycontrollers (as returned from .probe.display).
+     *
+     * @param 	list display_list
+     *
+     * @return  [ unknown_server, unique_key, x11pacs_to_install, xserver, xserver_3d ]
+     *
+     * @see
+     */
+
+    define pacs_and_servers( list display_list )
+	``{
+	// Replace the server alias with the real server for version 3.
+	//
+	string default_alias = "VGA16";
+	list default_srvlist = [ "xvga16", "XF86_VGA16" ];
+
+	if ( has_fbdev )	// Has already been set in probe_settings()
+	{
+	    default_alias = "FBDEV";
+	    default_srvlist = [ "xfbdev", "XF86_FBDev" ];
+	}
+
+	// Do we fail to recognize the server?
+	//
+	boolean unknown_server = true;
+
+	// Should we warn the user?
+	//
+	boolean warn_nvidia = false;
+
+	// List of packages to install.
+	//
+	list x11pacs = [];
+
+	// Read server->package map.
+	//
+	map xsrvmap = WFM::Read( .local.yast2, "xserver.ycp" );
+
+	// Collect all packages needed for the graphic controllers.
+
+	// Special voodoo add-on handling ?
+	//
+	boolean have_voodoo_special = false;
+
+	// Loop over all probed controllers.
+	//
+	foreach (`dpycontroller, display_list,
+	``{
+
+	    // Check for voodoo/voodoo2.
+	    //
+	    if ( dpycontroller["vendor_id"]:0 == 0x1121a )
+	    {
+		integer voodoo_device_id = dpycontroller["device_id"]:0;
+		if ( ( voodoo_device_id == 0x10001 ) || ( voodoo_device_id == 0x10002 ) )
+		    have_voodoo_special = true;
+	    }
+
+	    // Check for x11 data in this hwdata.
+	    //
+	    list x11list = dpycontroller["x11"]:[];
+
+	    // Extract all packages needed for this display controller.
+	    //
+	    foreach (`x11entry, x11list,
+	    ``{
+		list pacs = extract_packages( x11entry, xsrvmap );
+		
+		foreach (`pac, pacs,
+		``{
+		    if ( size( pac ) > 0 )
+		    {
+			x11pacs = add( x11pacs, pac );
+		    }
+		});
+	    });
+
+	}); // foreach xserver
+
+	// Now setup xserver and xserver_3d for the *active* display controller.
+
+	map x_server = $[];
+	map x_server_3d = $[];
+	string uni_key = "";
+	string card_name = "";
+	boolean vga_present = false;
+
+	// Scan "x11" list (driver info) in first entry of videoprobelist (active bios display).
+	//
+	videoprobelist = SCR::Read( .probe.bios_video );
+
+	if ( videoprobelist != nil && size( videoprobelist ) > 0 )	
+	{
+	    vga_present = true;		// We found a VGA card
+
+	    map first_video = videoprobelist[0]:$[];
+
+	    uni_key = first_video["unique_key"]:"";
+
+	    // name = sub_vendor + sub_device
+	    // fallback to vendor + device
+	    card_name = first_video["sub_vendor"]:(first_video["vendor"]:"")
+		        + " "
+		        + first_video["sub_device"]:(first_video["device"]:"");
+
+	    foreach( `x11server, first_video["x11"]:[],
+		     ``{
+		if (x11server["server"]:"" == "nvidia" )
+		{
+		    x11server["warn_nvidia"] = true;
+		}
+
+		// Get first 3d entry as "xserver_3d" and first non-3d entry as "xserver".
+		//
+		if ( x11server["has_3d"]:false )
+		{
+		    if ( size( x_server_3d ) == 0 )
+		    {
+			x_server_3d = x11server;
+		    }
+		}
+		else	// has_3d == false
+		{
+		    if ( size( x_server ) == 0 )
+		    {
+			x_server = x11server;
+		    }
+		}
+
+	    }); // foreach x11server
+
+	    // Did we find a server?
+	    //
+	    if ( size( x_server ) == 0 )
+	    {
+		if ( has_fbdev )
+		{
+		    x_server = $["server" : "fbdev", "version" : "4"];
+		}
+		else
+		{
+		    x_server = $["server" : "vga", "version" : "4"];
+		}
+		unknown_server = true;
+	    }
+	    else
+	    {
+		unknown_server = false;
+	    }
+
+	    // If no 3d server was found but a voodoo card take non-3d server as 3d.
+	    //
+	    if ( ( size( x_server_3d ) == 0 ) && have_voodoo_special )
+	    {
+		x_server_3d = eval (x_server);
+		x_server_3d["has_3d"] = true;
+	    }
+
+	    if ( x_server["version"]:"0" == "3" )
+	    {
+		list xnames = xsrvmap[x_server["server"]:default_alias]:default_srvlist;
+	    
+		if ( size( xnames ) > 1 )
+		{
+		    x_server["server"] = xnames[1]:"";
+		}
+	    }
+
+	    if ( x_server_3d["version"]:"0" == "3" )
+	    {
+		list xnames = xsrvmap[x_server_3d["server"]:default_alias]:default_srvlist;
+	    
+		if ( size( xnames ) > 1 )
+		{
+		    x_server_3d["server"] = xnames[1]:"";
+		}
+	    }
+	}
+	else	// No VGA card present
+	{
+	    vga_present = false;
+	}
+
+	return [ unknown_server, uni_key, x11pacs, x_server, x_server_3d, card_name, vga_present ];
+    };	// pacs_and_servers()
+
+
+    
+    /*
+     * probe_settings()
+     *
+     * Probe graphics card and add needed xserver to pacs_to_install.
+     *
+     * @param 	-
+     *
+     * @return  -
+     *
+     * @see
+     */
+    
+    define probe_settings()
+	``{
+	// Check if the system has a framebuffer device.
+	//
+	fbdev_resol = SCR::Read( .probe.framebuffer );
+
+	y2milestone( "fbdev_resol: <%1>", fbdev_resol );
+	
+	if ( fbdev_resol != nil && fbdev_resol != [] )	has_fbdev = true;
+	else						has_fbdev = false;
+
+	y2milestone ( "has_fbdev: %1", has_fbdev );
+
+        list display_list = SCR::Read( .probe.display );	// list of maps
+
+	y2milestone( "display_list: <%1>", display_list );
+
+	if ( display_list != nil && size( display_list ) > 0 )
+	{
+	    map display = display_list[0]:$[];
+
+	    bus_id  = display["bus_id"]:0;
+	    slot_id = display["slot_id"]:0;
+	    func_id = display["func_id"]:0;
+	}
+	
+	// Check displaycontrollers.
+	// [ unknown_server, unique_key, x11pacs_to_install, xserver, xserver_3d, card_name, vga_present ]
+
+	list serversettings = pacs_and_servers( display_list );
+
+	y2milestone( "serversettings: <%1>", serversettings );
+
+	// Assign xserver data for 2D and 3D case for public access.
+	//
+	xserver_is_unknown = serversettings[0]:true;
+	xserver	           = serversettings[3]:$[];
+	xserver_3d 	   = serversettings[4]:$[];
+	has_3d 		   = xserver_3d["has_3d"]:false;
+
+	y2milestone ( "xserver_is_unknown: %1", xserver_is_unknown );
+	y2milestone ( "xserver: %1", xserver );
+	y2milestone ( "xserver_3d: %1", xserver_3d );
+	y2milestone ( "has_3d: %1", has_3d );
+
+	// Hardware info.
+	//
+	unique_key      = serversettings[1]:"";
+	video_card_name = serversettings[5]:"";
+	has_vga 	= serversettings[6]:false;
+	
+	y2milestone ( "unique_key: %1", unique_key );
+	y2milestone ( "video_card_name: %1", video_card_name );
+	y2milestone ( "has_vga: %1", has_vga );
+
+	// Package info.
+	//
+	pacs_to_install = serversettings[2]:[];
+
+	y2milestone ( "pacs_to_install: %1", pacs_to_install );
+
+	return;
+    };	// probe_settings()
+
+    // ---------------------------------------------------------------------------------------
+    // END: Locally defined functions
+    // ---------------------------------------------------------------------------------------
+    
+}
+
+// - EOF -

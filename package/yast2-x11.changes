@@ -1,0 +1,122 @@
+-------------------------------------------------------------------
+Wed Jun 19 10:11:56 CEST 2002 - ms@suse.de
+
+- add function checkRemoteControl() to be called to setup the
+  state of the change button for remote login sessions
+
+-------------------------------------------------------------------
+Sun Jun  9 23:24:42 CEST 2002 - ms@suse.de
+
+- add new versions of X11 workflow to YaST2 CVS head
+  make use of SaX2 modules to build X11 configuration workflow within YaST2
+
+-------------------------------------------------------------------
+Tue May 28 15:45:16 CEST 2002 - arvin@suse.de
+
+- added libycp-devel to neededforbuild
+
+-------------------------------------------------------------------
+Mon May 27 18:17:15 CEST 2002 - sh@suse.de
+
+- Added missing files to files list
+
+-------------------------------------------------------------------
+Mon Apr 22 13:14:55 MEST 2002 - tom@suse.de
+
+- Merge with Tag Patch_80_tom
+
+-------------------------------------------------------------------
+Mon Apr 15 19:05:34 MEST 2002 - tom@suse.de
+
+- (#15546) Now changing lilo.conf correctly.
+
+-------------------------------------------------------------------
+Wed Mar 20 18:32:52 MET 2002 - tom@suse.de
+
+- (#15109) Now running SuSEconfig only for xdm, gdm and kdm3.
+
+-------------------------------------------------------------------
+Tue Mar 19 19:07:41 MET 2002 - tom@suse.de
+
+- (#15091) Now restoring saved monitor data in normal mode.
+
+-------------------------------------------------------------------
+Mon Feb 18 18:55:03 MET 2002 - tom@suse.de
+
+- Implemented reprobe functionality.
+
+-------------------------------------------------------------------
+Mon Feb 11 18:58:18 MET 2002 - tom@suse.de
+
+- (#12400) Now restoring SCRIPT_3D on abortion.
+
+-------------------------------------------------------------------
+Mon Feb 11 17:56:01 MET 2002 - tom@suse.de
+
+- new module architecture
+
+-------------------------------------------------------------------
+Mon Jan 21 19:59:03 MET 2002 - tom@suse.de
+
+- Migration to devtools and menuentry...y2cc
+
+-------------------------------------------------------------------
+Sun Sep 23 21:55:43 MEST 2001 - tom@suse.de
+
+- (#11217) invented another special case handling for VMWare.
+
+-------------------------------------------------------------------
+Wed Sep 19 20:17:40 MEST 2001 - tom@suse.de
+
+- Moved to group "Hardware" now (#10914).
+
+-------------------------------------------------------------------
+Tue Sep 18 21:08:12 MEST 2001 - tom@suse.de
+
+- (#10873) Now the packages really needed are installed.
+
+-------------------------------------------------------------------
+Mon Sep 17 12:05:50 MEST 2001 - tom@suse.de
+
+- Corrected Requires: yast2-trans-inst-x11
+
+-------------------------------------------------------------------
+Fri Sep  7 11:21:44 CEST 2001 - kkaempf@suse.de
+
+- install 3ddiag and xloader if missing.
+
+-------------------------------------------------------------------
+Thu Sep  6 16:48:07 CEST 2001 - kkaempf@suse.de
+
+- install mesasoft if missing.
+
+-------------------------------------------------------------------
+Wed Sep  5 12:29:01 CEST 2001 - kkaempf@suse.de
+
+- automatically install missing XFree86 packages.
+
+-------------------------------------------------------------------
+Wed Sep  5 11:27:01 CEST 2001 - kkaempf@suse.de
+
+- allow first-time X11 configuration during runtime.
+  properly detect missing X11 packages.
+
+-------------------------------------------------------------------
+Tue Sep  4 15:15:53 CEST 2001 - kkaempf@suse.de
+
+- use "import" feature for Arch and Installation.
+
+-------------------------------------------------------------------
+Sat Aug 18 17:36:47 MEST 2001 - tom@suse.de
+
+- Finished. Now works with new (modified) X11 configuration dialog.
+
+-------------------------------------------------------------------
+Fri Jul 27 18:34:53 MEST 2001 - tom@suse.de
+
+- first check in, only draft
+
+-------------------------------------------------------------------
+Thu Mar 22 09:27:24 CET 2001 - tom@suse.de
+
+- initial version

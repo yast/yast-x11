@@ -1,0 +1,95 @@
+#! /bin/sh
+# Update mouse protocol entries in XFree86 config files. 
+# Called by YaST2 if a wheel mouse was detected.
+#
+# Authors:
+# --------
+# Marcus Schaefer <ms@suse.de>
+#
+#===================================
+# check given device if it`s a link
+#-----------------------------------
+function readLink {
+	local realDevice
+	if [ -L "$1" ];then
+		realDevice=`ls -l $1 2>/dev/null | cut -f2 -d\>`
+		realDevice=`echo $realDevice`
+	else
+		realDevice=$1
+	fi
+	echo $realDevice
+}
+
+#===================================
+# get mouse device:protocol X 4.x
+#-----------------------------------
+function getMouseX4 {
+	local configFile
+	configFile="/etc/X11/XF86Config"
+	local protocol=`cat $configFile | \
+		grep -i "Driver.*mouse" -A4 | \
+		grep -i "Protocol.*" | cut -f4 -d\" \
+	2>/dev/null`
+	local device=`cat $configFile | \
+		grep -i "Driver.*mouse" -A4 | \
+		grep -i "Device.*" | cut -f4 -d\" \
+    2>/dev/null`
+	device=`readLink $device`
+	echo "$device:$protocol" | tr [:upper:] [:lower:]
+}
+
+#===================================
+# get mouse device:protocol X 3.x
+#-----------------------------------
+function getMouseX3 {
+	local configFile
+	configFile="/etc/XF86Config"
+	local protocol=`cat $configFile | \
+		grep -i "Section.*Pointer" -A4 | \
+		grep -i "Protocol.*" | cut -f2 -d\" \
+	2>/dev/null`
+    local device=`cat $configFile | \
+		grep -i "Section.*Pointer" -A4 | \
+		grep -i "Device.*" | cut -f2 -d\" \
+	2>/dev/null`
+	device=`readLink $device`
+	echo "$device:$protocol" | tr [:upper:] [:lower:]
+}
+
+#===================================
+# update config file
+#-----------------------------------
+function updateMouse {
+	local configFile=$1
+	local mouseData=$2
+	local device=`echo $mouseData | cut -f1 -d:`
+	if [ "$device" = "/dev/psaux" ];then
+	local protocol=`echo $mouseData | cut -f2 -d:`
+	if [ ! -z "$protocol" ] && [ $protocol = "ps/2" ];then
+		sed -e s"@$protocol@imps/2@" $configFile > "$configFile.tmp$$"
+		mv $configFile $configFile.before_update
+		mv $configFile.tmp$$ $configFile
+	fi
+	fi
+}
+
+# /.../
+# main part below
+# ---
+#====================================
+# handle XFree86 4.x case
+#------------------------------------
+configFile="/etc/X11/XF86Config"
+if [ -f "$configFile" ];then
+	mouseData=`getMouseX4`
+	updateMouse $configFile $mouseData
+fi
+
+#====================================
+# handle XFree86 3.x case
+#------------------------------------
+configFile="/etc/XF86Config"
+if [ -f "$configFile" ];then
+	mouseData=`getMouseX3`
+	updateMouse $configFile $mouseData
+fi
