@@ -352,7 +352,7 @@ global define list getSuggestion (boolean init) ``{
 	// call init.pl now and remove the profile
 	// file after this call
 	// ---
-	integer initCode = SCR::Execute (
+	integer initCode = (integer) SCR::Execute (
 		.target.bash, initString
 	);
 	if ( haveProfile ) {
@@ -368,7 +368,7 @@ global define list getSuggestion (boolean init) ``{
 	//===========================================
 	// read suggest.ycp
 	//-------------------------------------------
-	initResult = SCR::Read ( .target.ycp,
+	initResult = (list)SCR::Read ( .target.ycp,
 		suggestFile
 	);
 	//===========================================
@@ -384,7 +384,7 @@ global define list getSuggestion (boolean init) ``{
 	// call 3Ddiag-result to get 3D status
 	//-------------------------------------------
 	D3Active = false;
-	integer D3Status = SCR::Execute (
+	integer D3Status = (integer) SCR::Execute (
 		.target.bash, "/usr/bin/3Ddiag-result"
 	);
 	if (D3Status == 0) {
@@ -411,14 +411,14 @@ global define list resetSuggestion () ``{
 	list moduleISaX = [
 		"Card","Desktop","Mouse","Keyboard","Layout","Path"
 	];
-	string tmpdir = SCR::Read( .target.tmpdir );
-	foreach (`mod, moduleISaX,``{
+	string tmpdir = (string)SCR::Read( .target.tmpdir );
+	foreach (string mod, moduleISaX,``{
 		string modFile = tmpdir + "/" + mod;
 		SCR::Execute ( .target.bash,
 			"/usr/X11R6/" + Display::lib + "/sax/tools/isax -y -l "
 			+ mod + ">" + modFile
 		);
-		map modResult = SCR::Read ( .target.ycp,
+		map modResult = (map)SCR::Read ( .target.ycp,
 			modFile
 		);
 		suggestion = add (
@@ -544,7 +544,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 		//=====================================
 		// Change Bootloader configuration...
 		// ------------------------------------
-		list liloCode = SCR::Read ( .target.ycp,
+		list liloCode = (list)SCR::Read ( .target.ycp,
 			liloCodeFile
 		);
 		string orig = Bootloader::getKernelParam ("LINUX_DEFAULT","vga");
@@ -655,11 +655,11 @@ global define boolean changeConfiguration () ``{
 		xcopt = xcopt + " --nocheckpacs";
 	}
 	if (Mode::cont) {
-	code = SCR::Execute ( .target.bash,
+	code = (integer)SCR::Execute ( .target.bash,
 	"/usr/X11R6/"+Display::lib+"/sax/xc.pl -y --fullscreen --noborder "+xcopt
 	);
 	} else {
-	code = SCR::Execute ( .target.bash,
+	code = (integer)SCR::Execute ( .target.bash,
 		"/usr/X11R6/"+ Display::lib + "/sax/xc.pl -y " + xcopt
 	);
 	}
@@ -683,7 +683,7 @@ global define void setupRemoteControl () ``{
 	// ---
 	map displayInfo = UI::GetDisplayInfo();
 	if (displayInfo["TextMode"]:false) {
-	integer remote = SCR::Execute ( .target.bash,
+	integer remote = (integer)SCR::Execute ( .target.bash,
 		"/usr/X11R6/" + Display::lib + "/sax/tools/whois"
 	);
 	if (remote == 1) {
