@@ -21,13 +21,18 @@
     {
 	map x11 = AutoinstX11::x11;
 	list resolutions        = [];
-	list<string> resolutions_list = ["640x480",
-        "800x600",
-        "1024x768",
-        "1152x864",
-        "1280x960",
-        "1280x1024",
-        "1600x1200"];
+        list<string> resolutions_list = [
+            "640x480",
+            "800x600",
+            "1024x768",
+            "1152x864",
+            "1280x960",
+            "1280x1024",
+            "1400x1050",
+            "1600x1000",
+            "1600x1024",
+            "1600x1200"
+                ];
 	list<map> depths_list = [
 			    $[
 			      "desc"	:_("8 Bit / 256 Colors"),
