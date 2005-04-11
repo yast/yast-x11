@@ -34,6 +34,7 @@ import "Mouse";
 import "Keyboard";
 import "XMessages";
 import "Bootloader";
+import "PackageSystem";
 import "Display";
 
 //==========================================
@@ -506,6 +507,7 @@ global define void concludeConfiguration (boolean X11Enabled) ``{
 		// we need to update the displaymanager according
 		// to the provided packages
 		// ---
+		PackageSystem::EnsureTargetInit ();
 		string currentManager = (string) eval (SCR::Read(
 			.sysconfig.displaymanager.DISPLAYMANAGER
 		));

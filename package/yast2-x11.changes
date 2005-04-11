@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Apr 11 10:34:38 CEST 2005 - ms@suse.de
+
+- added EnsureTargetInit() before checking for packages (#74608)
+
+-------------------------------------------------------------------
 Mon Apr  4 09:22:28 CEST 2005 - ms@suse.de
 
 - fixed displaymanager check for GDM (#75703)
