@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu May 19 15:06:39 CEST 2005 - ms@suse.de
+
+- added EnsureTargetInit() before checking for packages (#74608)
+
+-------------------------------------------------------------------
 Mon Mar 21 09:22:10 CET 2005 - ms@suse.de
 
 - applied patch from Jiri Srain, fixing use of Pkg module (#73825)
