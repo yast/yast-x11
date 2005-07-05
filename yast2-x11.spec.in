@@ -1,6 +1,6 @@
 @HEADER-COMMENT@
 
-# neededforbuild  yast2-devel-packages yast2 yast2-installation  yast2-bootloader yast2-country yast2-mouse yast2-storage gpp libgpp
+# neededforbuild  yast2-devel-packages yast2 yast2-installation  yast2-bootloader yast2-country yast2-mouse yast2-storage gpp libgpp sax2 sax2-libsax sax2-libsax-perl sax2-tools sax2-ident
 
 @HEADER@
 Requires:	yast2

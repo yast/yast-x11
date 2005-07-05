@@ -104,7 +104,7 @@ void Xf86ConfigAgent::init( void )
 	// Assign the isax update command (XFree4)
 	// It is always the same.
 	//
-	xfree4_update_command = "/usr/X11R6/lib/sax/tools/isax -m -f "	// -m means modify
+	xfree4_update_command = "/usr/sbin/isax -m -f "	// -m means modify
 	    + rc_sax_path +
 	    + " -c /etc/X11/xorg.conf > "
 	    + isax_log_path
@@ -565,7 +565,7 @@ YCPValue Xf86ConfigAgent::ReadXF86Config( const string section, const YCPValue& 
 
     // Read the requested section.
     //
-    string command = "/usr/X11R6/lib/sax/tools/isax -y -l "
+    string command = "/usr/sbin/isax -y -l "
 	+ section
 	+ " > "
 	+ isax_output_path

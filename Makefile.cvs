@@ -21,6 +21,24 @@ reconf: all
 	./config.status
 
 clean:
+	rm -rf src/autoyast/dialog/Makefile
+	rm -rf src/autoyast/dialog/Makefile.in
+	rm -rf src/autoyast/modules/Makefile
+	rm -rf src/autoyast/modules/Makefile.in
+	rm -rf src/autoyast/Makefile
+	rm -rf src/autoyast/Makefile.in
+	rm -rf src/autoyast/schema/Makefile
+	rm -rf src/autoyast/schema/Makefile.in
+	rm -rf src/autoyast/proposal/Makefile
+	rm -rf src/autoyast/proposal/Makefile.in
+	rm -rf src/dialog/Makefile
+	rm -rf src/dialog/Makefile.in
+	rm -rf agent-isax/src/.libs
+	rm -rf scripts/Makefile
+	rm -rf scripts/Makefile.in
+	rm -rf pluglib-bindings.ami
+	rm -rf `find -name ".dep*"`
+	rm -rf `find -name "*.lo"`
 	rm -rf Makefile
 	rm -rf Makefile.am
 	rm -rf Makefile.in
@@ -54,6 +72,8 @@ clean:
 	rm -rf src/modules/Makefile.in
 	rm -rf src/Makefile
 	rm -rf src/Makefile.in
+	rm -rf src/proposal/Makefile
+	rm -rf src/proposal/Makefile.in
 	rm -f  agent-isax/Makefile.in
 	rm -f  agent-isax/doc/autodocs/Makefile.in
 	rm -f  agent-isax/doc/Makefile.in
@@ -66,5 +86,10 @@ clean:
 	rm -f  agent-isax/src/Makefile
 	rm -f  agent-isax/conf/Makefile
 	rm -f  agent-isax/testsuite/Makefile
+	rm -f  agent-isax/doc/autodocs/*.html
+	rm -f  agent-isax/doc/autodocs/doxygen.*
+	rm -f  agent-isax/doc/autodocs/installdox
+	rm -f  agent-isax/doc/autodocs/yast2-x11.tag
+	rm -f  agent-isax/doc/autodocs/*.png
 	rm -f `find -name *.ybc`
 	rm -f Makefile.am.common
