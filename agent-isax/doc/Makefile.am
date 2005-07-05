@@ -1,13 +1,9 @@
 #
-# Makefile.am for .../agent-isax/doc/autodocs
+# Makefile.am for y2a_xf86/doc
+#
+# $Id: Makefile.am,v 1.2 2004/01/08 12:44:24 msvec Exp $
 #
 
-htmldir = $(docdir)/agent-isax/autodocs
+SUBDIRS = autodocs
 
-html_DATA = index.html $(wildcard *.html *.png) doxygen.css @RPMNAME@.tag
-CLEANFILES = $(html_DATA) doxygen.log doxygen.conf installdox
-
-doxygen.css @RPMNAME@.tag: index.html
-
-index.html: $(srcdir)/../../src/*.h
-	@ybindir@/ydoxygen PROJECT_NAME=@RPMNAME@
+htmldir = $(docdir)
