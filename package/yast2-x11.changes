@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul  5 11:29:59 CEST 2005 - ms@suse.de
+
+- ********** added new libsax x11 module code *************
+
+-------------------------------------------------------------------
 Mon Apr 11 10:34:38 CEST 2005 - ms@suse.de
 
 - added EnsureTargetInit() before checking for packages (#74608)
