@@ -1,0 +1,225 @@
+/**************
+FILE          : x11_proposal.ycp
+***************
+PROJECT       : YaST2
+              :
+AUTHOR        : Marcus Schäfer <ms@suse.de>
+              :
+BELONGS TO    : YaST2
+              : (X11 integration part using SaX2/ISaX)
+              :
+DESCRIPTION   : Proposal function dispatcher for
+              : X11 configuration
+              :
+              :
+STATUS        : Development
+**************/
+/**
+ * File:        proposal/x11_proposal.ycp
+ * Package:     X11 Configuration
+ * Summary:     Installation Proposal for X11 stuff
+ * Authors:     Marcus Schaefer <ms@suse.de>
+ *
+ */
+{
+textdomain "x11";
+
+import "Report";
+import "Installation";
+import "Arch";
+import "Confirm";
+import "XMessages";
+import "XLib";
+
+include "x11/x11Dialog.ycp";
+
+//===================================================
+// Initialize proposal parameters
+//---------------------------------------------------
+string  func  = (string) WFM::Args(0);
+map     param = (map)    WFM::Args(1);
+map     ret   = $[];
+
+//===================================================
+// Handle Arch flag
+//---------------------------------------------------
+if ( (! Arch::x11_setup_needed ()) || (! Installation::x11_setup_needed ()) ) {
+if ( func != "Description" ) {
+	ret = $[
+		"rich_text_title"       : "",
+		"menu_title"            : "",
+		"id"                    : "",
+		"preformatted_proposal" : "<b> </b>",
+		"success"               : true
+	];
+	return ret;
+} else {
+	return ret;
+}
+}
+//===================================================
+// Create proposal for installation/configuration...
+//---------------------------------------------------
+if ( func == "MakeProposal" ) {
+	//======================================
+	// Initialize library cache
+	//--------------------------------------
+	if (! (boolean)XLib::isInitialized()) {
+		y2milestone ("Loading library cache...");
+		XLib::loadApplication();
+	}
+	//======================================
+	// Reading library cache data
+	//--------------------------------------
+	y2milestone ("Reading libsax cache data...");
+	string	resolution  = (string)  XLib::getActiveResolution();
+	string	colorDepth  = (string)  XLib::getActiveColorDepth();
+	string	cardName    = (string)  XLib::getCardName();
+	string	monitorName = (string)  XLib::getMonitorName();
+	boolean	has3D       = (boolean) XLib::hasOpenGLFeatures();
+	boolean	is3DCard    = (boolean) XLib::has3DCapabilities();
+
+	//======================================
+	// Prepare proposal
+	//--------------------------------------
+	string UL = "<ul>";
+	string LU = "</ul>";
+	string LI = "<li>";
+	string IL = "</li>";
+	string proposal = "";
+	string colorCount = "";
+	if (colorDepth == "24") {
+		colorCount = "16.7 Mio. " + XMessages::colors;
+	}
+	if (colorDepth == "16") {
+		colorCount = "65536 " + XMessages::colors;
+	}
+	if (colorDepth == "15") {
+		colorCount = "32768 " + XMessages::colors;
+	}
+	if (colorDepth == "8") {
+		colorCount = "256 "   + XMessages::colors;
+	}
+	//======================================
+	// Create proposal
+	//--------------------------------------
+	proposal = UL;
+	//======================================
+	// Graphics card name...
+	//--------------------------------------
+	proposal = proposal
+	+ LI
+		+ XMessages::graphicsCard + cardName
+	+ IL;
+	//======================================
+	// Monitor name and resolution...
+	//--------------------------------------
+	proposal = proposal
+	+ LI
+		+ XMessages::monitor + "<a href=\"sax-monitor\">"
+		+ monitorName + "</a>" + " - (<a href=\"sax-resolution\">"
+		+ resolution  + "</a>)"
+	+ IL;
+	//======================================
+	// Colordepth and number of colors...
+	//--------------------------------------
+	proposal = proposal
+	+ LI
+		+ XMessages::colorDepth + "<a href=\"sax-colors\">"
+		+ colorDepth + "</a> Bit (" + colorCount + ")"
+	+ IL;
+	//======================================
+	// 3D acceleration status/availability
+	//--------------------------------------
+	if (is3DCard) {
+		string status = XMessages::deactivated;
+		if (has3D) {
+			status = XMessages::activated;
+		}
+		proposal = proposal
+		+ LI
+			+ XMessages::acceleration + "<a href=\"sax-3d\">"
+			+ status + "</a>"
+		+ IL;
+	}
+	proposal = proposal + LU;
+	ret = $[
+		"preformatted_proposal" : proposal,
+		"links" : [
+			"sax-monitor",
+			"sax-resolution",
+			"sax-colors","sax-3d"
+		]
+	];
+	return ret;
+}
+//===================================================
+// Handle user requests...
+//---------------------------------------------------
+else if ( func == "AskUser" ) {
+	any chosenID = param["chosen_id"]:nil;
+	if (chosenID == "sax-monitor") {
+		y2milestone("X11: setup monitor...");
+		string vendor = XLib::getMonitorVendor();
+		string model  = XLib::getMonitorModel();
+		map<string,list> cdb = XLib::getMonitorCDB();
+		list selectedMonitor = setupMonitor ( cdb,vendor,model );
+		y2milestone("X11: setup monitor <%1>",selectedMonitor);
+		XLib::setMonitorCDB ( (list<string>)selectedMonitor );
+	}
+	if (chosenID == "sax-resolution") {
+		y2milestone("X11: setup resolution...");
+		string selectedRes = setupResolutions (
+			XLib::getAvailableResolutionNames(),
+			XLib::getActiveResolutionString()
+		);
+		y2milestone("X11: setup resolution <%1>",selectedRes);
+		XLib::setResolution ( selectedRes );
+	}
+	if (chosenID == "sax-colors") {
+		y2milestone("X11: setup color depth...");
+		string depth = XLib::getActiveColorDepth();
+		string colstr = "256 [ 8 bit ]";
+		if (depth == "15") {
+			colstr = "32768 [ 15 bit ]";
+		}
+		if (depth == "16") {
+			colstr = "65536 [ 16 bit ]";
+		}
+		if (depth == "24") {
+			colstr = "16.7 Mio. [ 24 Bit ]";
+		}
+		string selectedColor = setupColors ( colstr );
+		y2milestone("X11: setup color depth <%1>",selectedColor);
+		XLib::setDefaultColorDepth ( selectedColor );
+	}
+	if (chosenID == "sax-3d") {
+		y2milestone("X11: setup 3D...");
+		boolean has3D = XLib::hasOpenGLFeatures();
+		y2milestone("X11: setup 3D <%1>",has3D);
+		if (! has3D) {
+			XLib::activate3D();
+		} else {
+			XLib::deactivate3D();
+		}
+	}
+}
+//===================================================
+// Handle proposal description...
+//---------------------------------------------------
+else if ( func == "Description" ) {
+	ret = $[
+		"rich_text_title" : XMessages::proposalTitle,
+		"menu_title"      : XMessages::proposalMenuTitle,
+		"id"              : "x11_conf"
+	];
+}
+//===================================================
+// writing configuration
+//---------------------------------------------------
+else if ( func == "Write" ) {
+	boolean success = XLib::writeConfiguration();
+	ret = $[ "success" : success ];
+}
+return ret;
+}

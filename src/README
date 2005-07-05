@@ -1,0 +1,31 @@
+#=============================================
+# X11 module source tree structure description
+#---------------------------------------------
+src─┬─autoyast
+	│ all autoyast related files 
+	│
+	├─autoyast/data
+	│ data files for selections needed in auto mode
+	│
+	├─autoyast/schema
+	│ autoyast schema file
+	│
+	├─config
+	│ desktop file
+	│
+	├─dialog
+	│ wizzard descriptions
+	│
+	├─proposal
+	│ files for the proposal mechanism during installation
+	│ and for autoyast
+	│
+	├─XLib.pm
+    │ perl written YAPI interface to access libsax
+	│
+	├─XMain.ycp
+    │ main startup call from x11.ycp to handle SaX
+    │ startup in normal mode
+	│
+	└─XMessages.ycp
+      translation module containing code keys

@@ -1,0 +1,99 @@
+/**************
+FILE          : XMessages.ycp
+***************
+PROJECT       : YaST2 - Yet another Setup Tool
+              :
+AUTHOR        : Marcus Schäfer <ms@suse.de>
+              :
+BELONGS TO    : YaST2 - X11 integration part using SaX2/libsax
+              :
+DESCRIPTION   : YaST module: Provide global message descriptions
+              : used in all modules concering the X11 configuration
+              : the translation will be mapped to an internal key
+              :
+STATUS        : Development
+**************/
+/*! \brief YaST2 - X11 configuration interface
+*
+* File:        XMessages.ycp
+* Package:     X11 Configuration
+* Summary:     Main Module started if yast2 x11 is called
+* Authors:     Marcus Schaefer <ms@suse.de>
+*/
+{ // begin
+module "XMessages";
+
+textdomain "x11";
+//=============================================
+// some packages required are missing
+//---------------------------------------------
+global string pacsMissing = _("
+The following packages are missing:
+%1
+Install them now?
+");
+
+//=============================================
+// help text for commandline mode
+//---------------------------------------------
+global string helpCMD = _("
+X11 configuration module.
+");
+
+//=============================================
+// color key
+//---------------------------------------------
+global string colors = _("Colors");
+
+//=============================================
+// graphics card
+//---------------------------------------------
+global string graphicsCard = _("Graphics card: ");
+
+//=============================================
+// monitor
+//---------------------------------------------
+global string monitor = _("Monitor: ");
+
+//=============================================
+// colorDepth
+//---------------------------------------------
+global string colorDepth = _("Colordepth: ");
+
+//=============================================
+// deactivated
+//---------------------------------------------
+global string deactivated = _("Deactived");
+
+//=============================================
+// activated
+//---------------------------------------------
+global string activated = _("Activated");
+
+//=============================================
+// 3D acceleration
+//---------------------------------------------
+global string acceleration = _("3D Acceleration: ");
+
+//=============================================
+// selectColorDepth
+//---------------------------------------------
+global string selectColorDepth = _("Select color depth:");
+
+//=============================================
+// selectResolution
+//---------------------------------------------
+global string selectResolution = _("Select resolution:");
+
+//=============================================
+// selectMonitor
+//---------------------------------------------
+global string selectMonitor = _("Select Monitor Vendor and Model:");
+
+//=============================================
+// proposal menu and title text
+//---------------------------------------------
+global string proposalTitle     = _("Graphics Cards");
+global string proposalMenuTitle = _("&Graphics Cards");
+
+} // end

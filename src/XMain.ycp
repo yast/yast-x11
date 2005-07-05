@@ -1,0 +1,53 @@
+/**************
+FILE          : XMain.ycp
+***************
+PROJECT       : YaST2 - Yet another Setup Tool
+              :
+AUTHOR        : Marcus Schäfer <ms@suse.de>
+              :
+BELONGS TO    : YaST2 - X11 integration part using SaX2/libsax
+              :
+DESCRIPTION   : The x11 module provides a wizzard mainly used
+              : during installation. While installing a wizzard like
+              : interface seems to be the best way to simplify the
+              : process of configuring the X11 system. Based on a
+              : suggestion only the primary parts like:
+              : //.../
+              : - Resolution
+              : - Colordepth
+              : - Monitor settings
+              : ---
+              : are offered for the configuration. Within the later
+              : installed system the SaX control center takes control
+              : over the wide range of X11 configuration issues.
+              :
+              :
+STATUS        : Development
+**************/
+/*! \brief YaST2 - X11 configuration interface
+*
+* File:        XMain.ycp
+* Package:     X11 Configuration
+* Summary:     Main Module started if yast2 x11 is called
+* Authors:     Marcus Schaefer <ms@suse.de>
+*/
+{ // begin
+textdomain "x11";
+
+//==========================================
+// Start SaX2 in normal mode...
+//------------------------------------------
+integer status = (integer)SCR::Execute ( .target.bash,
+	"/usr/sbin/sax2"
+);
+
+//==========================================
+// exit module...
+//------------------------------------------
+y2milestone ("SaX finished with exit code: <%1>",status);
+if (status == 0) {
+	return `next;
+}
+return `nil;
+
+} // end

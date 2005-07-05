@@ -1,0 +1,64 @@
+[Desktop Entry]
+Type=Application
+Categories=Qt;X-SuSE-YaST;X-SuSE-YaST-Hardware;
+
+X-KDE-ModuleType=Library
+X-KDE-RootOnly=true
+X-KDE-HasReadOnlyMode=true
+X-KDE-Library=yast2
+X-SuSE-YaST-Call=x11
+
+X-SuSE-YaST-Group=Hardware
+X-SuSE-YaST-Argument=
+X-SuSE-YaST-RootOnly=true
+X-SuSE-YaST-AutoInst=all
+X-SuSE-YaST-Geometry=
+X-SuSE-YaST-SortKey=
+X-SuSE-YaST-AutoInstResource=
+X-SuSE-YaST-AutoInstClient=x11_auto
+X-SuSE-YaST-AutoInstClonable=true
+
+Icon=yast-x11
+Exec=/sbin/yast2 x11 
+
+Name=Graphics card and monitor
+GenericName=Configure graphics card and monitor
+Name[cs]=Grafická karta a monitor
+GenericName[cs]=Konfigurovat grafickou kartu a monitor
+Name[de]=Grafikkarte und Monitor
+GenericName[de]=Grafikkarte und Monitor konfigurieren
+Name[en]=Graphics Card and Monitor
+Name[es]=Tarjeta gráfica y monitor
+GenericName[es]=Configurar tarjeta gráfica y monitor
+Name[hu]=Videokártya és monitor
+GenericName[hu]=A videokártya és a monitor beállítása
+Name[it]=Scheda video e monitor
+GenericName[it]=Configura la scheda video e il monitor
+Name[ko]=그래픽 카드와 모니터
+GenericName[ko]=그래픽 카드와 모니터 설정
+Name[nl]=Grafische kaart en monitor
+GenericName[nl]=Configureer grafische kaart en monitor
+Name[pt]=Placa de vídeo e monitor
+GenericName[pt]=Configurar placa de vídeo e monitor
+Name[sk]=Grafická karta a monitor
+GenericName[sk]=Konfigurácia grafickej karty monitora
+Name[sv]=Grafikkort och bildskärm
+GenericName[sv]=Ställ in grafikkort och bildskärm
+Name[bg]=Видеокарта и монитор
+GenericName[bg]=Настройка на видеокарта и монитор
+Name[da]=Grafikkort og skærm
+GenericName[da]=Konfigurere grafikkort og skærm
+Name[el]=Κάρτα γραφικών και οθόνη
+GenericName[el]=Ρύθμιση της κάρτας γραφικών και της οθόνης
+Name[en]=Graphics Card and Monitor
+Name[fr]=Carte graphique et moniteur
+GenericName[fr]=Configurer la carte graphique et le moniteur
+Name[ja]=グラフィックカードとモニター
+GenericName[ja]=グラフィックカードとモニターの設定
+Name[lt]=Video plokštė ir monitorius
+GenericName[lt]=Konfigūruoti video plokštę monitorių
+Name[sl]=Grafička kartica in ekran
+GenericName[sl]=Nastavi grafično kartico in ekran
+Name[tr]=Grafik kartı ve monitör
+GenericName[tr]=Grafik kartı ve monitörü yapılandır
+X-KDE-SubstituteUID=true

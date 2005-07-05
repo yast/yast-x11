@@ -1,0 +1,164 @@
+/**************
+FILE          : x11Dialog.ycp
+***************
+PROJECT       : YaST2
+              :
+AUTHOR        : Marcus Schäfer <ms@suse.de>
+              :
+BELONGS TO    : YaST2 - Yet another Setup Tool
+              : (X11 integration part using libsax)
+              :
+DESCRIPTION   : UI part of the automatic X11 configuration
+              : Authors: Marcus Schäfer <ms@suse.de>
+              :
+STATUS        : Development
+**************/
+/**
+ * File:        dialog/x11Dialog.ycp
+ * Package:     X11 Configuration
+ * Summary:     Popups for the X11 proposal
+ * Authors:     Marcus Schaefer <ms@suse.de>
+ *
+ */
+{
+textdomain "x11";
+
+//================================
+// Imports...
+//--------------------------------
+import "XMessages";
+
+//================================
+// setupColors
+//--------------------------------
+define string setupColors ( string currentText ) ``{
+	string topic = XMessages::selectColorDepth;
+	UI::OpenDialog(
+		`VBox(
+			`Heading (topic),
+			`HBox(`Left( `ComboBox(`id(`depth),"",
+				[
+					`item(`id(`bit8),  "256 [ 8 bit ]"        ),
+					`item(`id(`bit15), "32768 [ 15 bit ]"     ),
+					`item(`id(`bit16), "65536 [ 16 bit ]"     ),
+					`item(`id(`bit24), "16.7 Mio. [ 24 Bit ]" )
+				]
+			))),
+			`Right (`HBox (
+				`PushButton(`id(`ok),"&OK"),
+				`PushButton(`id(`cancel),"&Cancel")
+			))
+		)
+	);
+	UI::ChangeWidget(`id(`depth), `Value, currentText);
+	any id = UI::UserInput();
+	if (id == `cancel) {
+		UI::CloseDialog();
+		if (currentText == "256 [ 8 bit ]") {
+			return "8";
+		}
+		if (currentText == "32768 [ 15 bit ]") {
+			return "15";
+		}
+		if (currentText == "65536 [ 16 bit ]") {
+			return "16";
+		}
+		if (currentText == "16.7 Mio. [ 24 Bit ]") {
+			return "24";
+		}
+		return "undef";
+	}
+	any col=UI::QueryWidget(`id(`depth), `Value);
+	UI::CloseDialog();
+
+	if ( col == `bit8  ) return "8";
+	if ( col == `bit15 ) return "15";
+	if ( col == `bit16 ) return "16";
+	if ( col == `bit24 ) return "24";
+
+	return "undef";
+};
+
+//================================
+// setupResolutions
+//--------------------------------
+define string setupResolutions ( list reslist, string currentText ) ``{
+	string topic = XMessages::selectResolution;
+	UI::OpenDialog(
+		`VBox(
+			`Heading(topic),
+			`HBox(`Left ( `ComboBox(`id(`resitem),"", reslist))),
+			`Right (`HBox (
+				`PushButton(`id(`ok),"&OK"),
+				`PushButton(`id(`cancel),"&Cancel")
+			))
+		)
+	);
+	UI::ChangeWidget(`id(`resitem), `Value, currentText);
+	any id = UI::UserInput();
+	if (id == `cancel) {
+		UI::CloseDialog();
+		return currentText;
+	}
+	any res=UI::QueryWidget(`id(`resitem), `Value);
+	UI::CloseDialog();
+	return (string)res;
+};
+
+//================================
+// setupMonitor
+//--------------------------------
+define list setupMonitor (
+	map<string,list> data, string currentVendor, string currentModel
+) ``{
+	any id = nil;
+	list<string> result = [];
+	list<string> vendorList = [];
+	foreach (string vendor, list models, data, ``{
+		vendorList = vendorList + vendor;
+	});
+	UI::OpenDialog(
+		`VBox(
+		`HSpacing(70),
+		`Heading(XMessages::selectMonitor),
+		`HBox (
+			`VSpacing(20),
+			`SelectionBox(`id(`vendor),`opt(`notify,`immediate),"",vendorList),
+			`SelectionBox(`id(`model) ,`opt(`notify,`immediate),"", [])
+		),
+		`Right( `HBox (
+			`PushButton(`id(`ok),"&OK"),
+			`PushButton(`id(`cancel),"&Cancel")
+		))
+		)
+	);
+	list modeList = data[currentVendor]:[];
+	UI::ChangeWidget(`id(`vendor), `CurrentItem, currentVendor);
+	UI::ChangeWidget(`id(`model) , `Items, modeList);
+	UI::ChangeWidget(`id(`model) , `CurrentItem, currentModel);
+	any vendor = (string)currentVendor;
+	any model  = (string)currentModel;
+	repeat {
+		id = UI::UserInput();
+		if (id == `vendor) {
+			vendor = UI::QueryWidget(`id(`vendor), `CurrentItem);
+			list modelList = sort (data[(string)vendor]:[]);
+			UI::ChangeWidget( `id( `model ), `Items, [] );
+			UI::ChangeWidget( `id( `model ), `Items, modelList );
+		}
+		if (id == `model) {
+			model  = UI::QueryWidget(`id(`model),  `CurrentItem);
+		}
+		if (id == `cancel) {
+			result[0] = (string)currentVendor;
+			result[1] = (string)currentModel;
+			UI::CloseDialog();
+			return result;
+		}
+	} until ( id == `ok );
+	UI::CloseDialog();
+	result[0] = (string)vendor;
+	result[1] = (string)model;
+	return result;
+};
+}

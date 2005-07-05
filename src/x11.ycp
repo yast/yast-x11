@@ -1,0 +1,114 @@
+/**************
+FILE          : x11.ycp
+***************
+PROJECT       : YaST2 - Yet another Setup Tool
+              :
+AUTHOR        : Marcus Schäfer <ms@suse.de>
+              :
+BELONGS TO    : YaST2 - X11 integration part using SaX2/libsax
+              :
+DESCRIPTION   : The x11 module provides a wizzard mainly used
+              : during installation. While installing a wizzard like
+              : interface seems to be the best way to simplify the
+              : process of configuring the X11 system. Based on a
+              : suggestion only the primary parts like:
+              : //.../
+              : - Resolution
+              : - Colordepth
+              : - Monitor settings
+              : ---
+              : are offered for the configuration. Within the later
+              : installed system the SaX control center takes control
+              : over the wide range of X11 configuration issues.
+              :
+              :
+STATUS        : Development
+**************/
+/*! \brief YaST2 - X11 configuration interface
+*
+* File:        x11.ycp
+* Package:     X11 Configuration
+* Summary:     Main Module started if yast2 x11 is called
+* Authors:     Marcus Schaefer <ms@suse.de>
+*/
+{ // begin
+textdomain "x11";
+
+import "X11Version";
+import "XMessages";
+import "Wizard";
+import "Popup";
+import "Mode";
+import "Package";
+import "CommandLine";
+
+//==========================================
+// Functions...
+//------------------------------------------
+//---[ finish ]----//
+define any finish() ``{
+	any localReturn = `next;
+	y2milestone ("Running displaymanager SuSEconfig module");
+	UI::BusyCursor();
+	SCR::Execute (.target.bash, "/sbin/SuSEconfig --module xdm");
+	SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
+	SCR::Execute (.target.bash, "/sbin/SuSEconfig --module gdm");
+	UI::NormalCursor();
+	return localReturn;
+}
+
+//==========================================
+// installPackages()...
+//------------------------------------------
+define any installPackages() ``{
+	list<string> requiredPacs = [
+		"xorg-x11", "xorg-x11-server","xorg-x11-server-glx","libusb",
+		"sax2", "sax2-gui", "sax2-ident", "sax2-tools","sax2-libsax",
+		"sax2-libsax-perl"
+	];
+	// ... /
+	// setup contents of requiredPacs plus required pacs
+	// for the detected card(s)
+	// ---
+	requiredPacs = toset ( flatten( [requiredPacs] ) );
+	return Package::InstallAllMsg (
+		requiredPacs, XMessages::pacsMissing
+	) ? `auto : nil;
+}
+
+//==========================================
+// install eventually missing packages...
+//------------------------------------------
+if (installPackages() == nil) {
+	return `nil;
+}
+
+//==========================================
+// setup GUI handler routine
+//------------------------------------------
+define boolean GUIHandler () {
+	any done = WFM::CallFunction ("XMain", [true,true]);
+	if ((done == `abort) || (done == `back) || (done == `nil)) {
+		return false;
+	}
+	finish();
+	return true;
+}
+
+//==========================================
+// setup commandline description
+//------------------------------------------
+map cmdlineDescription = $[
+	"id"         : "x11",
+	"guihandler" : GUIHandler,
+	"help"       : XMessages::helpCMD
+];
+
+//==========================================
+// run module now...
+//------------------------------------------
+any ret = CommandLine::Run (
+	cmdlineDescription
+);
+return (symbol)ret;
+} // end
