@@ -115,7 +115,7 @@ sub isSupported {
 # check if the card is supported from XOrg 4.x
 #
 	my $class = "Unclassified";
-	my $sysp  = "/usr/X11R6/lib/sax/sysp.pl -c";
+	my $sysp  = "/usr/sbin/sysp -c";
 	my $data  = qx ($sysp);
 	if (grep (/$class/,$data)) {
 		return 0;
