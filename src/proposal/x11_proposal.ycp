@@ -203,6 +203,9 @@ else if ( func == "AskUser" ) {
 			XLib::deactivate3D();
 		}
 	}
+	if (chosenID == "x11_conf") {
+		infoPopup();
+	}
 }
 //===================================================
 // Handle proposal description...

@@ -27,23 +27,28 @@ textdomain "x11";
 // Imports...
 //--------------------------------
 import "XMessages";
+import "Popup";
+
+define void infoPopup () ``{
+	Popup::Message(XMessages::selectLink);
+}
 
 //================================
 // setupColors
 //--------------------------------
 define string setupColors ( string currentText ) ``{
-	string topic = XMessages::selectColorDepth;
+	string space = "                       ";
+	string topic = XMessages::selectColorDepth + space;
 	UI::OpenDialog(
 		`VBox(
-			`Heading (topic),
-			`HBox(`Left( `ComboBox(`id(`depth),"",
+			`HBox(`ComboBox(`id(`depth),`opt(`hstretch),topic,
 				[
 					`item(`id(`bit8),  "256 [ 8 bit ]"        ),
 					`item(`id(`bit15), "32768 [ 15 bit ]"     ),
 					`item(`id(`bit16), "65536 [ 16 bit ]"     ),
 					`item(`id(`bit24), "16.7 Mio. [ 24 Bit ]" )
 				]
-			))),
+			)),
 			`Right (`HBox (
 				`PushButton(`id(`ok),"&OK"),
 				`PushButton(`id(`cancel),"&Cancel")
@@ -83,11 +88,11 @@ define string setupColors ( string currentText ) ``{
 // setupResolutions
 //--------------------------------
 define string setupResolutions ( list reslist, string currentText ) ``{
-	string topic = XMessages::selectResolution;
+	string space = "                       ";
+	string topic = XMessages::selectResolution + space;
 	UI::OpenDialog(
 		`VBox(
-			`Heading(topic),
-			`HBox(`Left ( `ComboBox(`id(`resitem),"", reslist))),
+			`HBox(`Left ( `ComboBox(`id(`resitem),topic, reslist))),
 			`Right (`HBox (
 				`PushButton(`id(`ok),"&OK"),
 				`PushButton(`id(`cancel),"&Cancel")
@@ -120,7 +125,7 @@ define list setupMonitor (
 	UI::OpenDialog(
 		`VBox(
 		`HSpacing(70),
-		`Heading(XMessages::selectMonitor),
+		`Left (`Label(XMessages::selectMonitor)),
 		`HBox (
 			`VSpacing(20),
 			`SelectionBox(`id(`vendor),`opt(`notify,`immediate),"",vendorList),

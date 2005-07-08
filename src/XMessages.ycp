@@ -91,6 +91,11 @@ global string selectResolution = _("Select resolution:");
 global string selectMonitor = _("Select Monitor Vendor and Model:");
 
 //=============================================
+// selectLink
+//---------------------------------------------
+global string selectLink = _("Please use the hyperlinks for your Changes");
+
+//=============================================
 // proposal menu and title text
 //---------------------------------------------
 global string proposalTitle     = _("Graphics Cards");
