@@ -16,6 +16,7 @@ use YaPI;
 use Data::Dumper;
 use Time::localtime;
 use SaX;
+use Env;
 
 textdomain("x11");
 
@@ -47,6 +48,7 @@ BEGIN{ $TYPEINFO{loadApplication} = ["function","void"]; }
 sub loadApplication {
 	my $class  = shift;
 	my $sinit = new SaX::SaXInit;
+	$ENV{HW_UPDATE} = 1;
 	$sinit -> doInit();
 	my @importID = (
 		$SaX::SAX_CARD,
@@ -478,6 +480,7 @@ sub sortResolution {
 #------------------------------------------
 if (0) {
 	loadApplication();
+	print "HW_UPDATE=$ENV{HW_UPDATE}\n";
 	my $resolution = getActiveResolution ();
 	my $colordepth = getActiveColorDepth ();
 	my $cardname   = getCardName();

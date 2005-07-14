@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 14 16:15:24 CEST 2005 - ms@suse.de
+
+- added missing environment variable HW_UPDATE=1
+
+-------------------------------------------------------------------
 Fri Jul  8 16:57:01 CEST 2005 - ms@suse.de
 
 - fixed look&feel of popups within x11_proposal
