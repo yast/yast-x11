@@ -21,8 +21,8 @@ X-SuSE-YaST-AutoInstClonable=true
 Icon=yast-x11
 Exec=/sbin/yast2 x11 
 
-Name=Graphics card and monitor
-GenericName=Configure graphics card and monitor
+Name=Graphics Card and Monitor
+GenericName=Configure the graphics card and monitor
 Name[cs]=Grafická karta a monitor
 GenericName[cs]=Konfigurovat grafickou kartu a monitor
 Name[de]=Grafikkarte und Monitor
