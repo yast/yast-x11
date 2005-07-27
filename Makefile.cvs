@@ -21,6 +21,8 @@ reconf: all
 	./config.status
 
 clean:
+	rm -f autodocs-ycp.ami
+	rm -f OUTPUT2 OUTPUT autodocs-cc.ami
 	rm -rf src/autoyast/dialog/Makefile
 	rm -rf src/autoyast/dialog/Makefile.in
 	rm -rf src/autoyast/modules/Makefile

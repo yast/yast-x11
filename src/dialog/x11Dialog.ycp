@@ -137,9 +137,9 @@ define list setupMonitor (
 		))
 		)
 	);
-	list modeList = data[currentVendor]:[];
+	list modelList = sort (data[currentVendor]:[]);
 	UI::ChangeWidget(`id(`vendor), `CurrentItem, currentVendor);
-	UI::ChangeWidget(`id(`model) , `Items, modeList);
+	UI::ChangeWidget(`id(`model) , `Items, modelList);
 	UI::ChangeWidget(`id(`model) , `CurrentItem, currentModel);
 	any vendor = (string)currentVendor;
 	any model  = (string)currentModel;
