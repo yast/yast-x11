@@ -30,6 +30,7 @@ import "Arch";
 import "Confirm";
 import "XMessages";
 import "XLib";
+import "Package";
 
 include "x11/x11Dialog.ycp";
 
