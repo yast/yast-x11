@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug  4 12:27:35 CEST 2005 - jsrain@suse.cz
+
+- check for existence of sax2-gui before initializing libsax
+  (#100204)
+
+-------------------------------------------------------------------
 Fri Jul 29 08:32:20 CEST 2005 - jsrain@suse.cz
 
 - merged texts from proofread
