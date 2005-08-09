@@ -63,7 +63,7 @@ global string colorDepth = _("Colordepth: ");
 //=============================================
 // deactivated
 //---------------------------------------------
-global string deactivated = _("Deactived");
+global string deactivated = _("Deactivated");
 
 //=============================================
 // activated

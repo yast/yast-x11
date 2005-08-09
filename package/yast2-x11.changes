@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Aug  9 15:25:14 CEST 2005 - ms@suse.de
+
+- fixed typo (#100540)
+
+-------------------------------------------------------------------
 Thu Aug  4 12:27:35 CEST 2005 - jsrain@suse.cz
 
 - check for existence of sax2-gui before initializing libsax
