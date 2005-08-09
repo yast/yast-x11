@@ -44,23 +44,23 @@ map     ret   = $[];
 //===================================================
 // Handle Arch flag
 //---------------------------------------------------
-if ( (! Arch::x11_setup_needed ()) || (! Installation::x11_setup_needed ()) 
-|| (! Package::Installed ("sax2-gui"))
-
-)
-{
-    if ( func != "Description" ) {
-	ret = $[
-		"rich_text_title"       : "",
-		"menu_title"            : "",
-		"id"                    : "",
-		"preformatted_proposal" : "<b> </b>",
-		"success"               : true
-	];
-	return ret;
-    } else {
-	return ret;
-    }
+if (
+	(! Arch::x11_setup_needed ()) ||
+	(! Installation::x11_setup_needed ()) ||
+	(! Package::Installed ("sax2-gui"))
+) {
+	if ( func != "Description" ) {
+		ret = $[
+			"rich_text_title"       : "",
+			"menu_title"            : "",
+			"id"                    : "",
+			"preformatted_proposal" : "<b> </b>",
+			"success"               : true
+		];
+		return ret;
+	} else {
+		return ret;
+	}
 }
 //===================================================
 // Create proposal for installation/configuration...
