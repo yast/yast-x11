@@ -93,7 +93,7 @@ global string selectMonitor = _("Select Monitor Vendor and Model:");
 //=============================================
 // selectLink
 //---------------------------------------------
-global string selectLink = _("Use the hyperlinks for your changes.");
+global string selectLink = _("Click the underlined setting to change.");
 
 //=============================================
 // proposal menu and title text
