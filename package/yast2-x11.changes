@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Aug 24 15:19:39 CEST 2005 - ug@suse.de
+
+- compatibility fix for autoyast with new
+  libsax
+- version to 2.12.6
+
+-------------------------------------------------------------------
 Tue Aug 23 10:57:41 CEST 2005 - ms@suse.de
 
 - fixed NFB (#106608)

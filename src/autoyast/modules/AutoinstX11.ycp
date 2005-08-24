@@ -83,10 +83,6 @@ global define string Summary() {
 	string depth = sformat ("%1",
 		(x11["color_depth"]:-1 != -1) ? x11["color_depth"]:-1 : nc
 	);
-	summary = Summary::AddHeader (summary, _("Configure X11"));
-	summary = Summary::AddLine   (summary,
-		(x11["configure_x11"]:false) ? _("Yes") : nc
-	);
 	summary = Summary::AddHeader (summary, _("Enable 3D Support If Possible"));
 	summary = Summary::AddLine   (summary,
 		(x11["enable_3d"]:false) ? _("Yes") : nc
@@ -136,7 +132,6 @@ global define boolean Read() {
 	x11["display_manager"] = (string) eval (SCR::Read(
 		.sysconfig.windowmanager.DEFAULT_WM
 	));
-	x11["configure_x11"] = true;
 	x11["enable_3d"] = false;
 	if (! (boolean)XLib::isInitialized()) {
 		y2milestone ("X11-Auto: Loading library cache...");
