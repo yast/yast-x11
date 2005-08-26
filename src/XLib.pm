@@ -79,6 +79,7 @@ sub writeConfiguration {
 	$config->setMode ($SaX::SAX_NEW);
 	my $status = $config->createConfiguration();
 	$config->commitConfiguration();
+	qx ( /usr/sbin/hwupdate );
 	return $status;
 }
 #==========================================

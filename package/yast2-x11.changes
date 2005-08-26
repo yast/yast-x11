@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Aug 26 15:36:57 CEST 2005 - ms@suse.de
+
+- fixed writing of status flags to indicate that the configuration
+  has been written by the proposal and can be imported by SaX later
+  (#99082)
+
+-------------------------------------------------------------------
 Wed Aug 24 15:19:39 CEST 2005 - ug@suse.de
 
 - compatibility fix for autoyast with new
