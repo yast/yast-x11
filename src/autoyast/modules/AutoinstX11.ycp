@@ -126,10 +126,10 @@ global define void readMonitorDB() {
 // Read
 //---------------------------------------
 global define boolean Read() {
-	x11["window_manager"] = (string) eval (SCR::Read(
+	x11["display_manager"] = (string) eval (SCR::Read(
 		.sysconfig.displaymanager.DISPLAYMANAGER
 	));
-	x11["display_manager"] = (string) eval (SCR::Read(
+	x11["window_manager"] = (string) eval (SCR::Read(
 		.sysconfig.windowmanager.DEFAULT_WM
 	));
 	x11["enable_3d"] = false;
