@@ -171,7 +171,7 @@ if (open (FB,"/dev/fb0")) {
 	# YaST should InjectFile() the fbdev config file...
 	exit 1;
 }
-my $bios = qx (hwinfo --bios | grep "VESA BIOS");
+my $bios = qx (hwinfo --vbe | grep "VESA BIOS");
 if ($bios =~ /VESA BIOS/) {
 	#============================================
 	# 3) Card not fbdev capable but VESA capable

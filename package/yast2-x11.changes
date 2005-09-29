@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 29 15:24:34 CEST 2005 - ms@suse.de
+
+- fixed resolution setup in autoinst module (#118383)
+- fixed hwinfo vbe call in xmigrate.pl
+
+-------------------------------------------------------------------
 Fri Aug 26 15:36:57 CEST 2005 - ms@suse.de
 
 - fixed writing of status flags to indicate that the configuration

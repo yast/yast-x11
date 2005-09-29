@@ -140,7 +140,7 @@ global define boolean Read() {
 	current_vendor = (string) XLib::getMonitorVendor();
 	current_model  = (string) XLib::getMonitorModel();
 	x11["color_depth"] = (string) XLib::getActiveColorDepth();
-	x11["resolution"]  = (string) XLib::getActiveResolution();
+	x11["resolution"]  = (string) XLib::getActiveResolutionString();
 	display["min_hsync"] = tointeger(XLib::getHsyncMin());
 	display["max_hsync"] = tointeger(XLib::getHsyncMax());
 	display["min_vsync"] = tointeger(XLib::getVsyncMin());
@@ -165,7 +165,7 @@ global define boolean Write() {
 	XLib::setHsyncRange (hstart,hstop);
 	XLib::setVsyncRange (vstart,vstop);
 
-	string resolution = x11["resolution"]:"800x600";
+	string resolution = x11["resolution"]:"800x600 (SVGA)";
 	y2milestone("X11-Auto: setup resolution <%1>",resolution);
 	XLib::setResolution ( resolution );
 
