@@ -76,6 +76,11 @@ global string activated = _("Activated");
 global string acceleration = _("3D Acceleration: ");
 
 //=============================================
+// External VGA on NoteBooks
+//---------------------------------------------
+global string externalvga = _("External VGA: ");
+
+//=============================================
 // selectColorDepth
 //---------------------------------------------
 global string selectColorDepth = _("Select color depth:");

@@ -83,6 +83,8 @@ if ( func == "MakeProposal" ) {
 	string	monitorName = (string)  XLib::getMonitorName();
 	boolean	has3D       = (boolean) XLib::hasOpenGLFeatures();
 	boolean	is3DCard    = (boolean) XLib::has3DCapabilities();
+	boolean isNoteBook  = (boolean) XLib::isExternalVGANoteBook();
+	boolean extVGAactive= (boolean) XLib::isExternalVGAactive();
 
 	//======================================
 	// Prepare proposal
@@ -147,13 +149,29 @@ if ( func == "MakeProposal" ) {
 			+ status + "</a>"
 		+ IL;
 	}
+	//======================================
+	// External VGA on NoteBooks
+	//--------------------------------------
+	if (isNoteBook) {
+		string status = XMessages::deactivated;
+		if (extVGAactive) {
+			status = XMessages::activated;
+		}
+		proposal = proposal
+		+ LI
+			+ XMessages::externalvga + "<a href=\"sax-ext-vga\">"
+			+ status + "</a>"
+		+ IL;
+	}
 	proposal = proposal + LU;
 	ret = $[
 		"preformatted_proposal" : proposal,
 		"links" : [
 			"sax-monitor",
 			"sax-resolution",
-			"sax-colors","sax-3d"
+			"sax-colors",
+			"sax-3d",
+			"sax-ext-vga"
 		]
 	];
 	return ret;
@@ -206,6 +224,16 @@ else if ( func == "AskUser" ) {
 			XLib::activate3D();
 		} else {
 			XLib::deactivate3D();
+		}
+	}
+	if (chosenID == "sax-ext-vga") {
+		y2milestone("X11: setup external VGA...");
+		boolean extVGAactive = XLib::isExternalVGAactive();
+		y2milestone("X11: setup external VGA <%1>",extVGAactive);
+		if (! extVGAactive) {
+			XLib::activateExternalVGA();
+		} else {
+			XLib::deactivateExternalVGA();
 		}
 	}
 	if (chosenID == "x11_conf") {

@@ -28,6 +28,7 @@ use Errno qw(ENOENT);
 #==========================================
 # Globals
 #------------------------------------------
+my %profileDriverOptions = ();
 my $init = 0;
 my %section;
 my $config;
@@ -79,8 +80,71 @@ sub writeConfiguration {
 	$config->setMode ($SaX::SAX_NEW);
 	my $status = $config->createConfiguration();
 	$config->commitConfiguration();
-	qx ( /usr/sbin/hwupdate );
 	return $status;
+}
+#==========================================
+# isExternalVGANoteBook
+#------------------------------------------
+BEGIN{ $TYPEINFO{isExternalVGANoteBook} = ["function","boolean"]; }
+sub isExternalVGANoteBook {
+	my $ok = 0;
+	my $saxCard = new SaX::SaXManipulateCard (
+		$section{Card}
+	);
+	my $saxDesktop = new SaX::SaXManipulateDesktop (
+		$section{Desktop},$section{Card},$section{Path}
+	);
+	if ($saxCard->isNoteBook()) {
+		my $profile = $saxDesktop->getDualHeadProfile();
+		if ($profile ne "") {
+			$ok = 1;
+		}
+	}
+	return $ok;
+}
+#==========================================
+# isExternalVGAactive
+#------------------------------------------
+BEGIN{ $TYPEINFO{isExternalVGAactive} = ["function","boolean"]; }
+sub isExternalVGAactive {
+	my $ok = 0;
+	my $saxCard = new SaX::SaXManipulateCard ( $section{Card} );
+	my %options = %{$saxCard->getOptions()};
+	if (defined $options{SaXDualHead}) {
+		$ok = 1;
+	}
+	return $ok;
+}
+#==========================================
+# activateExternalVGA
+#------------------------------------------
+BEGIN{ $TYPEINFO{activateExternalVGA} = ["function", "void"]; }
+sub activateExternalVGA {
+	my $class = shift;
+	my $saxCard = new SaX::SaXManipulateCard ( $section{Card} );
+	if ((keys %profileDriverOptions) == 0) {
+		%profileDriverOptions = readProfile();
+	}
+	foreach my $key (sort keys %profileDriverOptions) {
+		$saxCard->removeCardOption ( $key );
+	}
+	foreach my $key (sort keys %profileDriverOptions) {
+		$saxCard->addCardOption ( $key,$profileDriverOptions{$key} );
+	}
+}
+#==========================================
+# deactivateExternalVGA
+#------------------------------------------
+BEGIN{ $TYPEINFO{deactivateExternalVGA} = ["function", "void"]; }
+sub deactivateExternalVGA {
+	my $class = shift;
+	my $saxCard = new SaX::SaXManipulateCard ( $section{Card} );
+	if ((keys %profileDriverOptions) == 0) {
+		%profileDriverOptions = readProfile();
+	}
+	foreach my $key (sort keys %profileDriverOptions) {
+		$saxCard->removeCardOption ( $key );
+	}
 }
 #==========================================
 # setResolution
@@ -475,6 +539,26 @@ sub sortResolution {
 	}
 	return @list;
 }
+#==========================================
+# readProfile
+#------------------------------------------
+sub readProfile {
+	my $saxDesktop = new SaX::SaXManipulateDesktop (
+		$section{Desktop},$section{Card},$section{Path}
+	);
+	my %result  = ();
+	my $profile = $saxDesktop->getDualHeadProfile();
+	if ($profile ne "") {
+		my $pProfile = new SaX::SaXImportProfile ( $profile );
+		$pProfile -> doImport();
+		my $mImport = $pProfile -> getImport ( $SaX::SAX_CARD );
+		if (defined $mImport) {
+			my $saxProfileCard = new SaX::SaXManipulateCard ( $mImport );
+			%result = %{$saxProfileCard->getOptions()};
+		}
+	}
+	return %result;
+}
 
 #==========================================
 # test code
@@ -494,4 +578,5 @@ if (0) {
 	print "3D capable: $statusCard\n";
 	print "$resstring\n";
 }
+
 1;
