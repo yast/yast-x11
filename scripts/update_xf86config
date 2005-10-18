@@ -26,8 +26,11 @@ function readLink {
 function getMouseX4 {
 	local configFile
 	configFile="/etc/X11/XF86Config"
+	if [ ! -f $configFile ];then
+		configFile="/etc/X11/xorg.conf";
+	fi
 	local protocol=`cat $configFile | \
-		grep -i "Driver.*mouse" -A4 | \
+		grep -i "Driver.*mouse" -A5 | \
 		grep -i "Protocol.*" | cut -f4 -d\" \
 	2>/dev/null`
 	local device=`cat $configFile | \
@@ -63,13 +66,15 @@ function updateMouse {
 	local configFile=$1
 	local mouseData=$2
 	local device=`echo $mouseData | cut -f1 -d:`
-	if [ "$device" = "/dev/psaux" ];then
-	local protocol=`echo $mouseData | cut -f2 -d:`
-	if [ ! -z "$protocol" ] && [ $protocol = "ps/2" ];then
-		sed -e s"@$protocol@imps/2@" $configFile > "$configFile.tmp$$"
-		mv $configFile $configFile.before_update
-		mv $configFile.tmp$$ $configFile
-	fi
+	if [ "$device" = "/dev/psaux" ] || [ "$device" = "/dev/mouse" ];then
+		local protocol=`echo $mouseData | cut -f2 -d:`
+		if [ ! -z "$protocol" ]; then
+			cat $configFile | sed -e s"@$protocol@explorerps/2@" \
+				-e s"@$device@/dev/input/mice@" \
+			> "$configFile.tmp$$"
+			mv $configFile $configFile.before_update
+			mv $configFile.tmp$$ $configFile
+		fi
 	fi
 }
 
@@ -80,6 +85,9 @@ function updateMouse {
 # handle XOrg 4.x case
 #------------------------------------
 configFile="/etc/X11/XF86Config"
+if [ ! -f "$configFile" ];then
+	configFile="/etc/X11/xorg.conf"
+fi
 if [ -f "$configFile" ];then
 	mouseData=`getMouseX4`
 	updateMouse $configFile $mouseData
