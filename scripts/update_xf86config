@@ -24,11 +24,7 @@ function readLink {
 # get mouse device:protocol X 4.x
 #-----------------------------------
 function getMouseX4 {
-	local configFile
-	configFile="/etc/X11/XF86Config"
-	if [ ! -f $configFile ];then
-		configFile="/etc/X11/xorg.conf";
-	fi
+	local configFile=$1
 	local protocol=`cat $configFile | \
 		grep -i "Driver.*mouse" -A5 | \
 		grep -i "Protocol.*" | cut -f4 -d\" \
@@ -85,11 +81,13 @@ function updateMouse {
 # handle XOrg 4.x case
 #------------------------------------
 configFile="/etc/X11/XF86Config"
-if [ ! -f "$configFile" ];then
-	configFile="/etc/X11/xorg.conf"
-fi
 if [ -f "$configFile" ];then
-	mouseData=`getMouseX4`
+	mouseData=`getMouseX4 $configFile`
+	updateMouse $configFile $mouseData
+fi
+configFile="/etc/X11/xorg.conf"
+if [ -f "$configFile" ];then
+	mouseData=`getMouseX4 $configFile`
 	updateMouse $configFile $mouseData
 fi
 
