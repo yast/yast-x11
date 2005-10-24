@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Oct 24 14:59:03 CEST 2005 - ms@suse.de
+
+- added test link to test the configuration from within the proposal
+- added info message if in case of laptop hardware the accelerated
+  graphics driver doesn't support external VGA based on MergedFB
+
+-------------------------------------------------------------------
 Tue Oct 18 12:32:55 CEST 2005 - ms@suse.de
 
 - fixed update_xf86config script to check configuration whether

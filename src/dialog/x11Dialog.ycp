@@ -29,8 +29,15 @@ textdomain "x11";
 import "XMessages";
 import "Popup";
 
+//================================
+// Popups
+//--------------------------------
 define void infoPopup () ``{
 	Popup::Message(XMessages::selectLink);
+}
+
+define void warnNoteBookPopup () ``{
+	Popup::Message(XMessages::warnNoteBook);
 }
 
 //================================

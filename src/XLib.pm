@@ -83,6 +83,22 @@ sub writeConfiguration {
 	return $status;
 }
 #==========================================
+# testConfiguration
+#------------------------------------------
+BEGIN{ $TYPEINFO{testConfiguration} = ["function","boolean"]; }
+sub testConfiguration {
+	my $ok = 1;
+	$config->setMode ($SaX::SAX_NEW);
+	my $status = $config->testConfiguration();
+	if ($status == -1) {
+		$ok = 0;
+	}
+	if ($status == 0) {
+		$ok = writeConfiguration();
+	}
+	return $ok;
+}
+#==========================================
 # isExternalVGANoteBook
 #------------------------------------------
 BEGIN{ $TYPEINFO{isExternalVGANoteBook} = ["function","boolean"]; }
@@ -101,6 +117,19 @@ sub isExternalVGANoteBook {
 		}
 	}
 	return $ok;
+}
+#==========================================
+# isNoteBookHardware
+#------------------------------------------
+BEGIN{ $TYPEINFO{isNoteBookHardware} = ["function","boolean"]; }
+sub isNoteBookHardware {
+	my $saxCard = new SaX::SaXManipulateCard (
+		$section{Card}
+	);
+	if ($saxCard->isNoteBook()) {
+		return 1;
+	}
+	return 0;
 }
 #==========================================
 # isExternalVGAactive
@@ -195,6 +224,7 @@ sub setResolution {
 		}
 		}
 	}
+	setupMetaModes ($resList[0]);
 }
 #==========================================
 # setDefaultColorDepth
@@ -559,6 +589,23 @@ sub readProfile {
 	}
 	return %result;
 }
+#==========================================
+# setupMetaModes
+#------------------------------------------
+sub setupMetaModes {
+	my $resolution = $_[0];
+	my $mCard = new SaX::SaXManipulateCard (
+		$section{Card}
+	);
+	my %options = %{$mCard->getOptions()};
+	if (defined $options{MetaModes}) {
+		my @metaList = split (/,/,$options{MetaModes});
+		$metaList[0] = $resolution;
+		my $value = join (",",@metaList);
+		$mCard->removeCardOption ("MetaModes");
+		$mCard->addCardOption ("MetaModes",$value);
+	}
+}   
 
 #==========================================
 # test code

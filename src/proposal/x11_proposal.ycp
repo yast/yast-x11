@@ -84,6 +84,7 @@ if ( func == "MakeProposal" ) {
 	boolean	has3D       = (boolean) XLib::hasOpenGLFeatures();
 	boolean	is3DCard    = (boolean) XLib::has3DCapabilities();
 	boolean isNoteBook  = (boolean) XLib::isExternalVGANoteBook();
+	boolean isNoteBookHW= (boolean) XLib::isNoteBookHardware();
 	boolean extVGAactive= (boolean) XLib::isExternalVGAactive();
 
 	//======================================
@@ -162,7 +163,24 @@ if ( func == "MakeProposal" ) {
 			+ XMessages::externalvga + "<a href=\"sax-ext-vga\">"
 			+ status + "</a>"
 		+ IL;
+	} else {
+		if ((isNoteBookHW) && (! XMessages::popupDone)) {
+			XMessages::popupDone = true;
+			y2milestone ("X11: External VGA not supported with this NoteBook");
+			warnNoteBookPopup();
+		}
 	}
+	//======================================
+	// Test your configuration now
+	//--------------------------------------
+	proposal = proposal
+	+ LI
+		+ XMessages::testConfig + "<a href=\"sax-test\">"
+		+ XMessages::now + "</a>"
+	+ IL;
+	//======================================
+	// End proposal...
+	//--------------------------------------
 	proposal = proposal + LU;
 	ret = $[
 		"preformatted_proposal" : proposal,
@@ -171,7 +189,8 @@ if ( func == "MakeProposal" ) {
 			"sax-resolution",
 			"sax-colors",
 			"sax-3d",
-			"sax-ext-vga"
+			"sax-ext-vga",
+			"sax-test"
 		]
 	];
 	return ret;
@@ -235,6 +254,12 @@ else if ( func == "AskUser" ) {
 		} else {
 			XLib::deactivateExternalVGA();
 		}
+	}
+	if (chosenID == "sax-test") {
+		y2milestone("X11: running a test server now...");
+		boolean testStatus = XLib::testConfiguration();
+		y2milestone("X11: test run returns <%1>",testStatus);
+		y2milestone("X11: refer to /var/log/Xorg.99.log for details");
 	}
 	if (chosenID == "x11_conf") {
 		infoPopup();

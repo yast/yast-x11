@@ -25,6 +25,11 @@ module "XMessages";
 
 textdomain "x11";
 //=============================================
+// popup with message already showed
+//---------------------------------------------
+global boolean popupDone = false;
+
+//=============================================
 // some packages required are missing
 //---------------------------------------------
 global string pacsMissing = _("
@@ -105,5 +110,18 @@ global string selectLink = _("Click the underlined setting to change.");
 //---------------------------------------------
 global string proposalTitle     = _("Graphics Cards");
 global string proposalMenuTitle = _("&Graphics Cards");
+
+//=============================================
+// selectTest
+//---------------------------------------------
+global string testConfig = _("Test configuration: ");
+global string now = _("now");
+
+//=============================================
+// warnNoteBook
+//---------------------------------------------
+global string warnNoteBook = _("
+External VGA not supported with this NoteBook
+");
 
 } // end
