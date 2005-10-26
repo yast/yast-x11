@@ -69,6 +69,7 @@ sub loadApplication {
 		my $name = $import->getSectionName();
 		$section{$name} = $import;
 	}
+	activateExternalVGA();
 	$init = 1;
 }
 #==========================================
