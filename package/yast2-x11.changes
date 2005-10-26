@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Oct 26 16:54:28 CEST 2005 - ms@suse.de
+
+- activate external VGA by default on laptops
+
+-------------------------------------------------------------------
 Mon Oct 24 14:59:03 CEST 2005 - ms@suse.de
 
 - added test link to test the configuration from within the proposal
