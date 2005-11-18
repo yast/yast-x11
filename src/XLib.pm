@@ -69,7 +69,9 @@ sub loadApplication {
 		my $name = $import->getSectionName();
 		$section{$name} = $import;
 	}
-	activateExternalVGA();
+	if (isNoteBookHardware()) {
+		activateExternalVGA();
+	}
 	$init = 1;
 }
 #==========================================

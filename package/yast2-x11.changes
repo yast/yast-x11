@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Nov 18 18:59:22 CET 2005 - ms@suse.de
+
+- fixed external VGA activation
+
+-------------------------------------------------------------------
 Wed Oct 26 16:54:28 CEST 2005 - ms@suse.de
 
 - activate external VGA by default on laptops
