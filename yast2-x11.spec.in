@@ -11,6 +11,7 @@ Provides:	yast2-trans-inst-x11 y2t_inst-x11
 Obsoletes:	yast2-trans-inst-x11 y2t_inst-x11
 Provides:	yast2-agent-isax-devel
 Obsoletes:	yast2-agent-isax-devel
+ExcludeArch:  s390 s390x
 
 Summary:	-
 
