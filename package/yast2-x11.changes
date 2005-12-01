@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec  1 13:21:27 CET 2005 - ms@suse.de
+
+- fixed laptop and driver check to avoid external vga on
+  laptops which is not supported by the X driver
+
+-------------------------------------------------------------------
 Tue Nov 29 11:50:11 CET 2005 - ms@suse.de
 
 - don't build package for s390 and s390x architectures
