@@ -106,6 +106,17 @@ global string selectMonitor = _("Select Monitor Vendor and Model:");
 global string selectLink = _("Click the underlined setting to change.");
 
 //=============================================
+// Scale unit for display traversal
+//---------------------------------------------
+global string Inches = _("Inches");
+
+//=============================================
+// selectDisplaySize
+//---------------------------------------------
+global string selectDisplayTraversal = _("Traversal") + " [ " + Inches + " ]:";
+global string selectDisplayRatio = _("Aspect Ratio:");
+
+//=============================================
 // proposal menu and title text
 //---------------------------------------------
 global string proposalTitle     = _("Graphics Cards");

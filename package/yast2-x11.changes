@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Dec  6 15:23:05 CET 2005 - ms@suse.de
+
+- added support for DisplaySize setup during installation (#136330)
+
+-------------------------------------------------------------------
 Thu Dec  1 13:21:27 CET 2005 - ms@suse.de
 
 - fixed laptop and driver check to avoid external vga on

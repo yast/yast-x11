@@ -179,6 +179,42 @@ sub deactivateExternalVGA {
 	}
 }
 #==========================================
+# setDisplaySize
+#------------------------------------------
+BEGIN{ $TYPEINFO{setDisplaySize} = ["function","void",["list","string"]]; }
+sub setDisplaySize {
+	my $class = shift;
+	my @list  = @{+shift};
+	my $mDesktop = new SaX::SaXManipulateDesktop (
+		$section{Desktop},$section{Card},$section{Path}
+	);
+	my $traversal = $list[0];
+	my @ratios = split (/\//,$list[1]);
+	my $aspect = $ratios[0];
+	my $ratio  = $ratios[1];
+	$mDesktop->setDisplayRatioAndTraversal (
+		$traversal,$aspect,$ratio
+	);
+}
+#==========================================
+# getDisplaySize
+#------------------------------------------
+BEGIN{ $TYPEINFO{getDisplaySize} = ["function", ["list","string"]]; }
+sub getDisplaySize {
+	my $class = shift;
+	my $mDesktop = new SaX::SaXManipulateDesktop (
+		$section{Desktop},$section{Card},$section{Path}
+	);
+	my @result = ("15","5","4");
+	my $traversal = $mDesktop->getDisplayTraversal();
+	my @ratio  = @{$mDesktop->getDisplayRatio()};
+	if (defined $traversal) {
+		$traversal = sprintf ("%.f",$traversal);
+		@result = ($traversal,@ratio);
+	}
+	return \@result;
+}
+#==========================================
 # setResolution
 #------------------------------------------
 BEGIN{ $TYPEINFO{setResolution} = ["function", "void", "string"]; }
@@ -615,6 +651,15 @@ sub setupMetaModes {
 #------------------------------------------
 if (0) {
 	loadApplication();
+	
+	my @list = @{getDisplaySize()};
+	print "@list\n";
+	@list = (17,"4/3");
+	setDisplaySize ("class",\@list);
+	@list = @{getDisplaySize()};
+	print "@list\n";
+	exit;
+
 	print "HW_UPDATE=$ENV{HW_UPDATE}\n";
 	my $resolution = getActiveResolution ();
 	my $colordepth = getActiveColorDepth ();

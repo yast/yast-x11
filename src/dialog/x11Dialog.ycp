@@ -118,6 +118,47 @@ define string setupResolutions ( list reslist, string currentText ) ``{
 };
 
 //================================
+// setupDisplaySize
+//--------------------------------
+define list<string> setupDisplaySize (
+	string currentTraversal, string currentRatios
+) ``{
+	//string space = "                       ";
+	string topic1 = XMessages::selectDisplayTraversal;
+	string topic2 = XMessages::selectDisplayRatio;
+	list<string> traverlist = ["21","20","19","17","15"];
+	list<string> ratioslist = ["4/3","5/4","16/10"];
+	UI::OpenDialog(
+		`VBox(
+			`HBox(
+				`Left  ( `ComboBox(`id(`traveritem),topic1, traverlist)),
+				`Right ( `ComboBox(`id(`ratiositem),topic2, ratioslist))
+			),
+			`Right (`HBox (
+				`PushButton(`id(`ok),"&OK"),
+				`PushButton(`id(`cancel),"&Cancel")
+			))
+		)
+	);
+	UI::ChangeWidget(`id(`traveritem), `Value, currentTraversal);
+	UI::ChangeWidget(`id(`ratiositem), `Value, currentRatios);
+	any id = UI::UserInput();
+	list<string> result = [];
+	if (id == `cancel) {
+		UI::CloseDialog();
+		result = add (result,currentTraversal);
+		result = add (result,currentRatios);
+		return result;
+	}
+	any traversal=UI::QueryWidget(`id(`traveritem), `Value);
+	any ratios=UI::QueryWidget(`id(`ratiositem), `Value);
+	result = add (result,(string)traversal);
+	result = add (result,(string)ratios);
+	UI::CloseDialog();
+	return result;
+};
+
+//================================
 // setupMonitor
 //--------------------------------
 define list setupMonitor (
