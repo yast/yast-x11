@@ -126,11 +126,10 @@ if ( func == "MakeProposal" ) {
 	proposal = proposal
 	+ LI
 		+ XMessages::monitor + "<a href=\"sax-monitor\">"
-		+ monitorName + "</a>"  + " - (<a href=\"sax-resolution\">"
-		+ resolution  + "</a>)" + " : (<a href=\"sax-displaysize\">"
-		+ monitorSize[0]:"" + " " + XMessages::Inches + " "
-		+ monitorSize[1]:"" + "/"
-		+ monitorSize[2]:"" + "</a>)"
+		+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
+		+ monitorSize[0]:"" + XMessages::Inches + ", " + XMessages::Aspect + " "
+		+ monitorSize[1]:"" + ":" + monitorSize[2]:"" + "</a>)"
+		+ " - (<a href=\"sax-resolution\">" + resolution  + "</a>)"
 	+ IL;
 	//======================================
 	// Colordepth and number of colors...

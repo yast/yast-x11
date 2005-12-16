@@ -111,6 +111,11 @@ global string selectLink = _("Click the underlined setting to change.");
 global string Inches = _("Inches");
 
 //=============================================
+// Scale unit for display aspect
+//---------------------------------------------
+global string Aspect = _("Aspect");
+
+//=============================================
 // selectDisplaySize
 //---------------------------------------------
 global string selectDisplayTraversal = _("Traversal") + " [ " + Inches + " ]:";

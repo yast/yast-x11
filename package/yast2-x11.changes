@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
 Fri Dec 16 12:29:09 CET 2005 - ms@suse.de
 
-- increased traversal list
+- fixed layout of aspect/ratio setup (#139575)
+- increased traversal list (#139575)
 
 -------------------------------------------------------------------
 Tue Dec  6 15:23:05 CET 2005 - ms@suse.de
