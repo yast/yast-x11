@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Dec 16 12:29:09 CET 2005 - ms@suse.de
+
+- increased traversal list
+
+-------------------------------------------------------------------
 Tue Dec  6 15:23:05 CET 2005 - ms@suse.de
 
 - added support for DisplaySize setup during installation (#136330)
