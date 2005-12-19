@@ -88,10 +88,10 @@ clean:
 	rm -f  agent-isax/src/Makefile
 	rm -f  agent-isax/conf/Makefile
 	rm -f  agent-isax/testsuite/Makefile
+	rm -f  agent-isax/doc/autodocs/*.gif
 	rm -f  agent-isax/doc/autodocs/*.html
-	rm -f  agent-isax/doc/autodocs/doxygen.*
-	rm -f  agent-isax/doc/autodocs/installdox
-	rm -f  agent-isax/doc/autodocs/yast2-x11.tag
 	rm -f  agent-isax/doc/autodocs/*.png
+	rm -f  agent-isax/doc/autodocs/*.tag
+	rm -f  agent-isax/doc/autodocs/doxygen.*
 	rm -f `find -name *.ybc`
 	rm -f Makefile.am.common

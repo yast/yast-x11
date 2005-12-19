@@ -126,7 +126,7 @@ define list<string> setupDisplaySize (
 	//string space = "                       ";
 	string topic1 = XMessages::selectDisplayTraversal;
 	string topic2 = XMessages::selectDisplayRatio;
-	list<string> traverlist = ["21","20","19","18.1","17","15.4","15","14.1"];
+	list<string> traverlist = ["21","20","19","18.1","17","15.4","15","14.1","13.3","12.2"];
 	list<string> ratioslist = ["4/3","5/4","16/10"];
 	UI::OpenDialog(
 		`VBox(
