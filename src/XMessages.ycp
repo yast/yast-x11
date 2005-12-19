@@ -130,14 +130,12 @@ global string proposalMenuTitle = _("&Graphics Cards");
 //=============================================
 // selectTest
 //---------------------------------------------
-global string testConfig = _("Test configuration: ");
-global string now = _("now");
+global string testConfig = _("Test Configuration: ");
+global string now = _("Now");
 
 //=============================================
 // warnNoteBook
 //---------------------------------------------
-global string warnNoteBook = _("
-External VGA not supported with this NoteBook
-");
+global string warnNoteBook = _("\nExternal VGA not supported with this laptop.\n");
 
 } // end
