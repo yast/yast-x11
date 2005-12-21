@@ -28,6 +28,8 @@ Summary:	-
 rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 %endif
 
+rm -fv $RPM_BUILD_ROOT/%{_libdir}/YaST2/plugin/*.so
+
 @CLEAN@
 
 %files

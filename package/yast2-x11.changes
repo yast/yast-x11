@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Dec 20 18:55:01 CET 2005 - ro@suse.de
+
+- remove unpackaged symlink
+- moved symlink fix to yast2-x11.spec.in
+
+-------------------------------------------------------------------
 Mon Dec 19 13:56:07 CET 2005 - ms@suse.de
 
 - added 13.3 and 12.2 to traversal list (#139575)
