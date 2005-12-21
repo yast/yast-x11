@@ -209,7 +209,28 @@ sub getDisplaySize {
 	my $traversal = $mDesktop->getDisplayTraversal();
 	my @ratio  = @{$mDesktop->getDisplayRatio()};
 	if (defined $traversal) {
-		$traversal = sprintf ("%.f",$traversal);
+		$traversal = sprintf ("%.1f",$traversal);
+		if ($traversal >= 21) {
+			$traversal = 21;
+		} elsif ($traversal >= 20) {
+			$traversal = 20;
+		} elsif ($traversal >= 19) {
+			$traversal = 19;
+		} elsif ($traversal >= 18.1) {
+			$traversal = 18.1;
+		} elsif ($traversal >= 17) {
+			$traversal = 17;
+		} elsif ($traversal >= 15.4) {
+			$traversal = 15.4;
+		} elsif ($traversal >= 15) {
+			$traversal = 15;
+		} elsif ($traversal >= 14.1) {
+			$traversal = 14.1;
+		} elsif ($traversal >= 13.3) {
+			$traversal = 13.3;
+		} elsif ($traversal >= 12.1) {
+			$traversal = 12.2;
+		}
 		@result = ($traversal,@ratio);
 	}
 	return \@result;
@@ -654,7 +675,7 @@ if (0) {
 	
 	my @list = @{getDisplaySize()};
 	print "@list\n";
-	@list = (17,"4/3");
+	@list = (12.2,"5/4");
 	setDisplaySize ("class",\@list);
 	@list = @{getDisplaySize()};
 	print "@list\n";

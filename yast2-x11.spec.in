@@ -1,17 +1,19 @@
 @HEADER-COMMENT@
 
-# neededforbuild  yast2-devel-packages yast2 gpp libgpp sax2 sax2-libsax sax2-libsax-perl sax2-tools sax2-ident qt3-devel-packages hwinfo hwinfo-devel sysfsutils hal dbus-1
+# neededforbuild  yast2-devel-packages yast2 gpp libgpp sax2 sax2-libsax sax2-libsax-perl sax2-tools sax2-ident qt3-devel-packages sysfsutils hal dbus-1
 
 @HEADER@
-Requires:	yast2 sax2-libsax-perl
+Requires:	 yast2 sax2-libsax-perl
 
-Provides:	yast2-config-x11 yast2-agent-isax y2a_xf86
-Obsoletes:	yast2-config-x11 yast2-agent-isax y2a_xf86
-Provides:	yast2-trans-inst-x11 y2t_inst-x11
-Obsoletes:	yast2-trans-inst-x11 y2t_inst-x11
-Provides:	yast2-agent-isax-devel
-Obsoletes:	yast2-agent-isax-devel
-ExcludeArch:  s390 s390x
+Provides:	 yast2-config-x11 yast2-agent-isax y2a_xf86
+Obsoletes:	 yast2-config-x11 yast2-agent-isax y2a_xf86
+Provides:	 yast2-trans-inst-x11 y2t_inst-x11
+Obsoletes:	 yast2-trans-inst-x11 y2t_inst-x11
+Provides:	 yast2-agent-isax-devel
+Obsoletes:	 yast2-agent-isax-devel
+ExcludeArch: s390 s390x
+
+BuildArchitectures: noarch
 
 Summary:	-
 
@@ -27,8 +29,6 @@ Summary:	-
 %ifarch s390 s390x
 rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 %endif
-
-rm -fv $RPM_BUILD_ROOT/%{_libdir}/YaST2/plugin/*.so
 
 @CLEAN@
 
@@ -47,7 +47,5 @@ rm -fv $RPM_BUILD_ROOT/%{_libdir}/YaST2/plugin/*.so
 @ybindir@/update_xf86config
 @ybindir@/xmigrate.pl
 @ydatadir@/monitors.ycp
-@scrconfdir@/*.scr
-@plugindir@/*.so.*
 @schemadir@/autoyast/rnc/*.rnc
 %doc @docdir@
