@@ -41,9 +41,6 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/x11.desktop
 %ifnarch s390 s390x
 @desktopdir@/*.desktop
 %endif
-@ybindir@/mkttflinks
-@ybindir@/setVGA.pl
-@ybindir@/update_unique_keys.pl
 @ybindir@/update_xf86config
 @ybindir@/xmigrate.pl
 @ydatadir@/monitors.ycp

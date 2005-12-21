@@ -3,9 +3,6 @@
 #
 
 ybin_SCRIPTS = \
-	mkttflinks \
-	setVGA.pl  \
-	update_unique_keys.pl \
 	update_xf86config \
 	xmigrate.pl
 
