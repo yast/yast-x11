@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Dec 28 16:26:02 CET 2005 - ms@suse.de
+
+- fixed build
+
+-------------------------------------------------------------------
 Wed Dec 21 12:38:48 CET 2005 - ms@suse.de
 
 - fixed DisplaySize setup when odd traversal sizes are used
