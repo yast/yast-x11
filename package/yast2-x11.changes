@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan  3 15:47:24 CET 2006 - ms@suse.de
+
+- applied keyboard methods from Jiří Suchomel <jsuchome@suse.cz>
+
+-------------------------------------------------------------------
 Wed Dec 28 16:26:02 CET 2005 - ms@suse.de
 
 - fixed build

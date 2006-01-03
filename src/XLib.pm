@@ -668,6 +668,76 @@ sub setupMetaModes {
 }   
 
 #==========================================
+# return current Keyboard layout
+#------------------------------------------
+BEGIN{ $TYPEINFO{getXkbLayout} = ["function", "string"]; }
+sub getXkbLayout {
+	my $class   = shift;
+	my $mKeyboard = new SaX::SaXManipulateKeyboard (
+		$section{Keyboard}
+	);
+	my @list = @{$mKeyboard->getXKBLayout()};
+	my $result = shift (@list);
+	return $result;
+}
+
+#==========================================
+# set new Keyboard layout
+#------------------------------------------
+BEGIN{ $TYPEINFO{setXkbLayout} = ["function", "void", "string"]; }
+sub setXkbLayout {
+	my ($class, $layout)   = shift;
+	my $mKeyboard = new SaX::SaXManipulateKeyboard (
+		$section{Keyboard}
+	);
+	$mKeyboard->setXKBLayout ($layout);
+}
+
+#==========================================
+# set new Keyboard model
+#------------------------------------------
+BEGIN{ $TYPEINFO{setXkbModel} = ["function", "void", "string"]; }
+sub setXkbModel {
+	my ($class, $model)   = shift;
+	my $mKeyboard = new SaX::SaXManipulateKeyboard (
+		$section{Keyboard}
+	);
+	$mKeyboard->setXKBModel ($model);
+}
+
+#==========================================
+# set new layout variant for given layout
+#------------------------------------------
+BEGIN{ $TYPEINFO{setXkbVariant} = ["function", "void", "string", "string"]; }
+sub setXkbVariant {
+	my ($class, $layout, $variant)   = shift;
+	my $mKeyboard = new SaX::SaXManipulateKeyboard (
+		$section{Keyboard}
+	);
+	$mKeyboard->setXKBVariant ($layout, $variant);
+}
+
+#==========================================
+# set mapping for the special keys
+#------------------------------------------
+BEGIN{ $TYPEINFO{setXkbMappings} = ["function","void", ["map","string","string"]];}
+sub setXkbMappings {
+	# ...
+	# set mapping for the special keys (Left/Right-Alt Scroll-Lock
+	# and Right Ctrl) parameter is map with pairs of type
+	# { SaX::XKB_LEFT_ALT => SaX::XKB_MAP_META }
+	# ---
+	my ($class, $mappings)   = shift;
+	my $mKeyboard = new SaX::SaXManipulateKeyboard (
+		$section{Keyboard}
+	);
+	return if (ref ($mappings) ne "HASH" || ! %{$mappings});
+	while (my ($type, $mapping) = each %{$mappings}) {
+		$mKeyboard->setXKBMapping ($type, $mapping);
+	}
+}
+
+#==========================================
 # test code
 #------------------------------------------
 if (0) {
