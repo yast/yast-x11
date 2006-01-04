@@ -738,6 +738,26 @@ sub setXkbMappings {
 }
 
 #==========================================
+# set new list of Xkb options
+#------------------------------------------
+BEGIN{ $TYPEINFO{setXkbOptions} = ["function","void", ["list","string"]];}
+sub setXkbOptions {
+	# ...
+	# resets the current list of options and adds the new ones
+	# parameter is list of options
+	# ---
+	my ($class, $options)   = shift;
+	return if (!defined $options || ref ($options) ne "ARRAY");
+	my $mKeyboard = new SaX::SaXManipulateKeyboard (
+		$section{Keyboard}
+	);
+	$mKeyboard->setXKBOption ();
+	foreach my $option (@{$options}) {
+	    $mKeyboard->addXKBOption ($option);
+	}
+}
+
+#==========================================
 # test code
 #------------------------------------------
 if (0) {
