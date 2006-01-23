@@ -109,6 +109,9 @@ if ( func == "MakeProposal" ) {
 	if (colorDepth == "8") {
 		colorCount = "256 "   + XMessages::colors;
 	}
+	if (monitorName == "undef") {
+		monitorName = XMessages::unconfigured;
+	}
 	//======================================
 	// Create proposal
 	//--------------------------------------

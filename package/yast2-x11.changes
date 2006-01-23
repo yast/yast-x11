@@ -2,6 +2,8 @@
 Mon Jan 23 11:20:26 CET 2006 - ms@suse.de
 
 - fixed test configuration statement (#144437)
+- fixed typo in showing an unconfigured monitor model name
+- fixed use of undefined value in XLib.pm
 
 -------------------------------------------------------------------
 Tue Jan  3 15:47:24 CET 2006 - ms@suse.de

@@ -133,6 +133,11 @@ global string proposalMenuTitle = _("&Graphics Cards");
 global string testConfig = _("Test the Configuration");
 
 //=============================================
+// Unconfigured
+//---------------------------------------------
+global string unconfigured = _("Unconfigured");
+
+//=============================================
 // warnNoteBook
 //---------------------------------------------
 global string warnNoteBook = _("\nExternal VGA not supported with this laptop.\n");

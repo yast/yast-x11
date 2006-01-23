@@ -115,8 +115,10 @@ sub isExternalVGANoteBook {
 	);
 	if ($saxCard->isNoteBook()) {
 		my $profile = $saxDesktop->getDualHeadProfile();
-		if ($profile ne "") {
-			$ok = 1;
+		if (defined $profile) {
+			if ($profile ne "") {
+				$ok = 1;
+			}
 		}
 	}
 	return $ok;
@@ -383,7 +385,7 @@ sub getMonitorName {
 	);
 	$mDesktop->selectDesktop (0);
 	my $vendor = $mDesktop->getMonitorVendor();
-	if ($vendor =~ /Unknonw/i) {
+	if ($vendor =~ /Unknown/i) {
 		return "undef";
 	}
 	my $model  = $mDesktop->getMonitorName();
