@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jan 23 11:20:26 CET 2006 - ms@suse.de
+
+- fixed test configuration statement (#144437)
+
+-------------------------------------------------------------------
 Tue Jan  3 15:47:24 CET 2006 - ms@suse.de
 
 - applied keyboard methods from Jiří Suchomel <jsuchome@suse.cz>

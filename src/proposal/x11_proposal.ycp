@@ -179,8 +179,8 @@ if ( func == "MakeProposal" ) {
 	//--------------------------------------
 	proposal = proposal
 	+ LI
-		+ XMessages::testConfig + "<a href=\"sax-test\">"
-		+ XMessages::now + "</a>"
+		+ "<a href=\"sax-test\">"
+		+ XMessages::testConfig + "</a>"
 	+ IL;
 	//======================================
 	// End proposal...

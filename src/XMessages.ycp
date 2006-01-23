@@ -130,8 +130,7 @@ global string proposalMenuTitle = _("&Graphics Cards");
 //=============================================
 // selectTest
 //---------------------------------------------
-global string testConfig = _("Test Configuration: ");
-global string now = _("Now");
+global string testConfig = _("Test the Configuration");
 
 //=============================================
 // warnNoteBook
