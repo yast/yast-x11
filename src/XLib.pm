@@ -212,26 +212,26 @@ sub getDisplaySize {
 	my @ratio  = @{$mDesktop->getDisplayRatio()};
 	if (defined $traversal) {
 		$traversal = sprintf ("%.1f",$traversal);
-		if ($traversal >= 21) {
-			$traversal = 21;
-		} elsif ($traversal >= 20) {
-			$traversal = 20;
-		} elsif ($traversal >= 19) {
-			$traversal = 19;
-		} elsif ($traversal >= 18.1) {
-			$traversal = 18.1;
-		} elsif ($traversal >= 17) {
-			$traversal = 17;
-		} elsif ($traversal >= 15.4) {
-			$traversal = 15.4;
-		} elsif ($traversal >= 15) {
-			$traversal = 15;
-		} elsif ($traversal >= 14.1) {
-			$traversal = 14.1;
-		} elsif ($traversal >= 13.3) {
-			$traversal = 13.3;
-		} elsif ($traversal >= 12.1) {
+		if ($traversal < 13.3) {
 			$traversal = 12.2;
+		} elsif (($traversal >= 13.3) && ($traversal < 14.1)) {
+			$traversal = 13.3;
+		} elsif (($traversal >= 14.1) && ($traversal < 14.5)) {
+			$traversal = 14.1;
+		} elsif (($traversal >= 14.5) && ($traversal < 15.4)) {
+			$traversal = 15;
+		} elsif (($traversal >= 15.4) && ($traversal < 16.5)) {
+			$traversal = 15.4;
+		} elsif (($traversal >= 16.5) && ($traversal < 18.1)) {
+			$traversal = 17;
+		} elsif (($traversal >= 18.1) && ($traversal < 18.5)) {
+			$traversal = 18.1;
+		} elsif (($traversal >= 18.5) && ($traversal < 19.5)) {
+			$traversal = 19;
+                } elsif (($traversal >= 19.5) && ($traversal < 21)  ) {
+			$traversal = 20;
+		} elsif ($traversal >= 21) {
+			$traversal = 21;
 		}
 		@result = ($traversal,@ratio);
 	}

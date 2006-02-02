@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb  2 12:06:12 CET 2006 - ms@suse.de
+
+- changed ranges of display size lookup table
+
+-------------------------------------------------------------------
 Mon Jan 23 16:59:01 CET 2006 - ms@suse.de
 
 - fixed spec file
