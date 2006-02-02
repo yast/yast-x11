@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb  2 21:13:53 CET 2006 - ms@suse.de
+
+- disabled warn popup, laptop guys don't care on warnings (#147761)
+
+-------------------------------------------------------------------
 Thu Feb  2 12:06:12 CET 2006 - ms@suse.de
 
 - changed ranges of display size lookup table

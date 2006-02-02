@@ -174,7 +174,7 @@ if ( func == "MakeProposal" ) {
 		if ((isNoteBookHW) && (! XMessages::popupDone)) {
 			XMessages::popupDone = true;
 			y2milestone ("X11: External VGA not supported with this NoteBook");
-			warnNoteBookPopup();
+			//warnNoteBookPopup();
 		}
 	}
 	//======================================
