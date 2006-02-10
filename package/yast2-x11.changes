@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 10 10:13:22 CET 2006 - ms@suse.de
+
+- fixed text misunderstanding concerning SaX::Dual Head Mode
+  and YaST::External VGA (#149229)
+
+-------------------------------------------------------------------
 Thu Feb  2 21:13:53 CET 2006 - ms@suse.de
 
 - disabled warn popup, laptop guys don't care on warnings (#147761)

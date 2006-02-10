@@ -83,7 +83,7 @@ global string acceleration = _("3D Acceleration: ");
 //=============================================
 // External VGA on NoteBooks
 //---------------------------------------------
-global string externalvga = _("External VGA: ");
+global string externalvga = _("Dual Head Mode: ");
 
 //=============================================
 // selectColorDepth
@@ -140,6 +140,6 @@ global string unconfigured = _("Unconfigured");
 //=============================================
 // warnNoteBook
 //---------------------------------------------
-global string warnNoteBook = _("\nExternal VGA not supported with this laptop.\n");
+global string warnNoteBook = _("\nDual Head Mode not supported with this laptop.\n");
 
 } // end
