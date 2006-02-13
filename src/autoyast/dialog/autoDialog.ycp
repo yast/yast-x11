@@ -3,7 +3,7 @@
  * Summary:	Handle X11 dialogs
  * Authors:	Anas Nashif <nashif@suse.de>
  *
- * $Id: autoDialog.ycp 21734 2005-02-19 17:20:58Z nashif $
+ * $Id$
  */
 {
     textdomain "x11";

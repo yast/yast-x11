@@ -1,7 +1,7 @@
 #
 # Makefile.am for src/schema
 #
-# $Id: Makefile.am 19261 2004-09-12 20:19:59Z nashif $
+# $Id$
 #
 
 schemafilesdir =  $(schemadir)/autoyast/rnc
