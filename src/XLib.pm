@@ -228,10 +228,28 @@ sub getDisplaySize {
 			$traversal = 18.1;
 		} elsif (($traversal >= 18.5) && ($traversal < 19.5)) {
 			$traversal = 19;
-                } elsif (($traversal >= 19.5) && ($traversal < 21)  ) {
+		} elsif (($traversal >= 19.5) && ($traversal < 20.5)) {
 			$traversal = 20;
-		} elsif ($traversal >= 21) {
-			$traversal = 21;
+		} elsif (($traversal >= 20.5) && ($traversal < 21.3)) {
+			$traversal = 21.1;
+		} elsif (($traversal >= 21.3) && ($traversal < 21.5)) {
+			$traversal = 21.3;
+		} elsif (($traversal >= 21.5) && ($traversal < 22.2)) {
+			$traversal = 22.2;
+		} elsif (($traversal >= 22.2) && ($traversal < 23.5)) {
+			$traversal = 23;
+		} elsif (($traversal >= 23.5) && ($traversal < 24.5)) {
+			$traversal = 24;
+		} elsif (($traversal >= 24.5) && ($traversal < 30.5)) {
+			$traversal = 30;
+		} elsif (($traversal >= 30.5) && ($traversal < 31.8)) {
+			$traversal = 31.5;
+		} elsif (($traversal >= 31.8) && ($traversal < 32.5)) {
+			$traversal = 32;
+		} elsif (($traversal >= 32.5) && ($traversal < 40.5)) {
+			$traversal = 40;
+		} elsif ($traversal >= 40.5) {
+			$traversal = 46;
 		}
 		@result = ($traversal,@ratio);
 	}
