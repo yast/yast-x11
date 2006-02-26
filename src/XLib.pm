@@ -706,7 +706,7 @@ sub getXkbLayout {
 #------------------------------------------
 BEGIN{ $TYPEINFO{setXkbLayout} = ["function", "void", "string"]; }
 sub setXkbLayout {
-	my ($class, $layout)   = shift;
+	my ($class, $layout)   = @_;
 	my $mKeyboard = new SaX::SaXManipulateKeyboard (
 		$section{Keyboard}
 	);
@@ -718,7 +718,7 @@ sub setXkbLayout {
 #------------------------------------------
 BEGIN{ $TYPEINFO{setXkbModel} = ["function", "void", "string"]; }
 sub setXkbModel {
-	my ($class, $model)   = shift;
+	my ($class, $model)   = @_;
 	my $mKeyboard = new SaX::SaXManipulateKeyboard (
 		$section{Keyboard}
 	);
@@ -730,7 +730,7 @@ sub setXkbModel {
 #------------------------------------------
 BEGIN{ $TYPEINFO{setXkbVariant} = ["function", "void", "string", "string"]; }
 sub setXkbVariant {
-	my ($class, $layout, $variant)   = shift;
+	my ($class, $layout, $variant)   = @_;
 	my $mKeyboard = new SaX::SaXManipulateKeyboard (
 		$section{Keyboard}
 	);
@@ -747,12 +747,13 @@ sub setXkbMappings {
 	# and Right Ctrl) parameter is map with pairs of type
 	# { SaX::XKB_LEFT_ALT => SaX::XKB_MAP_META }
 	# ---
-	my ($class, $mappings)   = shift;
+	my ($class, $mappings)   = @_;
 	my $mKeyboard = new SaX::SaXManipulateKeyboard (
 		$section{Keyboard}
 	);
 	return if (ref ($mappings) ne "HASH" || ! %{$mappings});
 	while (my ($type, $mapping) = each %{$mappings}) {
+		next if !$mapping;
 		$mKeyboard->setXKBMapping ($type, $mapping);
 	}
 }
@@ -766,13 +767,14 @@ sub setXkbOptions {
 	# resets the current list of options and adds the new ones
 	# parameter is list of options
 	# ---
-	my ($class, $options)   = shift;
+	my ($class, $options)   = @_;
 	return if (!defined $options || ref ($options) ne "ARRAY");
 	my $mKeyboard = new SaX::SaXManipulateKeyboard (
 		$section{Keyboard}
 	);
-	$mKeyboard->setXKBOption ();
-	foreach my $option (@{$options}) {
+	my @opt = @{$options};
+	$mKeyboard->setXKBOption (shift @opt);
+	foreach my $option (@opt) {
 	    $mKeyboard->addXKBOption ($option);
 	}
 }
