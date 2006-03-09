@@ -95,3 +95,4 @@ clean:
 	rm -f  agent-isax/doc/autodocs/doxygen.*
 	rm -f `find -name *.ybc`
 	rm -f Makefile.am.common
+	rm -f *.ami
