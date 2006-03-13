@@ -207,7 +207,7 @@ sub getDisplaySize {
 	my $mDesktop = new SaX::SaXManipulateDesktop (
 		$section{Desktop},$section{Card},$section{Path}
 	);
-	my @result = ("15","5","4");
+	my @result = ("15","4","3");
 	my $traversal = $mDesktop->getDisplayTraversal();
 	my @ratio  = @{$mDesktop->getDisplayRatio()};
 	if (defined $traversal) {
