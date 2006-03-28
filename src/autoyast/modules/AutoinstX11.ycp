@@ -156,6 +156,18 @@ global define boolean Write() {
 		y2milestone ("X11-Auto: Loading library cache...");
 		XLib::loadApplication();
 	}
+	string displayManager = x11["display_manager"]:"";
+	string windowManager  = x11["window_manager"]:"";
+	if (size(displayManager) > 0) {
+		y2milestone("X11-Auto: setup display manager <%1>",displayManager);
+		SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER, displayManager);
+		SCR::Write (.sysconfig.displaymanager, nil);
+	}
+	if (size(windowManager) > 0) {
+		y2milestone("X11-Auto: setup window manager <%1>",windowManager);
+		SCR::Write (.sysconfig.windowmanager.DEFAULT_WM, windowManager);
+		SCR::Write (.sysconfig.windowmanager, nil);
+	}
 	integer hstart = display["min_hsync"]:30;
 	integer hstop  = display["max_hsync"]:60;
 	integer vstart = display["min_vsync"]:60;

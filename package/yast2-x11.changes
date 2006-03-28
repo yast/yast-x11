@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar 28 13:33:37 CEST 2006 - ms@suse.de
+
+- add display- / windowmanger setup to AutoinstX11.ycp (#153852)
+
+-------------------------------------------------------------------
 Mon Mar 13 16:39:01 CET 2006 - ms@suse.de
 
 - fixed default value for DisplaySize 15' 4/3 (#156462)
