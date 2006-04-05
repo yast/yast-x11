@@ -87,6 +87,7 @@ if ( func == "MakeProposal" ) {
 	boolean isNoteBookHW= (boolean) XLib::isNoteBookHardware();
 	boolean extVGAactive= (boolean) XLib::isExternalVGAactive();
 	list    monitorSize = (list)    XLib::getDisplaySize();
+	string  monitorInch = (string)  monitorSize[0]:"undef";
 
 	//======================================
 	// Prepare proposal
@@ -126,15 +127,25 @@ if ( func == "MakeProposal" ) {
 	//======================================
 	// Monitor name and resolution...
 	//--------------------------------------
-	proposal = proposal
-	+ LI
-		+ XMessages::monitor + "<a href=\"sax-monitor\">"
-		+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
-		+ monitorSize[0]:"" + " " + XMessages::Inches + ", "
-		+ XMessages::Aspect + " " + monitorSize[1]:"" + ":"
-		+ monitorSize[2]:"" + "</a>)" + " - (<a href=\"sax-resolution\">"
-		+ resolution  + "</a>)"
-	+ IL;
+	if (monitorInch == "undef") {
+		proposal = proposal
+		+ LI
+			+ XMessages::monitor + "<a href=\"sax-monitor\">"
+			+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
+			+ XMessages::Aspect + " " + XMessages::unconfigured + "</a>)"
+			+ " - (<a href=\"sax-resolution\">" + resolution  + "</a>)"
+		+ IL;
+	} else {
+		proposal = proposal
+		+ LI
+			+ XMessages::monitor + "<a href=\"sax-monitor\">"
+			+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
+			+ monitorSize[0]:"" + " " + XMessages::Inches + ", "
+			+ XMessages::Aspect + " " + monitorSize[1]:"" + ":"
+			+ monitorSize[2]:"" + "</a>)" + " - (<a href=\"sax-resolution\">"
+			+ resolution  + "</a>)"
+		+ IL;
+	}
 	//======================================
 	// Colordepth and number of colors...
 	//--------------------------------------
@@ -231,7 +242,7 @@ else if ( func == "AskUser" ) {
 		list<string> currentSize = XLib::getDisplaySize();
 		list<string> selectedSize = setupDisplaySize (
 			currentSize[0]:"15",
-			currentSize[1]:"5" + "/" + currentSize[2]:"4"
+			currentSize[1]:"4" + "/" + currentSize[2]:"3"
 		);
 		y2milestone("X11: setup displaysize <%1>",selectedSize);
 		XLib::setDisplaySize ( selectedSize );
