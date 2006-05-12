@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri May 12 14:11:15 CEST 2006 - ms@suse.de
+
+- added package check within the proposal code (#175161)
+
+-------------------------------------------------------------------
 Wed Apr  5 15:26:18 CEST 2006 - ms@suse.de
 
 - fixed information shown if the DisplaySize is unknown (#163749)

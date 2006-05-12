@@ -41,6 +41,26 @@ string  func  = (string) WFM::Args(0);
 map     param = (map)    WFM::Args(1);
 map     ret   = $[];
 
+//==========================================
+// Check for installed packages...
+//------------------------------------------
+if (
+	(Arch::x11_setup_needed ()) ||
+	(Installation::x11_setup_needed ())
+) {
+	list<string> requiredPacs = [
+		"xorg-x11", "xorg-x11-server","xorg-x11-server-glx","libusb",
+		"sax2", "sax2-gui", "sax2-ident", "sax2-tools","sax2-libsax",
+		"sax2-libsax-perl"
+	];
+	boolean package = Package::InstallAllMsg (
+		requiredPacs, XMessages::pacsMissing
+	);
+	y2milestone ("x11 package status is: <%1>",package);
+	if (! package) {
+		return $[];
+	}
+}
 //===================================================
 // Handle Arch flag
 //---------------------------------------------------
