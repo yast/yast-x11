@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Aug  4 12:45:30 CEST 2006 - mvidner@suse.cz
+
+- Removed a Perl search path that is added elsewhere already
+  and here just breaks compilation in some cases (#197099).
+
+-------------------------------------------------------------------
 Fri May 12 14:11:15 CEST 2006 - ms@suse.de
 
 - added package check within the proposal code (#175161)
