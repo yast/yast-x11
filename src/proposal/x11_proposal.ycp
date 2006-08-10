@@ -53,6 +53,10 @@ if (
 		"sax2", "sax2-gui", "sax2-ident", "sax2-tools","sax2-libsax",
 		"sax2-libsax-perl"
 	];
+
+	// remove unavailable packages
+	requiredPacs = filter(string pac, requiredPacs, {return Package::Available(pac);} );
+
 	boolean package = Package::InstallAllMsg (
 		requiredPacs, XMessages::pacsMissing
 	);

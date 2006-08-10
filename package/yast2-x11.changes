@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 10 10:53:10 CEST 2006 - lslezak@suse.cz
+
+- Don't try to install unavailable X11 packages (#198250)
+- 2.13.7
+
+-------------------------------------------------------------------
 Fri Aug  4 12:45:30 CEST 2006 - mvidner@suse.cz
 
 - Removed a Perl search path that is added elsewhere already

@@ -71,6 +71,10 @@ define any installPackages() ``{
 	// for the detected card(s)
 	// ---
 	requiredPacs = toset ( flatten( [requiredPacs] ) );
+
+	// remove unavailable packages
+	requiredPacs = filter(string pac, requiredPacs, {return Package::Available(pac);} );
+
 	return Package::InstallAllMsg (
 		requiredPacs, XMessages::pacsMissing
 	) ? `auto : nil;
