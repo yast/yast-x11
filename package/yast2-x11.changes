@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 10 16:40:04 CEST 2006 - lslezak@suse.cz
+
+- Properly detect unainavilable packages (#198250)
+- 2.13.8
+
+-------------------------------------------------------------------
 Thu Aug 10 10:53:10 CEST 2006 - lslezak@suse.cz
 
 - Don't try to install unavailable X11 packages (#198250)

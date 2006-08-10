@@ -73,7 +73,9 @@ define any installPackages() ``{
 	requiredPacs = toset ( flatten( [requiredPacs] ) );
 
 	// remove unavailable packages
-	requiredPacs = filter(string pac, requiredPacs, {return Package::Available(pac);} );
+	requiredPacs = filter(string pac, requiredPacs, {return Pkg::PkgProperties(pac) != nil;} );
+
+	y2milestone("required X11 packages: %1", requiredPacs);
 
 	return Package::InstallAllMsg (
 		requiredPacs, XMessages::pacsMissing

@@ -55,7 +55,9 @@ if (
 	];
 
 	// remove unavailable packages
-	requiredPacs = filter(string pac, requiredPacs, {return Package::Available(pac);} );
+	requiredPacs = filter(string pac, requiredPacs, {return Pkg::PkgProperties(pac) != nil;} );
+
+	y2milestone("required X11 packages: %1", requiredPacs);
 
 	boolean package = Package::InstallAllMsg (
 		requiredPacs, XMessages::pacsMissing
