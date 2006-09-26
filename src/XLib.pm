@@ -6,8 +6,6 @@
 # XLib.pm YAPI interface module to access libsax
 # functions to handle the X11 configuration
 #
-use lib "/usr/share/YaST2/modules";
-
 package XLib;
 
 use strict;

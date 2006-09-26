@@ -1,4 +1,22 @@
 -------------------------------------------------------------------
+Thu Aug 10 16:40:04 CEST 2006 - lslezak@suse.cz
+
+- Properly detect unainavilable packages (#198250)
+- 2.13.8
+
+-------------------------------------------------------------------
+Thu Aug 10 10:53:10 CEST 2006 - lslezak@suse.cz
+
+- Don't try to install unavailable X11 packages (#198250)
+- 2.13.7
+
+-------------------------------------------------------------------
+Fri Aug  4 12:45:30 CEST 2006 - mvidner@suse.cz
+
+- Removed a Perl search path that is added elsewhere already
+  and here just breaks compilation in some cases (#197099).
+
+-------------------------------------------------------------------
 Fri May 12 14:11:15 CEST 2006 - ms@suse.de
 
 - added package check within the proposal code (#175161)
