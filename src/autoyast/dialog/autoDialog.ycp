@@ -95,7 +95,9 @@
             `item(`id("gnome"), _("GNOME"), (
                         x11["window_manager"]:"kde" == "gnome")),
             `item(`id("twm"), _("TWM"), (
-                        x11["window_manager"]:"kde" == "twm"))
+                        x11["window_manager"]:"kde" == "twm")),
+            `item(`id("fvwm"), _("FVWM"), (
+                        x11["window_manager"]:"kde" == "fvwm"))
             ];
 	term contents =
 	    `Top(
