@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Sep 27 17:08:47 CEST 2006 - ms@suse.de
+
+- version update to 2.14.1
+
+-------------------------------------------------------------------
 Tue Sep 26 15:04:09 CEST 2006 - ms@suse.de
 
 - added support for fvwm in autoyast part of x11 module (#207928)
