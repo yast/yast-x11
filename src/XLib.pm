@@ -220,9 +220,11 @@ sub getDisplaySize {
 			$traversal = 15;
 		} elsif (($traversal >= 15.4) && ($traversal < 16.5)) {
 			$traversal = 15.4;
-		} elsif (($traversal >= 16.5) && ($traversal < 18.1)) {
+		} elsif (($traversal >= 16.5) && ($traversal < 18.0)) {
 			$traversal = 17;
-		} elsif (($traversal >= 18.1) && ($traversal < 18.5)) {
+		} elsif (($traversal >= 18.0) && ($traversal < 18.3)) {
+			$traversal = 18;
+		} elsif (($traversal >= 18.3) && ($traversal < 18.5)) {
 			$traversal = 18.1;
 		} elsif (($traversal >= 18.5) && ($traversal < 19.5)) {
 			$traversal = 19;

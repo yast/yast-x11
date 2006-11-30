@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 30 14:09:41 CET 2006 - ms@suse.de
+
+- 2.15.1
+- added 18.0 display size as supported size value (#222480)
+
+-------------------------------------------------------------------
 Wed Nov 29 10:06:08 CET 2006 - ms@suse.de
 
 - added autoyast scheme patch (#224161)
