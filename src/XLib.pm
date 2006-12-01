@@ -378,6 +378,20 @@ sub has3DCapabilities {
 	return 1;
 }
 #==========================================
+# isFbdevBased
+#------------------------------------------
+BEGIN{ $TYPEINFO{isFbdevBased} = ["function", "boolean"]; }
+sub isFbdevBased {
+	my $class = shift;
+	my $mCard = new SaX::SaXManipulateCard (
+		$section{Card}
+	);
+	if ($mCard -> getCardDriver() eq "fbdev") {
+		return 1;
+	}
+	return 0;
+}
+#==========================================
 # getCardName
 #------------------------------------------
 BEGIN{ $TYPEINFO{getCardName} = ["function", "string"]; }

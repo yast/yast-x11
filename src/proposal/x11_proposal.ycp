@@ -108,6 +108,7 @@ if ( func == "MakeProposal" ) {
 	string	cardName    = (string)  XLib::getCardName();
 	string	monitorName = (string)  XLib::getMonitorName();
 	boolean	has3D       = (boolean) XLib::hasOpenGLFeatures();
+	boolean isFbdevBased= (boolean) XLib::isFbdevBased();
 	boolean	is3DCard    = (boolean) XLib::has3DCapabilities();
 	boolean isNoteBook  = (boolean) XLib::isExternalVGANoteBook();
 	boolean isNoteBookHW= (boolean) XLib::isNoteBookHardware();
@@ -153,33 +154,63 @@ if ( func == "MakeProposal" ) {
 	//======================================
 	// Monitor name and resolution...
 	//--------------------------------------
-	if (monitorInch == "undef") {
-		proposal = proposal
-		+ LI
-			+ XMessages::monitor + "<a href=\"sax-monitor\">"
-			+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
-			+ XMessages::Aspect + " " + XMessages::unconfigured + "</a>)"
-			+ " - (<a href=\"sax-resolution\">" + resolution  + "</a>)"
-		+ IL;
+	if (! isFbdevBased) {
+		if (monitorInch == "undef") {
+			proposal = proposal
+			+ LI
+				+ XMessages::monitor + "<a href=\"sax-monitor\">"
+				+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
+				+ XMessages::Aspect + " " + XMessages::unconfigured + "</a>)"
+				+ " - (<a href=\"sax-resolution\">" + resolution  + "</a>)"
+			+ IL;
+		} else {
+			proposal = proposal
+			+ LI
+				+ XMessages::monitor + "<a href=\"sax-monitor\">"
+				+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
+				+ monitorSize[0]:"" + " " + XMessages::Inches + ", "
+				+ XMessages::Aspect + " " + monitorSize[1]:"" + ":"
+				+ monitorSize[2]:"" + "</a>)"
+				+ " - (<a href=\"sax-resolution\">" + resolution  + "</a>)"
+			+ IL;
+		}
 	} else {
-		proposal = proposal
-		+ LI
-			+ XMessages::monitor + "<a href=\"sax-monitor\">"
-			+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
-			+ monitorSize[0]:"" + " " + XMessages::Inches + ", "
-			+ XMessages::Aspect + " " + monitorSize[1]:"" + ":"
-			+ monitorSize[2]:"" + "</a>)" + " - (<a href=\"sax-resolution\">"
-			+ resolution  + "</a>)"
-		+ IL;
+		if (monitorInch == "undef") {
+			proposal = proposal
+			+ LI
+				+ XMessages::monitor + "<a href=\"sax-monitor\">"
+				+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
+				+ XMessages::Aspect + " " + XMessages::unconfigured + "</a>)"
+				+ " - (" + resolution  + ")"
+			+ IL;
+		} else {
+			proposal = proposal
+			+ LI
+				+ XMessages::monitor + "<a href=\"sax-monitor\">"
+				+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
+				+ monitorSize[0]:"" + " " + XMessages::Inches + ", "
+				+ XMessages::Aspect + " " + monitorSize[1]:"" + ":"
+				+ monitorSize[2]:"" + "</a>)"
+				+ " - (" + resolution  + ")"
+			+ IL;
+		}
 	}
 	//======================================
 	// Colordepth and number of colors...
 	//--------------------------------------
-	proposal = proposal
-	+ LI
-		+ XMessages::colorDepth + "<a href=\"sax-colors\">"
-		+ colorDepth + "</a> Bit (" + colorCount + ")"
-	+ IL;
+	if (! isFbdevBased) {
+		proposal = proposal
+		+ LI
+			+ XMessages::colorDepth + "<a href=\"sax-colors\">"
+			+ colorDepth + "</a> Bit (" + colorCount + ")"
+		+ IL;
+	} else {
+		proposal = proposal
+		+ LI
+			+ XMessages::colorDepth
+			+ colorDepth + " Bit (" + colorCount + ")"
+		+ IL;
+	}
 	//======================================
 	// 3D acceleration status/availability
 	//--------------------------------------
