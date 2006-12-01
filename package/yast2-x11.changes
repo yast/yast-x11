@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Dec  1 10:46:23 CET 2006 - ms@suse.de
+
+- added fbdev handling according to driver restrictions (#224924)
+
+-------------------------------------------------------------------
 Wed Sep 27 17:08:47 CEST 2006 - ms@suse.de
 
 - version update to 2.14.1
