@@ -3,7 +3,7 @@ namespace config = "http://www.suse.com/1.0/configns"
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
 color_depth =
-  element color_depth { INTEGER }
+  element color_depth { text }
 configure_x11 =
   element configure_x11 { BOOLEAN }
 y2_display =
