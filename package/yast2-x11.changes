@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jan  8 09:29:31 CET 2007 - ms@suse.de
+
+- added 10.0 traversal support
+
+-------------------------------------------------------------------
 Fri Dec  1 10:46:23 CET 2006 - ms@suse.de
 
 - added fbdev handling according to driver restrictions (#224924)

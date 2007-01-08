@@ -210,7 +210,9 @@ sub getDisplaySize {
 	my @ratio  = @{$mDesktop->getDisplayRatio()};
 	if (defined $traversal) {
 		$traversal = sprintf ("%.1f",$traversal);
-		if ($traversal < 13.3) {
+		if ($traversal < 12.2) {
+			$traversal = 10.0;
+		} elsif (($traversal >= 12.2) && ($traversal < 13.3)) {
 			$traversal = 12.2;
 		} elsif (($traversal >= 13.3) && ($traversal < 14.1)) {
 			$traversal = 13.3;
