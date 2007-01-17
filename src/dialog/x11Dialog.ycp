@@ -40,10 +40,14 @@ define void warnNoteBookPopup () ``{
 	Popup::Message(XMessages::warnNoteBook);
 }
 
+define void warnInvalidColorResolution () ``{
+	Popup::Message(XMessages::warnInvalidColorResolution);
+}
+
 //================================
 // setupColors
 //--------------------------------
-define string setupColors ( string currentText ) ``{
+define string setupColors ( string currentRes, string currentText ) ``{
 	string space = "                       ";
 	string topic = XMessages::selectColorDepth + space;
 	UI::OpenDialog(
@@ -53,7 +57,7 @@ define string setupColors ( string currentText ) ``{
 					`item(`id(`bit8),  "256 [ 8 bit ]"        ),
 					`item(`id(`bit15), "32768 [ 15 bit ]"     ),
 					`item(`id(`bit16), "65536 [ 16 bit ]"     ),
-					`item(`id(`bit24), "16.7 Mio. [ 24 Bit ]" )
+					`item(`id(`bit24), "16.7 Mio. [ 24 bit ]" )
 				]
 			)),
 			`Right (`HBox (
@@ -62,39 +66,46 @@ define string setupColors ( string currentText ) ``{
 			))
 		)
 	);
-	UI::ChangeWidget(`id(`depth), `Value, currentText);
-	any id = UI::UserInput();
-	if (id == `cancel) {
+	while (true) {
+		UI::ChangeWidget(`id(`depth), `Value, currentText);
+		any id = UI::UserInput();
+		if (id == `cancel) {
+			UI::CloseDialog();
+			if (currentText == "256 [ 8 bit ]") {
+				return "8";
+			}
+			if (currentText == "32768 [ 15 bit ]") {
+				return "15";
+			}
+			if (currentText == "65536 [ 16 bit ]") {
+				return "16";
+			}
+			if (currentText == "16.7 Mio. [ 24 bit ]") {
+				return "24";
+			}
+			return "undef";
+		}
+		any col=UI::QueryWidget(`id(`depth), `Value);
+		string color = "8";
+		if ( col == `bit8  ) color = "8";
+		if ( col == `bit15 ) color = "15";
+		if ( col == `bit16 ) color = "16";
+		if ( col == `bit24 ) color = "24";
+		if (! XLib::hasValidColorResolutionSetup (color,currentRes)) {
+			warnInvalidColorResolution();
+			continue;
+		}
 		UI::CloseDialog();
-		if (currentText == "256 [ 8 bit ]") {
-			return "8";
-		}
-		if (currentText == "32768 [ 15 bit ]") {
-			return "15";
-		}
-		if (currentText == "65536 [ 16 bit ]") {
-			return "16";
-		}
-		if (currentText == "16.7 Mio. [ 24 Bit ]") {
-			return "24";
-		}
-		return "undef";
+		return (string)color;
 	}
-	any col=UI::QueryWidget(`id(`depth), `Value);
-	UI::CloseDialog();
-
-	if ( col == `bit8  ) return "8";
-	if ( col == `bit15 ) return "15";
-	if ( col == `bit16 ) return "16";
-	if ( col == `bit24 ) return "24";
-
-	return "undef";
 };
 
 //================================
 // setupResolutions
 //--------------------------------
-define string setupResolutions ( list reslist, string currentText ) ``{
+define string setupResolutions (
+	list reslist, string currentText, string currentColor
+) ``{
 	string space = "                       ";
 	string topic = XMessages::selectResolution + space;
 	UI::OpenDialog(
@@ -106,15 +117,21 @@ define string setupResolutions ( list reslist, string currentText ) ``{
 			))
 		)
 	);
-	UI::ChangeWidget(`id(`resitem), `Value, currentText);
-	any id = UI::UserInput();
-	if (id == `cancel) {
+	while (true) {
+		UI::ChangeWidget(`id(`resitem), `Value, currentText);
+		any id = UI::UserInput();
+		if (id == `cancel) {
+			UI::CloseDialog();
+			return currentText;
+		}
+		any res=UI::QueryWidget(`id(`resitem), `Value);
+		if (! XLib::hasValidColorResolutionSetup (currentColor,(string)res)) {
+			warnInvalidColorResolution();
+			continue;
+		}
 		UI::CloseDialog();
-		return currentText;
+		return (string)res;
 	}
-	any res=UI::QueryWidget(`id(`resitem), `Value);
-	UI::CloseDialog();
-	return (string)res;
 };
 
 //================================

@@ -142,4 +142,9 @@ global string unconfigured = _("Unconfigured");
 //---------------------------------------------
 global string warnNoteBook = _("\nDual head mode is not supported with this laptop.\n");
 
+//=============================================
+// warnInvalidColorResolution
+//---------------------------------------------
+global string warnInvalidColorResolution = _("\nThe selected resolution and/or color settings are not supported by the graphics cards framebuffer.\n");
+
 } // end

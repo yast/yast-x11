@@ -154,63 +154,33 @@ if ( func == "MakeProposal" ) {
 	//======================================
 	// Monitor name and resolution...
 	//--------------------------------------
-	if (! isFbdevBased) {
-		if (monitorInch == "undef") {
-			proposal = proposal
-			+ LI
-				+ XMessages::monitor + "<a href=\"sax-monitor\">"
-				+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
-				+ XMessages::Aspect + " " + XMessages::unconfigured + "</a>)"
-				+ " - (<a href=\"sax-resolution\">" + resolution  + "</a>)"
-			+ IL;
-		} else {
-			proposal = proposal
-			+ LI
-				+ XMessages::monitor + "<a href=\"sax-monitor\">"
-				+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
-				+ monitorSize[0]:"" + " " + XMessages::Inches + ", "
-				+ XMessages::Aspect + " " + monitorSize[1]:"" + ":"
-				+ monitorSize[2]:"" + "</a>)"
-				+ " - (<a href=\"sax-resolution\">" + resolution  + "</a>)"
-			+ IL;
-		}
+	if (monitorInch == "undef") {
+		proposal = proposal
+		+ LI
+			+ XMessages::monitor + "<a href=\"sax-monitor\">"
+			+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
+			+ XMessages::Aspect + " " + XMessages::unconfigured + "</a>)"
+			+ " - (<a href=\"sax-resolution\">" + resolution  + "</a>)"
+		+ IL;
 	} else {
-		if (monitorInch == "undef") {
-			proposal = proposal
-			+ LI
-				+ XMessages::monitor + "<a href=\"sax-monitor\">"
-				+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
-				+ XMessages::Aspect + " " + XMessages::unconfigured + "</a>)"
-				+ " - (" + resolution  + ")"
-			+ IL;
-		} else {
-			proposal = proposal
-			+ LI
-				+ XMessages::monitor + "<a href=\"sax-monitor\">"
-				+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
-				+ monitorSize[0]:"" + " " + XMessages::Inches + ", "
-				+ XMessages::Aspect + " " + monitorSize[1]:"" + ":"
-				+ monitorSize[2]:"" + "</a>)"
-				+ " - (" + resolution  + ")"
-			+ IL;
-		}
+		proposal = proposal
+		+ LI
+			+ XMessages::monitor + "<a href=\"sax-monitor\">"
+			+ monitorName + "</a> " + "(<a href=\"sax-displaysize\">"
+			+ monitorSize[0]:"" + " " + XMessages::Inches + ", "
+			+ XMessages::Aspect + " " + monitorSize[1]:"" + ":"
+			+ monitorSize[2]:"" + "</a>)"
+			+ " - (<a href=\"sax-resolution\">" + resolution  + "</a>)"
+		+ IL;
 	}
 	//======================================
 	// Colordepth and number of colors...
 	//--------------------------------------
-	if (! isFbdevBased) {
-		proposal = proposal
-		+ LI
-			+ XMessages::colorDepth + "<a href=\"sax-colors\">"
-			+ colorDepth + "</a> Bit (" + colorCount + ")"
-		+ IL;
-	} else {
-		proposal = proposal
-		+ LI
-			+ XMessages::colorDepth
-			+ colorDepth + " Bit (" + colorCount + ")"
-		+ IL;
-	}
+	proposal = proposal
+	+ LI
+		+ XMessages::colorDepth + "<a href=\"sax-colors\">"
+		+ colorDepth + "</a> bit (" + colorCount + ")"
+	+ IL;
 	//======================================
 	// 3D acceleration status/availability
 	//--------------------------------------
@@ -287,9 +257,21 @@ else if ( func == "AskUser" ) {
 	}
 	if (chosenID == "sax-resolution") {
 		y2milestone("X11: setup resolution...");
+		string depth = XLib::getActiveColorDepth();
+		string colstr = "256 [ 8 bit ]";
+		if (depth == "15") {
+			colstr = "32768 [ 15 bit ]";
+		}
+		if (depth == "16") {
+			colstr = "65536 [ 16 bit ]";
+		}
+		if (depth == "24") {
+			colstr = "16.7 Mio. [ 24 bit ]";
+		}
 		string selectedRes = setupResolutions (
 			XLib::getAvailableResolutionNames(),
-			XLib::getActiveResolutionString()
+			XLib::getActiveResolutionString(),
+			colstr
 		);
 		y2milestone("X11: setup resolution <%1>",selectedRes);
 		XLib::setResolution ( selectedRes );
@@ -315,9 +297,12 @@ else if ( func == "AskUser" ) {
 			colstr = "65536 [ 16 bit ]";
 		}
 		if (depth == "24") {
-			colstr = "16.7 Mio. [ 24 Bit ]";
+			colstr = "16.7 Mio. [ 24 bit ]";
 		}
-		string selectedColor = setupColors ( colstr );
+		string selectedColor = setupColors (
+			XLib::getActiveResolutionString(),
+			colstr
+		);
 		y2milestone("X11: setup color depth <%1>",selectedColor);
 		XLib::setDefaultColorDepth ( selectedColor );
 	}

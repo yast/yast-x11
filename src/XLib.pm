@@ -8,6 +8,8 @@
 #
 package XLib;
 
+#use lib '/usr/share/YaST2/modules';
+
 use strict;
 use YaST::YCP qw(:LOGGING Boolean sformat);;
 use YaPI;
@@ -28,6 +30,7 @@ use Errno qw(ENOENT);
 #------------------------------------------
 my %profileDriverOptions = ();
 my $init = 0;
+my $fbdev= 0;
 my %section;
 my $config;
 my %cdb;
@@ -70,6 +73,7 @@ sub loadApplication {
 	if (isExternalVGANoteBook()) {
 		activateExternalVGA();
 	}
+	$fbdev= isFbdevBased();
 	$init = 1;
 }
 #==========================================
@@ -78,6 +82,17 @@ sub loadApplication {
 BEGIN{ $TYPEINFO{writeConfiguration} = ["function","boolean"]; }
 sub writeConfiguration {
 	my $class = shift;
+	if ($fbdev) {
+		my $mDesktop = new SaX::SaXManipulateDesktop (
+			$section{Desktop},$section{Card},$section{Path}
+		);
+		my $mode = $mDesktop -> getFBKernelMode (
+			getActiveResolution(),getActiveColorDepth()
+		);
+		if ($mode > 0) {
+			# TODO... update bootloader configuration
+		}
+	}
 	$config->setMode ($SaX::SAX_NEW);
 	my $status = $config->createConfiguration();
 	$config->commitConfiguration();
@@ -610,6 +625,32 @@ sub setMonitorCDB {
 	$mDesktop->setCDBMonitor ($group);
 }
 #==========================================
+# hasValidColorResolutionSetup
+#------------------------------------------
+BEGIN{ $TYPEINFO{hasValidColorResolutionSetup} = ["function", "boolean","string","string"]; }
+sub hasValidColorResolutionSetup {
+	my $class = shift;
+	my $color = shift;
+	my $res   = shift;
+	if (! $fbdev) {
+		return 1;
+	}
+	my $mDesktop = new SaX::SaXManipulateDesktop (
+		$section{Desktop},$section{Card},$section{Path}
+	);
+	if ($color =~ /\[ (.*) Bit \]/i) {
+		$color = $1;
+	}
+	if ($res =~ /(.*x.*) \(/) {
+		$res = $1;
+	}
+	my $mode = $mDesktop -> getFBKernelMode ($res,$color);
+	if ($mode > 0) {
+		return 1;
+	}
+	return 0;
+}
+#==========================================
 # getAvailableResolutions
 #------------------------------------------
 BEGIN{ $TYPEINFO{getAvailableResolutions} = ["function",["map","string","string"]]; }
@@ -634,7 +675,7 @@ sub getAvailableResolutions {
 BEGIN{ $TYPEINFO{getAvailableResolutionNames} = ["function",["list","string"]]; }
 sub getAvailableResolutionNames {
 	my $class = shift;
-	my $file = "/usr/share/sax/api/data/MonitorResolution";
+	my $file  = "/usr/share/sax/api/data/MonitorResolution";
 	my @result = ();
 	if (! open (FD,$file)) {
 		return \@result;
@@ -645,6 +686,22 @@ sub getAvailableResolutionNames {
 	}
 	}
 	close (FD);
+	if ($fbdev) {
+		my @fbresult = ();
+		my $mDesktop = new SaX::SaXManipulateDesktop (
+			$section{Desktop},$section{Card},$section{Path}
+		);
+		$mDesktop->selectDesktop (0);
+		my @fblist = @{$mDesktop->getResolutionsFromFrameBuffer()};
+		foreach my $resstring (@result) {
+			foreach my $res (@fblist) {
+				if ($resstring =~ /$res/) {
+					push (@fbresult,$resstring); last;
+				}
+			}
+		}
+		return \@fbresult;
+	}
 	return \@result;
 }
 #==========================================
@@ -800,7 +857,15 @@ sub setXkbOptions {
 #------------------------------------------
 if (0) {
 	loadApplication();
+
+	my $c = hasValidColorResolutionSetup (undef,"24","1024x768");
+	printf ("___$c\n");
+	exit (0);
 	
+	my @a = @{getAvailableResolutionNames()};
+	print "@a\n";
+	exit (0);
+
 	my @list = @{getDisplaySize()};
 	print "@list\n";
 	@list = (12.2,"5/4");
