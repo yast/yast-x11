@@ -350,6 +350,13 @@ else if ( func == "Description" ) {
 // writing configuration
 //---------------------------------------------------
 else if ( func == "Write" ) {
+	if (XLib::isFbdevBased()) {
+		integer mode = XLib::getKernelFrameBufferMode();
+		if (mode > 0) {
+			y2milestone("X11: Updating bootloader to vga=0x%1",mode);
+			// TODO
+		}
+	}
 	boolean success = XLib::writeConfiguration();
 	ret = $[ "success" : success ];
 }

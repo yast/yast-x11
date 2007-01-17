@@ -77,22 +77,25 @@ sub loadApplication {
 	$init = 1;
 }
 #==========================================
+# getKernelFrameBufferMode
+#------------------------------------------
+BEGIN{ $TYPEINFO{getKernelFrameBufferMode} = ["function", "integer"]; }
+sub getKernelFrameBufferMode {
+	my $class = shift;
+	my $mDesktop = new SaX::SaXManipulateDesktop (
+		$section{Desktop},$section{Card},$section{Path}
+	);
+	my $mode = $mDesktop -> getFBKernelMode (
+		getActiveResolution(),getActiveColorDepth()
+	);
+	return $mode;
+}
+#==========================================
 # writeConfiguration
 #------------------------------------------
 BEGIN{ $TYPEINFO{writeConfiguration} = ["function","boolean"]; }
 sub writeConfiguration {
 	my $class = shift;
-	if ($fbdev) {
-		my $mDesktop = new SaX::SaXManipulateDesktop (
-			$section{Desktop},$section{Card},$section{Path}
-		);
-		my $mode = $mDesktop -> getFBKernelMode (
-			getActiveResolution(),getActiveColorDepth()
-		);
-		if ($mode > 0) {
-			# TODO... update bootloader configuration
-		}
-	}
 	$config->setMode ($SaX::SAX_NEW);
 	my $status = $config->createConfiguration();
 	$config->commitConfiguration();
