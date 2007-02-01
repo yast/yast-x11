@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Feb  1 10:11:00 CET 2007 - ms@suse.de
+
+- fixed missing window close functionality in autoyast UI (#241008)
+
+-------------------------------------------------------------------
+Thu Feb  1 10:11:00 CET 2007 - ms@suse.de
+
+- added basic framebuffer configuration support (#234142)
+
+-------------------------------------------------------------------
 Mon Jan  8 09:29:31 CET 2007 - ms@suse.de
 
 - added 10.0 traversal support
