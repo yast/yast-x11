@@ -450,9 +450,11 @@ sub getActiveResolution {
 		$section{Desktop},$section{Card},$section{Path}
 	);
 	$mDesktop->selectDesktop (0);
-	my @list = @{$mDesktop->getResolutions(
-		$mDesktop->getColorDepth()
-	)};
+	my $color = $mDesktop->getColorDepth();
+	if (! $color) {
+		$color = 8;
+	}
+	my @list = @{$mDesktop->getResolutions($color)};
 	my $result = shift (@list);
 	return $result;
 }
@@ -480,7 +482,11 @@ sub getActiveColorDepth {
 		$section{Desktop},$section{Card},$section{Path}
 	);
 	$mDesktop->selectDesktop (0);
-	return $mDesktop->getColorDepth();
+	my $color = $mDesktop->getColorDepth();
+	if (! $color) {
+		$color = 8;
+	}
+	return $color;
 }
 #==========================================
 # getHsyncMin
