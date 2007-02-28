@@ -14,6 +14,7 @@ use YaPI;
 use Data::Dumper;
 use Time::localtime;
 use SaX;
+use FBSet;
 use Env;
 
 textdomain("x11");
@@ -31,6 +32,18 @@ my $init = 0;
 my %section;
 my $config;
 my %cdb;
+
+#==========================================
+# GetFbColor
+#------------------------------------------
+sub GetFbColor {
+	my $data = FBSet::FbGetData();
+	my $cols = $data->swig_depth_get();
+	if ($cols < 16) {
+		return 16;
+	}
+	return $cols;
+}
 
 #==========================================
 # isInitialized
@@ -452,7 +465,7 @@ sub getActiveResolution {
 	$mDesktop->selectDesktop (0);
 	my $color = $mDesktop->getColorDepth();
 	if (! $color) {
-		$color = 8;
+		$color = GetFbColor();
 	}
 	my @list = @{$mDesktop->getResolutions($color)};
 	my $result = shift (@list);
@@ -484,7 +497,7 @@ sub getActiveColorDepth {
 	$mDesktop->selectDesktop (0);
 	my $color = $mDesktop->getColorDepth();
 	if (! $color) {
-		$color = 8;
+		$color = GetFbColor();
 	}
 	return $color;
 }
