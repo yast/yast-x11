@@ -34,7 +34,6 @@ STATUS        : Development
 { // begin
 textdomain "x11";
 
-import "X11Version";
 import "XMessages";
 import "Wizard";
 import "Popup";
