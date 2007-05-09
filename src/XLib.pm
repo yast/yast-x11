@@ -39,9 +39,6 @@ my %cdb;
 sub GetFbColor {
 	my $data = FBSet::FbGetData();
 	my $cols = $data->swig_depth_get();
-	if ($cols < 16) {
-		return 16;
-	}
 	return $cols;
 }
 
