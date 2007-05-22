@@ -501,6 +501,9 @@ sub getActiveResolution {
 		$color = GetFbColor();
 	}
 	my @list = @{$mDesktop->getResolutions($color)};
+	if (! @list) {
+		push (@list,"800x600");
+	}
 	my $result = shift (@list);
 	return $result;
 }
