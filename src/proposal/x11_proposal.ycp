@@ -218,13 +218,14 @@ if ( func == "MakeProposal" ) {
 	//======================================
 	// Test your configuration now
 	//--------------------------------------
-	if (! isFbdevBased) {
-		proposal = proposal
-		+ LI
-			+ "<a href=\"sax-test\">"
-			+ XMessages::testConfig + "</a>"
-		+ IL;
-	}
+	// deactivated due to problems with multiple X-Server instances
+	//if (! isFbdevBased) {
+	//	proposal = proposal
+	//	+ LI
+	//		+ "<a href=\"sax-test\">"
+	//		+ XMessages::testConfig + "</a>"
+	//	+ IL;
+	//}
 	//======================================
 	// End proposal...
 	//--------------------------------------

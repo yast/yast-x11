@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue May 22 11:25:41 CEST 2007 - ms@suse.de
+
+- 2.15.8
+- disabled test button due to problems with multiple X-Server
+  instances (#264646)
+
+-------------------------------------------------------------------
 Wed May  9 12:13:22 CEST 2007 - ms@suse.de
 
 - 2.15.7
