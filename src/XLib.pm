@@ -101,6 +101,21 @@ sub getKernelFrameBufferMode {
 	return $mode;
 }
 #==========================================
+# setKernelFrameBufferMode
+#------------------------------------------
+BEGIN{ $TYPEINFO{setKernelFrameBufferMode} = ["function","boolean","integer"]; }
+sub setKernelFrameBufferMode {
+	my $class = shift;
+	my $mode  = shift;
+	my $mDesktop = new SaX::SaXManipulateDesktop (
+		$section{Desktop},$section{Card},$section{Path}
+	);
+	if (! $mDesktop -> setFBKernelMode ( $mode )) {
+		return 0;
+	}
+	return 1;
+}
+#==========================================
 # writeConfiguration
 #------------------------------------------
 BEGIN{ $TYPEINFO{writeConfiguration} = ["function","boolean"]; }

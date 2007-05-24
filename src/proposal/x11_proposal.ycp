@@ -357,10 +357,7 @@ else if ( func == "Write" ) {
 		integer mode = XLib::getKernelFrameBufferMode();
 		if (mode > 0) {
 			y2milestone("X11: Updating bootloader to vga=0x%1",mode);
-			// TODO
-			// use yast2 bootloader to change vga value
-			// see Bug: #234142 for details
-			// ---
+			XLib::setKernelFrameBufferMode (mode);
 		}
 	}
 	boolean success = XLib::writeConfiguration();
