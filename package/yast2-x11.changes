@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sat Sep  1 02:12:01 CEST 2007 - jdsn@suse.de
+
+- 2.15.11
+- check parameters of ratio and display size (#288730)
+
+-------------------------------------------------------------------
 Fri May 25 13:30:04 CEST 2007 - jsrain@suse.cz
 
 - removed outdated translations from .desktop-files (#271209)

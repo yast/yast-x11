@@ -235,6 +235,12 @@ sub setDisplaySize {
 	my @ratios = split (/\//,$list[1]);
 	my $aspect = $ratios[0];
 	my $ratio  = $ratios[1];
+
+    # (#288730) check for validity of parameters
+ 	if ($traversal !~ /^\d+(\.\d+)?$/ ) {$traversal="15"; }
+ 	if ($aspect    !~ /^\d+$/         ) {$aspect="4"; }
+ 	if ($ratio     !~ /^\d+$/         ) {$ratio="3"; }
+
 	$mDesktop->setDisplayRatioAndTraversal (
 		$traversal,$aspect,$ratio
 	);
