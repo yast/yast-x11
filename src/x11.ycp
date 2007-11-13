@@ -115,5 +115,18 @@ map cmdlineDescription = $[
 any ret = CommandLine::Run (
 	cmdlineDescription
 );
-return (symbol)ret;
+
+// CommandLine::Run returns <any>, so we have to interpret what to return
+if (is(ret, symbol)) {
+    return (symbol)ret;
+}
+else if (is(ret, boolean)) {
+    // true equals `next, false will be `auto in order to not block the workflow
+    return (boolean)ret? `next:`auto;
+}
+else {
+    // values will be interpreted as success
+    return `next;
+}
+
 } // end
