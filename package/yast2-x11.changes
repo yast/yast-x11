@@ -1,9 +1,4 @@
 -------------------------------------------------------------------
-Thu Jan 31 07:40:38 CET 2008 - coolo@suse.de
-
-- fix choice between icewm-lite and icewm-default
-
--------------------------------------------------------------------
 Tue Sep 11 18:34:45 CEST 2007 - ro@suse.de
 
 - buildreq sax2 (needed because of change in sax2)
