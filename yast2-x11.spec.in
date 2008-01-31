@@ -5,7 +5,7 @@ BuildRequires: docbook-xsl-stylesheets doxygen libxslt perl-XML-Writer qt3-devel
 %ifnarch s390 s390x
 # To solve sax2's virtual requires
 BuildRequires: icewm-lite
-BuildRequires: sax2-libsax-perl
+BuildRequires: sax2 sax2-libsax-perl
 %endif
 
 Requires:	 yast2 sax2-libsax-perl
@@ -16,9 +16,9 @@ Provides:	 yast2-trans-inst-x11 y2t_inst-x11
 Obsoletes:	 yast2-trans-inst-x11 y2t_inst-x11
 Provides:	 yast2-agent-isax-devel
 Obsoletes:	 yast2-agent-isax-devel
-ExcludeArch: s390 s390x
+ExcludeArch:     s390 s390x
 
-BuildArchitectures: noarch
+BuildArch:       noarch
 
 Summary:	-
 
