@@ -126,16 +126,16 @@ if ( func == "MakeProposal" ) {
 	string proposal = "";
 	string colorCount = "";
 	if (colorDepth == "24") {
-		colorCount = "16.7 Mio. " + XMessages::colors;
+		colorCount = XMessages::colors16m;
 	}
 	if (colorDepth == "16") {
-		colorCount = "65536 " + XMessages::colors;
+		colorCount = XMessages::colors65k;
 	}
 	if (colorDepth == "15") {
-		colorCount = "32768 " + XMessages::colors;
+		colorCount = XMessages::colors32k;
 	}
 	if (colorDepth == "8") {
-		colorCount = "256 "   + XMessages::colors;
+		colorCount = XMessages::colors256;
 	}
 	if (monitorName == "undef") {
 		monitorName = XMessages::unconfigured;
