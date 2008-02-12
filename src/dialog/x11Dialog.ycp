@@ -27,6 +27,7 @@ textdomain "x11";
 // Imports...
 //--------------------------------
 import "XMessages";
+import "Label";
 import "Popup";
 
 //================================
@@ -61,8 +62,8 @@ define string setupColors ( string currentRes, string currentText ) ``{
 				]
 			)),
 			`Right (`HBox (
-				`PushButton(`id(`ok),"&OK"),
-				`PushButton(`id(`cancel),"&Cancel")
+				`PushButton(`id(`ok),Label::OKButton()),
+				`PushButton(`id(`cancel),Label::CancelButton())
 			))
 		)
 	);
@@ -112,8 +113,8 @@ define string setupResolutions (
 		`VBox(
 			`HBox(`Left ( `ComboBox(`id(`resitem),topic, reslist))),
 			`Right (`HBox (
-				`PushButton(`id(`ok),"&OK"),
-				`PushButton(`id(`cancel),"&Cancel")
+				`PushButton(`id(`ok),Label::OKButton()),
+				`PushButton(`id(`cancel),Label::CancelButton())
 			))
 		)
 	);
@@ -152,8 +153,8 @@ define list<string> setupDisplaySize (
 				`Right ( `ComboBox(`id(`ratiositem),topic2, ratioslist))
 			),
 			`Right (`HBox (
-				`PushButton(`id(`ok),"&OK"),
-				`PushButton(`id(`cancel),"&Cancel")
+				`PushButton(`id(`ok),Label::OKButton()),
+				`PushButton(`id(`cancel),Label::CancelButton())
 			))
 		)
 	);
@@ -197,8 +198,8 @@ define list setupMonitor (
 			`SelectionBox(`id(`model) ,`opt(`notify,`immediate),"", [])
 		),
 		`Right( `HBox (
-			`PushButton(`id(`ok),"&OK"),
-			`PushButton(`id(`cancel),"&Cancel")
+			`PushButton(`id(`ok),Label::OKButton()),
+			`PushButton(`id(`cancel),Label::CancelButton())
 		))
 		)
 	);
