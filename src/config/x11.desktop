@@ -25,3 +25,4 @@ Exec=/sbin/yast2 x11
 Name=Graphics Card and Monitor
 GenericName=Configure the graphics card and monitor
 X-KDE-SubstituteUID=true
+StartupNotify=true
