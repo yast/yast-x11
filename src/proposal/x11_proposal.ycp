@@ -261,15 +261,15 @@ else if ( func == "AskUser" ) {
 	if (chosenID == "sax-resolution") {
 		y2milestone("X11: setup resolution...");
 		string depth = XLib::getActiveColorDepth();
-		string colstr = "256 [ 8 bit ]";
+		string colstr = XMessages::color8bit;
 		if (depth == "15") {
-			colstr = "32768 [ 15 bit ]";
+			colstr = XMessages::color15bit;
 		}
 		if (depth == "16") {
-			colstr = "65536 [ 16 bit ]";
+			colstr = XMessages::color16bit;
 		}
 		if (depth == "24") {
-			colstr = "16.7 Mio. [ 24 bit ]";
+			colstr = XMessages::color24bit;
 		}
 		string selectedRes = setupResolutions (
 			XLib::getAvailableResolutionNames(),
@@ -292,15 +292,15 @@ else if ( func == "AskUser" ) {
 	if (chosenID == "sax-colors") {
 		y2milestone("X11: setup color depth...");
 		string depth = XLib::getActiveColorDepth();
-		string colstr = "256 [ 8 bit ]";
+		string colstr = XMessages::color8bit;
 		if (depth == "15") {
-			colstr = "32768 [ 15 bit ]";
+			colstr = XMessages::color15bit;
 		}
 		if (depth == "16") {
-			colstr = "65536 [ 16 bit ]";
+			colstr = XMessages::color16bit;
 		}
 		if (depth == "24") {
-			colstr = "16.7 Mio. [ 24 bit ]";
+			colstr = XMessages::color24bit;
 		}
 		string selectedColor = setupColors (
 			XLib::getActiveResolutionString(),

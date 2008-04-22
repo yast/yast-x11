@@ -109,7 +109,21 @@
 						     `id(`enable_3d),
 						     _("&Enable 3D Support if possible"),
 						     x11["enable_3d"]:false)
+					),
+				     `Left(
+					   `CheckBox(
+						     `id(`enable_xgl),
+						     _("Enable &Xgl if possible"),
+						     x11["enable_xgl"]:false)
 					   ),
+				     `Left(
+					   `HBox( `CheckBox(
+						     `id(`xgl_options),
+						     _("&Custom Xgl options"),
+						     x11["xgl_options"]:false),
+						   `TextEntry(`id(`xgl_options_string), ""),
+						   `PushButton(`id(`fetch_xgl_options), _("Fetch from system"))
+					   )),
 				     `VSpacing(1),
 				     `HBox(
 					   `HWeight(50,

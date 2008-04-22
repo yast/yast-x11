@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Apr 22 18:13:29 CEST 2008 - jdsn@suse.de
+
+- added new strings for Xgl settings and abbr. of million
+
+-------------------------------------------------------------------
 Mon Mar 17 12:43:32 CET 2008 - jsrain@suse.cz
 
 - added 'StartupNotify=true' to the desktop file (bnc #304964)

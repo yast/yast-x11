@@ -45,30 +45,70 @@ global string helpCMD = _("
 X11 configuration module.
 ");
 
-//=============================================
-// 256 colors
-//---------------------------------------------
-global string colors256 = _("256 Colors");
+// 256 colors - lower case
+string colors256_lc = _("256 colors");
+// 256 Colors - upper case
+string colors256_uc = _("256 Colors");
+
+// 32768 colors - lower case
+string colors32k_lc = _("32768 colors");
+// 32768 colors - upper case
+string colors32k_uc = _("32768 Colors");
+
+// 65536 colors - lower case
+string colors65k_lc = _("65536 colors");
+// 65536 colors - upper case
+string colors65k_uc = _("65536 Colors");
+
+// 16.7 m colors - lower case
+string colors16m_lc = _("16.7 m colors");
+// 16.7 M colors - upper case
+string colors16m_uc = _("16.7 M Colors");
+// 16.7 Mio. colors - business language
+string colors16m_uc_business = _("16.7 Mio. Colors");
+
+global string colors256 = colors256_lc;
+global string colors32k = colors32k_lc;
+global string colors65k = colors65k_lc;
+global string colors16m = colors16m_lc;
+
 
 //=============================================
-// 32768 colors
-//---------------------------------------------
-global string colors32k = _("32768 Colors");
-
-//=============================================
-// 65536 colors
-//---------------------------------------------
-global string colors65k = _("65536 Colors");
-
-//=============================================
-// 16.7 Mio. colors
-//---------------------------------------------
-global string colors16m = _("16.7 Mio. Colors");
-
-//=============================================
-// color key
-//---------------------------------------------
+// Colors - title for a drop-down box
 global string colors = _("Colors");
+
+// string for a drop-down box
+global string color8bit  = _("256 [ 8 bit ]");
+// string for a drop-down box
+global string color15bit = _("32768 [ 15 bit ]");
+// string for a drop-down box
+global string color16bit = _("65536 [ 16 bit ]");
+// string for a drop-down box - lower case
+string color24bit_lc = _("16.7 m [ 24 bit ]");
+// string for a drop-down box - upper case
+string color24bit_uc = _("16.7 M [ 24 bit ]");
+// string for a drop-down box - business language
+string color24bit_uc_business = _("16.7 Mio. [ 24 bit ]");
+global string color24bit = color24bit_lc;
+
+//=============================================
+// Xgl strings
+//---------------------------------------------
+// label for a checkbox
+global string enableXgl = _("Enable Xgl");
+// label for a checkbox
+global string enableXglIfPossible = _("Enable Xgl if possible");
+// label for a text entry
+global string xglOptions = _("Xgl options");
+// label for a heading
+global string xglOptions = _("Xgl Options");
+// label for a text entry
+global string customXglOptions = _("Custom Xgl options");
+// label for a heading
+global string customXglOptions = _("Custom Xgl Options");
+// label for a drop-down box
+global string XServer = _("X server");
+
 
 //=============================================
 // graphics card
