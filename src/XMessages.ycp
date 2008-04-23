@@ -207,4 +207,8 @@ global string warnNoteBook = _("\nDual head mode is not supported with this lapt
 //---------------------------------------------
 global string warnInvalidColorResolution = _("\nThe selected resolution and/or color settings are not supported by the graphics cards framebuffer.\n");
 
+
+// text in a notification popup
+global string probeWarning = _("The system will now probe the graphics card.\nThe screen may flicker during this process.");
+
 } // end

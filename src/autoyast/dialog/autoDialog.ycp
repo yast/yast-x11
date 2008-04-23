@@ -122,6 +122,7 @@
 						     _("&Custom Xgl options"),
 						     x11["xgl_options"]:false),
 						   `TextEntry(`id(`xgl_options_string), ""),
+                                         // translators: this string is used in the context of fetching a configuration setting from the system
 						   `PushButton(`id(`fetch_xgl_options), _("Fetch from system"))
 					   )),
 				     `VSpacing(1),
