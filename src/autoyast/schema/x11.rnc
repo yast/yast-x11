@@ -22,6 +22,9 @@ frequency =
   element frequency { INTEGER }
 enable_3d =
   element enable_3d { BOOLEAN }
+enable_xgl =
+  element enable_xgl { BOOLEAN }
+xgl_custom_options = element xgl_custom_options { text }
 max_hsync =
   element max_hsync { INTEGER }
 max_vsync =
@@ -47,6 +50,8 @@ y2_x11 =
   | configure_x11
   | display_manager
   | enable_3d
+  | enable_xgl
+  | xgl_custom_options
   | window_manager
   | monitor
   | resolution

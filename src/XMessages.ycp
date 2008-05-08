@@ -67,10 +67,10 @@ string colors16m_uc = _("16.7 M Colors");
 // 16.7 Mio. colors - business language
 string colors16m_uc_business = _("16.7 Mio. Colors");
 
-global string colors256 = colors256_lc;
-global string colors32k = colors32k_lc;
-global string colors65k = colors65k_lc;
-global string colors16m = colors16m_lc;
+global string colors256 = colors256_uc;
+global string colors32k = colors32k_uc;
+global string colors65k = colors65k_uc;
+global string colors16m = colors16m_uc_business;
 
 
 //=============================================
@@ -89,7 +89,7 @@ string color24bit_lc = _("16.7 m [ 24 bit ]");
 string color24bit_uc = _("16.7 M [ 24 bit ]");
 // string for a drop-down box - business language
 string color24bit_uc_business = _("16.7 Mio. [ 24 bit ]");
-global string color24bit = color24bit_lc;
+global string color24bit = color24bit_uc_business;
 
 //=============================================
 // Xgl strings
@@ -101,11 +101,11 @@ global string enableXglIfPossible = _("Enable Xgl if possible");
 // label for a text entry
 global string xglOptions = _("Xgl options");
 // label for a heading
-global string xglOptions = _("Xgl Options");
+global string xglOptions_uc = _("Xgl Options");
 // label for a text entry
 global string customXglOptions = _("Custom Xgl options");
 // label for a heading
-global string customXglOptions = _("Custom Xgl Options");
+global string customXglOptions_uc = _("Custom Xgl Options");
 // label for a drop-down box
 global string XServer = _("X server");
 

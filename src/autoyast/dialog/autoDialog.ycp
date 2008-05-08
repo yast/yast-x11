@@ -99,6 +99,13 @@
             `item(`id("fvwm"), _("FVWM"), (
                         x11["window_manager"]:"kde" == "fvwm"))
             ];
+	boolean xgl_opts_enabled = false;
+	if (x11["xgl_custom_options"]:"" != "" )
+	{
+	    xgl_opts_enabled = true;
+	}
+        // translators: this string is used in the context of fetching a configuration setting from the system
+	string  fetch_xgl_opts = _("Fetch from system");
 	term contents =
 	    `Top(
 		 `VBox(
@@ -117,13 +124,11 @@
 						     x11["enable_xgl"]:false)
 					   ),
 				     `Left(
-					   `HBox( `CheckBox(
-						     `id(`xgl_options),
-						     _("&Custom Xgl options"),
-						     x11["xgl_options"]:false),
-						   `TextEntry(`id(`xgl_options_string), ""),
-                                         // translators: this string is used in the context of fetching a configuration setting from the system
-						   `PushButton(`id(`fetch_xgl_options), _("Fetch from system"))
+					   `HBox( `CheckBox( `id(`xgl_options), `opt(`notify), _("&Custom Xgl options"), xgl_opts_enabled),
+						      `HBox( `id(`xgl_opts_hbox),
+									 `TextEntry(`id(`xgl_options_string), "", x11["xgl_custom_options"]:"") //,
+									// `PushButton(`id(`fetch_xgl_options), fetch_xgl_opts)
+							  )
 					   )),
 				     `VSpacing(1),
 				     `HBox(
@@ -187,6 +192,7 @@ be started at boot time and what display manager should be used.</p>
 	Wizard::SetContents(caption,
 			    updateContents(), help, true, true);
 
+	UI::ChangeWidget(`id(`xgl_opts_hbox), `Enabled, (boolean)UI::QueryWidget(`id(`xgl_options), `Value));
 
 	any ret = nil;
 	repeat {
@@ -208,8 +214,21 @@ be started at boot time and what display manager should be used.</p>
 
 		boolean enable_3d = (boolean)UI::QueryWidget(`id(`enable_3d), `Value);
 	        AutoinstX11::x11["enable_3d"] = enable_3d;
+
+		boolean enable_xgl = (boolean)UI::QueryWidget(`id(`enable_xgl), `Value);
+	        AutoinstX11::x11["enable_xgl"] = enable_xgl;
+
+                if (enable_xgl && (boolean)UI::QueryWidget(`id(`xgl_options), `Value) )
+                {
+                    AutoinstX11::x11["xgl_custom_options"] = (string)UI::QueryWidget(`id(`xgl_options_string), `Value);
+                }
+		else
+		{
+		    AutoinstX11::x11["xgl_custom_options"] = "";
+		}
 	    }
 
+	    UI::ChangeWidget(`id(`xgl_opts_hbox), `Enabled, (boolean)UI::QueryWidget(`id(`xgl_options), `Value));
 
 	} until ( ret ==`next || ret ==`back || ret == `abort || ret == `cancel );
 
