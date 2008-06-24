@@ -258,6 +258,8 @@ sub getDisplaySize {
 	my $traversal = $mDesktop->getDisplayTraversal();
 	my @ratio  = @{$mDesktop->getDisplayRatio()};
 	if (defined $traversal) {
+        # if traversal is empty, set a minimal default value (bnc#388259)
+        if ($traversal eq "") { $traversal = 12.2; }
 		$traversal = sprintf ("%.1f",$traversal);
 		if ($traversal < 12.2) {
 			$traversal = 10.0;

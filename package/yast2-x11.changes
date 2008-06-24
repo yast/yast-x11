@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Jun 24 19:00:47 CEST 2008 - jdsn@suse.de
+
+- proper type conversion in autoinstallation (bnc#307967)
+- check for empty traversal parameter (bnc#388259)
+- show popup message before probing display (bnc#327604)
+- 2.17.0
+
+-------------------------------------------------------------------
 Fri May 16 16:40:22 CEST 2008 - jsrain@suse.cz
 
 - added categories Settings and System into desktop file

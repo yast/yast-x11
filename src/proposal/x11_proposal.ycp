@@ -31,6 +31,7 @@ import "Confirm";
 import "XMessages";
 import "XLib";
 import "Package";
+import "Popup";
 
 include "x11/x11Dialog.ycp";
 
@@ -97,6 +98,7 @@ if ( func == "MakeProposal" ) {
 	//--------------------------------------
 	if (! (boolean)XLib::isInitialized()) {
 		y2milestone ("Loading library cache...");
+		Popup::TimedMessage(XMessage::probeWarning, 15);
 		XLib::loadApplication();
 	}
 	//======================================

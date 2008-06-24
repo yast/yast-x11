@@ -170,10 +170,10 @@ global define boolean Write() {
 		SCR::Write (.sysconfig.windowmanager.DEFAULT_WM, windowManager);
 		SCR::Write (.sysconfig.windowmanager, nil);
 	}
-	integer hstart = display["min_hsync"]:30;
-	integer hstop  = display["max_hsync"]:60;
-	integer vstart = display["min_vsync"]:60;
-	integer vstop  = display["max_vsync"]:75;
+	integer hstart = tointeger(display["min_hsync"]:30);
+	integer hstop  = tointeger(display["max_hsync"]:60);
+	integer vstart = tointeger(display["min_vsync"]:60);
+	integer vstop  = tointeger(display["max_vsync"]:75);
 	y2milestone("X11-Auto: setup monitor <%1:%2>",current_vendor,current_model);
 	XLib::setMonitorCDB ( [current_vendor,current_model] );
 	XLib::setHsyncRange (hstart,hstop);
@@ -183,7 +183,8 @@ global define boolean Write() {
 	y2milestone("X11-Auto: setup resolution <%1>",resolution);
 	XLib::setResolution ( resolution );
 
-	integer colors = x11["color_depth"]:16;
+    // convert value to integer (bnc#307967)
+	integer colors = tointeger(x11["color_depth"]:16);
 	y2milestone("X11-Auto: setup color depth <%1>",colors);
 	XLib::setDefaultColorDepth ( tostring(colors) );
 
@@ -205,7 +206,7 @@ global define boolean Write() {
 		        SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER_XGL_OPTS, x11["xgl_custom_options"]:"" );
 		    }
 		}
-		
+
 	} else {
 		XLib::deactivate3D();
 	}
