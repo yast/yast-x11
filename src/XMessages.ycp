@@ -60,17 +60,20 @@ string colors65k_lc = _("65536 colors");
 // 65536 colors - upper case
 string colors65k_uc = _("65536 Colors");
 
-// 16.7 m colors - lower case
-string colors16m_lc = _("16.7 m colors");
-// 16.7 M colors - upper case
-string colors16m_uc = _("16.7 M Colors");
-// 16.7 Mio. colors - business language
-string colors16m_uc_business = _("16.7 Mio. Colors");
+// 16.7 M colors - lower case
+string colors16M_lc = _("16.7 M colors");
+// 16.7 M Colors - upper case
+string colors16M_uc = _("16.7 M Colors");
+
+// 16.7 Mio. colors - lower case - business language
+string colors16Mio_lc_business = _("16.7 Mio. colors");
+// 16.7 Mio. Colors - business language
+string colors16Mio_uc_business = _("16.7 Mio. Colors");
 
 global string colors256 = colors256_uc;
 global string colors32k = colors32k_uc;
 global string colors65k = colors65k_uc;
-global string colors16m = colors16m_uc_business;
+global string colors16m = colors16M_uc;
 
 
 //=============================================
@@ -78,18 +81,27 @@ global string colors16m = colors16m_uc_business;
 global string colors = _("Colors");
 
 // string for a drop-down box
-global string color8bit  = _("256 [ 8 bit ]");
+global string color8bit  = _("256 [8 bit]");
 // string for a drop-down box
-global string color15bit = _("32768 [ 15 bit ]");
+global string color15bit = _("32768 [15 bit]");
+// string for a drop-down box, PPC meaning: the PowerPC architecture
+global string color15bitPPC = _("32768 [15 bit] (PPC)");
 // string for a drop-down box
-global string color16bit = _("65536 [ 16 bit ]");
-// string for a drop-down box - lower case
-string color24bit_lc = _("16.7 m [ 24 bit ]");
-// string for a drop-down box - upper case
-string color24bit_uc = _("16.7 M [ 24 bit ]");
+global string color16bit = _("65536 [16 bit]");
+// string for a drop-down box, meaning "16.7 million" (colors)
+string color24bitM = _("16.7 M [24 bit]");
 // string for a drop-down box - business language
-string color24bit_uc_business = _("16.7 Mio. [ 24 bit ]");
-global string color24bit = color24bit_uc_business;
+string color24bitMio = _("16.7 Mio. [24 bit]");
+// string for a drop-down box
+string color24bitMillion = _("16.7 Million [24 bit]");
+global string color24bit = color24bitM;
+// string for a drop-down box, meaning "16.7 million" (colors)
+string color32bitM = _("16.7 M [32 bit]");
+// string for a drop-down box - business language
+string color32bitMio = _("16.7 Mio. [32 bit]");
+// string for a drop-down box
+string color32bitMillion = _("16.7 Million [32 bit]");
+global string color32bit = color32bitM;
 
 //=============================================
 // Xgl strings
@@ -123,7 +135,8 @@ global string monitor = _("Monitor: ");
 //=============================================
 // colorDepth
 //---------------------------------------------
-global string colorDepth = _("Colordepth: ");
+global string colorDepthOld = _("Colordepth: ");
+global string colorDepth    = _("Color Depth: ");
 
 //=============================================
 // deactivated
@@ -151,6 +164,11 @@ global string externalvga = _("Dual Head Mode: ");
 global string selectColorDepth = _("Select color depth:");
 
 //=============================================
+// resolution
+//---------------------------------------------
+global string resolution = _("Resolution:");
+
+//=============================================
 // selectResolution
 //---------------------------------------------
 global string selectResolution = _("Select resolution:");
@@ -158,7 +176,19 @@ global string selectResolution = _("Select resolution:");
 //=============================================
 // selectMonitor
 //---------------------------------------------
-global string selectMonitor = _("Select Monitor Vendor and Model:");
+global string selectMonitorOld = _("Select Monitor Vendor and Model:");
+global string selectMonitor = _("Select Monitor Vendor and Model");
+
+// selectTablet
+global string selectTablet = _("Select Tablet Vendor and Model");
+
+// tablet
+global string Tablet = _("Tablet:");
+
+// vendor - meaning "monitor vendor" (like "hardware vendor")
+global string Vendor = _("Vendor:");
+// model - meaning "monitor model"
+global string Model  = _("Model:");
 
 //=============================================
 // selectLink
@@ -178,8 +208,10 @@ global string Aspect = _("Aspect");
 //=============================================
 // selectDisplaySize
 //---------------------------------------------
-global string selectDisplayTraversal = _("Traversal") + " [ " + Inches + " ]:";
+global string selectDisplayTraversal = _("Traversal") + " [" + Inches + "]:";
 global string selectDisplayRatio = _("Aspect Ratio:");
+
+global string displaySettings = _("Display Settings");
 
 //=============================================
 // proposal menu and title text
@@ -196,6 +228,9 @@ global string testConfig = _("Test the Configuration");
 // Unconfigured
 //---------------------------------------------
 global string unconfigured = _("Unconfigured");
+
+// configure - in lower case
+global string configure = _("configure");
 
 //=============================================
 // warnNoteBook

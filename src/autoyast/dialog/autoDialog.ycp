@@ -12,6 +12,7 @@
     import "AutoinstX11";
     import "Wizard";
     import "Popup";
+    import "XMessages";
 
     /**
      * Build main Dialog
@@ -44,27 +45,17 @@
                     "2800x2100 (QSXGA+)",
                     "3200x2400 (QUXGA)"
                 ];
+
+    // made color depth list consistent and removed the 32bit special settings (bnc#405797)
 	list<map> depths_list = [
-			    $[
-			      "desc"	:_("8 Bit / 256 Colors"),
-			      "depth"	: 8
-			    ],
-			      $[
-				"desc"	:_("15 Bit / 32 K Colors (PPC)"),
-				"depth"	: 15
-			      ],
-			      $[
-				"desc"	:_("16 Bit / 64 K Colors"),
-				"depth"	: 16
-			      ],
-			      $[
-				"desc"	:_("24 Bit / 16 M Colors"),
-				"depth"	: 24
-			      ],
-			      $[
-				"desc"	:_("32 Bit / 16 M Colors"),
-				"depth"	: 32
-			      ]
+			    $[ "desc"	: XMessages::color8bit,
+			       "depth"	: 8   ],
+			    $[ "desc"	: XMessages::color15bit,
+				   "depth"	: 15  ],
+			    $[ "desc"	: XMessages::color16bit,
+				   "depth"	: 16  ],
+			    $[ "desc"	: XMessages::color24bit,
+				   "depth"	: 24  ]
 	];
 
 
@@ -75,7 +66,7 @@
 
 	foreach(map d, depths_list , ``{
 	    color_depths=add(color_depths,
-                `item( `id(d["depth"]:16), d["desc"]:_("16 Bit / 64 K Colors") ,
+                `item( `id(d["depth"]:16), d["desc"]:XMessages::color16bit,
                     ( d["depth"]:16 == x11["color_depth"]:16)));
 	});
         list displaymanager =

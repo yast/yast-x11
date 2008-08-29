@@ -35,6 +35,7 @@ my $fbdev= 0;
 my %section;
 my $config;
 my %cdb;
+my %tabletCDB;
 
 #==========================================
 # GetFbColor
@@ -258,52 +259,13 @@ sub getDisplaySize {
 	my $traversal = $mDesktop->getDisplayTraversal();
 	my @ratio  = @{$mDesktop->getDisplayRatio()};
 	if (defined $traversal) {
-        # if traversal is empty, set a minimal default value (bnc#388259)
-        if ($traversal eq "") { $traversal = 12.2; }
-		$traversal = sprintf ("%.1f",$traversal);
-		if ($traversal < 12.2) {
-			$traversal = 10.0;
-		} elsif (($traversal >= 12.2) && ($traversal < 13.3)) {
-			$traversal = 12.2;
-		} elsif (($traversal >= 13.3) && ($traversal < 14.1)) {
-			$traversal = 13.3;
-		} elsif (($traversal >= 14.1) && ($traversal < 14.5)) {
-			$traversal = 14.1;
-		} elsif (($traversal >= 14.5) && ($traversal < 15.4)) {
-			$traversal = 15;
-		} elsif (($traversal >= 15.4) && ($traversal < 16.5)) {
-			$traversal = 15.4;
-		} elsif (($traversal >= 16.5) && ($traversal < 18.0)) {
-			$traversal = 17;
-		} elsif (($traversal >= 18.0) && ($traversal < 18.3)) {
-			$traversal = 18;
-		} elsif (($traversal >= 18.3) && ($traversal < 18.5)) {
-			$traversal = 18.1;
-		} elsif (($traversal >= 18.5) && ($traversal < 19.5)) {
-			$traversal = 19;
-		} elsif (($traversal >= 19.5) && ($traversal < 20.5)) {
-			$traversal = 20;
-		} elsif (($traversal >= 20.5) && ($traversal < 21.3)) {
-			$traversal = 21.1;
-		} elsif (($traversal >= 21.3) && ($traversal < 21.5)) {
-			$traversal = 21.3;
-		} elsif (($traversal >= 21.5) && ($traversal < 22.2)) {
-			$traversal = 22.2;
-		} elsif (($traversal >= 22.2) && ($traversal < 23.5)) {
-			$traversal = 23;
-		} elsif (($traversal >= 23.5) && ($traversal < 24.5)) {
-			$traversal = 24;
-		} elsif (($traversal >= 24.5) && ($traversal < 30.5)) {
-			$traversal = 30;
-		} elsif (($traversal >= 30.5) && ($traversal < 31.8)) {
-			$traversal = 31.5;
-		} elsif (($traversal >= 31.8) && ($traversal < 32.5)) {
-			$traversal = 32;
-		} elsif (($traversal >= 32.5) && ($traversal < 40.5)) {
-			$traversal = 40;
-		} elsif ($traversal >= 40.5) {
-			$traversal = 46;
-		}
+        # if traversal is empty or not a numeric, set it to undef and do not operate on it (bnc#388259)
+        if ($traversal eq "" || $traversal !~ /^\d+\.?\d*$/) 
+        { $traversal = "undef"; }
+        else
+        # just round the computed (real) traversal to a tenth
+		{ $traversal = sprintf ("%.1f", $traversal); }
+
 		@result = ($traversal,@ratio);
 	}
 	return \@result;
@@ -896,6 +858,95 @@ sub setXkbOptions {
 	    $mKeyboard->addXKBOption ($option);
 	}
 }
+
+#==========================================
+# getTabletCDB
+#------------------------------------------
+BEGIN{ $TYPEINFO{getTabletCDB} = ["function",["map","string",["list","string"]]]; }
+sub getTabletCDB {
+    my $class = shift;
+    my $size = keys %tabletCDB;
+    if ($size > 0) {
+        return \%tabletCDB;
+    }
+    my $mTablet = new SaX::SaXManipulateTablets (
+        $section{Pointers},$section{Layout}
+    );
+    $mTablet->selectPointer (1);
+    my @vendorList = @{$mTablet->getTabletVendorList()};
+    foreach my $vendor (@vendorList) {
+        my $modelList = $mTablet->getTabletModelList ($vendor);
+        $tabletCDB{$vendor} = $modelList;
+    }
+    return \%tabletCDB;
+}
+#==========================================
+# getTabletVendor
+#------------------------------------------
+BEGIN{ $TYPEINFO{getTabletVendor} = ["function", "string"]; }
+sub getTabletVendor {
+        my $class = shift;
+        my $mTablet = new SaX::SaXManipulateTablets (
+                $section{Pointers},$section{Layout}
+        );
+        $mTablet->selectPointer(1);
+        my $vendor = $mTablet->getVendor();
+        if ($vendor =~ /Unknown/i) {
+                return "undef";
+        }
+        return $vendor;
+}
+#==========================================
+# getTabletModel
+#------------------------------------------
+BEGIN{ $TYPEINFO{getTabletModel} = ["function", "string"]; }
+sub getTabletModel {
+        my $class = shift;
+        my $mTablet = new SaX::SaXManipulateTablets (
+                $section{Pointers},$section{Layout}
+        );
+        $mTablet->selectPointer(1);
+        my $model = $mTablet->getName();
+        if ($model =~ /Unknown/i) {
+                return "undef";
+        }
+        return $model;
+}
+#==========================================
+# getTabletPointer
+#------------------------------------------
+BEGIN{ $TYPEINFO{getTabletPointer} = ["function", "string"]; }
+sub getTabletPointer {
+        my $class = shift;
+        my $mTablet = new SaX::SaXManipulateTablets (
+                $section{Pointers},$section{Layout}
+        );
+        # check if one of the first 5 pointer devices is a tablet
+        my $i;
+        for ( $i=0 ; $i <= 4 ; $i++ )
+        {
+            $mTablet->selectPointer($i);
+            if ($mTablet->isTablet() )
+            {
+                return "$i";
+            }
+        }
+        return "undef";
+}
+#==========================================
+# setTablet
+#------------------------------------------
+BEGIN{ $TYPEINFO{setTablet} = ["function","void",["list","string"]]; }
+sub setTablet {
+        my $vendor = shift;
+        my $model  = shift;
+        my $mTablet = new SaX::SaXManipulateTablets (
+                $section{Pointers},$section{Layout}
+        );
+        $mTablet->selectPointer(1);
+        $mTablet->setTablet($vendor, $model);
+}
+
 
 #==========================================
 # test code

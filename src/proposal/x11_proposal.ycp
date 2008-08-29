@@ -98,7 +98,7 @@ if ( func == "MakeProposal" ) {
 	//--------------------------------------
 	if (! (boolean)XLib::isInitialized()) {
 		y2milestone ("Loading library cache...");
-		Popup::TimedMessage(XMessage::probeWarning, 15);
+		Popup::TimedMessage(XMessages::probeWarning, 15);
 		XLib::loadApplication();
 	}
 	//======================================
@@ -117,6 +117,9 @@ if ( func == "MakeProposal" ) {
 	boolean extVGAactive= (boolean) XLib::isExternalVGAactive();
 	list    monitorSize = (list)    XLib::getDisplaySize();
 	string  monitorInch = (string)  monitorSize[0]:"undef";
+    //string  tabletPtr   = (string) XLib::getTabletPointer();
+    string  tabletName  = (string)  XLib::getTabletModel();
+    string  tabletVendor= (string)  XLib::getTabletVendor();
 
 	//======================================
 	// Prepare proposal
@@ -217,6 +220,20 @@ if ( func == "MakeProposal" ) {
 			//warnNoteBookPopup();
 		}
 	}
+    //======================================
+    // Tablet settings (fate#302888)
+    //--------------------------------------
+    string tabletStatus = XMessages::unconfigured;
+    if ( tabletVendor != "undef"  &&
+         tabletName   != "undef"     )
+    {
+        tabletStatus = sformat("%1 - %2", tabletVendor, tabletName);
+    }
+    proposal = proposal
+        + LI
+            + XMessages::Tablet + " " + tabletStatus
+            + " (<a href=\"sax-tablet\">" + XMessages::configure + "</a>)"
+        + IL;
 	//======================================
 	// Test your configuration now
 	//--------------------------------------
@@ -241,7 +258,8 @@ if ( func == "MakeProposal" ) {
 			"sax-colors",
 			"sax-3d",
 			"sax-ext-vga",
-			"sax-test"
+			"sax-test",
+            "sax-tablet"
 		]
 	];
 	return ret;
@@ -340,6 +358,15 @@ else if ( func == "AskUser" ) {
 	if (chosenID == "x11_conf") {
 		infoPopup();
 	}
+    if (chosenID == "sax-tablet" ) {
+        y2milestone("X11: setup tablet...");
+        string vendor = XLib::getTabletVendor();
+        string model  = XLib::getTabletModel();
+        map<string,list> tcdb = XLib::getTabletCDB();
+        list selectedTablet = setupTablet(tcdb, vendor, model);
+        y2milestone("X11: setup tablet <%1>", selectedTablet);
+        XLib::setTablet( (list<string>)selectedTablet );
+    }
 }
 //===================================================
 // Handle proposal description...
