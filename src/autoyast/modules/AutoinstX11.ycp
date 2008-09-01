@@ -141,7 +141,9 @@ global define boolean Read() {
 	}
 	current_vendor = (string) XLib::getMonitorVendor();
 	current_model  = (string) XLib::getMonitorModel();
-	x11["color_depth"] = (string) XLib::getActiveColorDepth();
+    // store this value with type integer in the map so it gets exported
+    // correctly to the autoyast profile (bnc#418648).
+    x11["color_depth"] = tointeger(XLib::getActiveColorDepth());
 	x11["resolution"]  = (string) XLib::getActiveResolutionString();
 	display["min_hsync"] = tointeger(XLib::getHsyncMin());
 	display["max_hsync"] = tointeger(XLib::getHsyncMax());
@@ -184,7 +186,8 @@ global define boolean Write() {
 	XLib::setResolution ( resolution );
 
     // convert value to integer (bnc#307967)
-	integer colors = tointeger(x11["color_depth"]:16);
+    // made obsolete by fix for (bnc#418648), cast the value to be sure it is integer
+	integer colors = (integer) x11["color_depth"]:16;
 	y2milestone("X11-Auto: setup color depth <%1>",colors);
 	XLib::setDefaultColorDepth ( tostring(colors) );
 

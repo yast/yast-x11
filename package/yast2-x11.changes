@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep  1 20:20:12 CEST 2008 - jdsn@suse.de
+
+- fixed type conversion in autoYaST setup (bnc#418648)
+- 2.17.2
+
+-------------------------------------------------------------------
 Fri Aug 29 23:02:24 CEST 2008 - jdsn@suse.de
 
 - tablet configuration support during installation (fate#302888)
