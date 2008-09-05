@@ -63,6 +63,8 @@ sub loadApplication {
 	my $sinit = new SaX::SaXInit;
 	$ENV{HW_UPDATE} = 1;
 	$sinit -> doInit();
+    # do not set busid parameter in single chip mode, therefore try to set the primary chip (bnc#381644)
+    $sinit -> setPrimaryChip();
 	my @importID = (
 		$SaX::SAX_CARD,
 		$SaX::SAX_DESKTOP,
