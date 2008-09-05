@@ -24,6 +24,15 @@ STATUS        : Development
 module "XMessages";
 
 textdomain "x11";
+
+
+//
+// For historical reasons some strings contain a trailing space character.
+// These will be left untouched unless we need to change them.
+// In the long run no trailing spaces should be used, insert them where needed explicitly.
+//
+
+
 //=============================================
 // popup with message already showed
 //---------------------------------------------
@@ -132,11 +141,14 @@ global string graphicsCard = _("Graphics card: ");
 //---------------------------------------------
 global string monitor = _("Monitor: ");
 
+// Display:
+global string display = _("Display:");
+
 //=============================================
 // colorDepth
 //---------------------------------------------
 global string colorDepthOld = _("Colordepth: ");
-global string colorDepth    = _("Color Depth: ");
+global string colorDepth    = _("Color Depth:");
 
 //=============================================
 // deactivated
@@ -178,6 +190,7 @@ global string selectResolution = _("Select resolution:");
 //---------------------------------------------
 global string selectMonitorOld = _("Select Monitor Vendor and Model:");
 global string selectMonitor = _("Select Monitor Vendor and Model");
+global string selectDisplayVendorAndModel = _("Select Display Vendor and Model");
 
 // selectTablet
 global string selectTablet = _("Select Tablet Vendor and Model");
@@ -185,10 +198,29 @@ global string selectTablet = _("Select Tablet Vendor and Model");
 // tablet
 global string Tablet = _("Tablet:");
 
-// vendor - meaning "monitor vendor" (like "hardware vendor")
+// vendor - meaning "monitor vendor" or "tablet vendor" (like "hardware vendor")
 global string Vendor = _("Vendor:");
-// model - meaning "monitor model"
+// model - meaning "monitor model" or "tablet vendor"
 global string Model  = _("Model:");
+
+// Monitor Vendor and Model:
+global string monitorVendorAndModel = _("Monitor Vendor and Model:");
+
+// Monitor Vendor and Model:
+global string displayVendorAndModel = _("Display Vendor and Model:");
+
+// Tablet Vendor and Model:
+global string tabletVendorAndModel = _("Tablet Vendor and Model:");
+
+// Size
+global string Size = _("Size:");
+
+// Monitor Size
+global string monitorSize = _("Monitor Size:");
+
+// Monitor Size
+global string displaySize = _("Display Size:");
+
 
 //=============================================
 // selectLink
@@ -231,6 +263,9 @@ global string unconfigured = _("Unconfigured");
 
 // configure - in lower case
 global string configure = _("configure");
+
+// change - in lower case
+global string Change = _("change");
 
 //=============================================
 // warnNoteBook

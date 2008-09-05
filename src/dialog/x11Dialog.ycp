@@ -97,19 +97,17 @@ define string setupColors ( string currentRes, string currentDepth )
     UI::CloseDialog();
     if (ret == `cancel)
     {
-        UI::CloseDialog();
         return currentDepth;
     }
 
     return color;
-
 };
 
 //================================
 // setupResolutions
 //--------------------------------
 define string setupResolutions (list reslist, string currentText, string currentColor)
-{ // rewritten to be consistent with 
+{ // rewritten to be consistent with
 
     string topic = XMessages::resolution;
     UI::OpenDialog( `MarginBox( 0.5, 0.5,

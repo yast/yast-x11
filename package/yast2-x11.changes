@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep  5 22:36:25 CEST 2008 - jdsn@suse.de
+
+- consistent look of x11 proposal with others (bnc#327435)
+- removed a wrong CloseDialog that crashed the installation
+- 2.17.4
+
+-------------------------------------------------------------------
 Thu Sep  4 19:02:46 CEST 2008 - jdsn@suse.de
 
 - no longer set BusID for single card configurations (bnc #381644)
