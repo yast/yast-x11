@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 11 13:13:40 CEST 2008 - jdsn@suse.de
+
+- fix for no BusID setting (bnc#381644)
+- 2.17.5
+
+-------------------------------------------------------------------
 Fri Sep  5 22:36:25 CEST 2008 - jdsn@suse.de
 
 - consistent look of x11 proposal with others (bnc#327435)
