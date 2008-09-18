@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep 18 16:00:19 CEST 2008 - jdsn@suse.de
+
+- temporary disable the fix for (bnc#381644) because of (bnc#427371)
+- set propper display size if size is undefined
+- 2.17.6
+
+-------------------------------------------------------------------
 Thu Sep 11 13:13:40 CEST 2008 - jdsn@suse.de
 
 - fix for no BusID setting (bnc#381644)

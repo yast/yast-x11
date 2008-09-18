@@ -299,8 +299,11 @@ else if ( func == "AskUser" ) {
 	if (chosenID == "sax-displaysize") {
 		y2milestone("X11: setup displaysize...");
 		list<string> currentSize = XLib::getDisplaySize();
+        // in case of undefined value fallback to a default
+        if (currentSize[0]:"undef" == "undef")
+            currentSize[0] = "15.0";
 		list<string> selectedSize = setupDisplaySize (
-			currentSize[0]:"15",
+			currentSize[0]:"15.0",
 			currentSize[1]:"4" + "/" + currentSize[2]:"3"
 		);
 		y2milestone("X11: setup displaysize <%1>",selectedSize);
