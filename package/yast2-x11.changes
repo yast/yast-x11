@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 23 11:53:17 CEST 2008 - jdsn@suse.de
+
+- reenabling setPrimaryChip call due to (bnc#427371)
+- 2.17.7
+
+-------------------------------------------------------------------
 Thu Sep 18 16:00:19 CEST 2008 - jdsn@suse.de
 
 - temporary disable the fix for (bnc#381644) because of (bnc#427371)
