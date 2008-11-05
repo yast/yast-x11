@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Nov  5 19:18:52 CET 2008 - jdsn@suse.de
+
+- string fixes for x11 proposal
+
+-------------------------------------------------------------------
 Tue Sep 23 11:53:17 CEST 2008 - jdsn@suse.de
 
 - reenabling setPrimaryChip call due to (bnc#427371)

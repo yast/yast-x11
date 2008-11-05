@@ -170,13 +170,13 @@ if ( func == "MakeProposal" ) {
     // open sublist for display settings
     proposal = proposal + LI + XMessages::displaySettings
      + UL + LI
-               + XMessages::monitor    + " " + monitorName    + " (<a href=\"sax-monitor\">change</a>)"
+               + XMessages::monitor    + " " + monitorName    + " (<a href=\"sax-monitor\">" + _("change") +" </a>)"
           + IL + LI
-               + XMessages::Size       + " " + monitorSizeStr + " (<a href=\"sax-displaysize\">change</a>)"
+               + XMessages::Size       + " " + monitorSizeStr + " (<a href=\"sax-displaysize\">" + _("change") + "</a>)"
           + IL + LI
-               + XMessages::resolution + " " + resolution     + " (<a href=\"sax-resolution\">change</a>)"
+               + XMessages::resolution + " " + resolution     + " (<a href=\"sax-resolution\">" + _("change") + "</a>)"
           + IL + LI
-               + XMessages::colorDepth + " " + colorDepth + " bit - " + colorCount +  " (<a href=\"sax-colors\">change</a>)"
+               + XMessages::colorDepth + " " + colorDepth + " bit - " + colorCount +  " (<a href=\"sax-colors\">" + _("change") + "</a>)"
           + IL  ;
     // sublist still open here - following items are within "display settings" section
 
@@ -189,7 +189,7 @@ if ( func == "MakeProposal" ) {
             status = XMessages::activated;
         }
         proposal = proposal + LI
-                 + XMessages::acceleration +  " " + status  +  " (<a href=\"sax-3d\">change</a>)"
+                 + XMessages::acceleration +  " " + status  +  " (<a href=\"sax-3d\">" + _("change") + "</a>)"
                  + IL ;
     }
 
@@ -200,7 +200,7 @@ if ( func == "MakeProposal" ) {
         if (extVGAactive) { status = XMessages::activated; }
 
         proposal = proposal + LI
-                 + XMessages::externalvga + " " + status + " (<a href=\"sax-ext-vga\">change</a>"
+                 + XMessages::externalvga + " " + status + " (<a href=\"sax-ext-vga\">" + _("change") + "</a>)"
                  + IL;
 	}
     else
