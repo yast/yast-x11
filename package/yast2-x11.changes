@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Nov  6 23:26:31 CET 2008 - jdsn@suse.de
+
+- adding more verbose loggin to x11 proposal
+
+-------------------------------------------------------------------
 Wed Nov  5 19:18:52 CET 2008 - jdsn@suse.de
 
 - string fixes for x11 proposal

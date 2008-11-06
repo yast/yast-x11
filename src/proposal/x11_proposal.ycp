@@ -121,6 +121,26 @@ if ( func == "MakeProposal" ) {
     string  tabletName  = (string)  XLib::getTabletModel();
     string  tabletVendor= (string)  XLib::getTabletVendor();
 
+    // add more verbose logging
+    y2milestone("Reading libsax data finished.");
+    y2milestone("Creating proposal summary with the following data:");
+    y2milestone("%1", $[
+        "resolution"    : resolution,
+        "colorDepth"    : colorDepth,
+        "cardName"      : cardName,
+        "monitorName"   : monitorName,
+        "has3D"         : has3D,
+        "isFbdevBased"  : isFbdevBased,
+        "is3DCard"      : is3DCard,
+        "isNoteBook"    : isNoteBook,
+        "isNoteBookHW"  : isNoteBookHW,
+        "extVGAactive"  : extVGAactive,
+        "monitorSize"   : monitorSize,
+        "monitorInch"   : monitorInch,
+        "tabletName"    : tabletName,
+        "tabletVendor"  : tabletVendor
+    ]);
+
 	//======================================
 	// Prepare proposal
 	//--------------------------------------
