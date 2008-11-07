@@ -51,6 +51,7 @@ define void warnInvalidColorResolution () ``{
 define string setupColors ( string currentRes, string currentDepth )
 { // rewritten due to consistency with setupDisplaySize
 
+    y2milestone("Called setupColors with resolution(%1) and colorDepth(%2)", currentRes, currentDepth);
     string topic = XMessages::colorDepth;
     UI::OpenDialog( `MarginBox( 0.5, 0.5,
         `VBox(
@@ -86,10 +87,14 @@ define string setupColors ( string currentRes, string currentDepth )
 
         color = (string) UI::QueryWidget(`id(`depth), `Value);
 
-        if (! XLib::hasValidColorResolutionSetup (color,currentRes))
+        // let the user cancel the dialog with cancel (bnc#440281)
+        if ( ret == `ok )
         {
-            warnInvalidColorResolution();
-            ret = nil;
+            if (! XLib::hasValidColorResolutionSetup (color,currentRes))
+            {
+                warnInvalidColorResolution();
+                ret = nil;
+            }
         }
 
     } until ( ret == `ok || ret == `cancel);
@@ -109,6 +114,7 @@ define string setupColors ( string currentRes, string currentDepth )
 define string setupResolutions (list reslist, string currentText, string currentColor)
 { // rewritten to be consistent with
 
+    y2milestone("Called setupResolution with reslist(%1) and resolution(%2) and color(%3).", reslist, currentText, currentColor);
     string topic = XMessages::resolution;
     UI::OpenDialog( `MarginBox( 0.5, 0.5,
         `VBox(
@@ -132,11 +138,17 @@ define string setupResolutions (list reslist, string currentText, string current
         ret = UI::UserInput();
 
         res = (string) UI::QueryWidget(`id(`resitem), `Value);
-        if (! XLib::hasValidColorResolutionSetup(currentColor, res))
+
+        // let the user cancel the dialog with cancel (bnc#440281)
+        if ( ret == `ok )
         {
-            warnInvalidColorResolution();
-            ret = nil;
+            if (! XLib::hasValidColorResolutionSetup(currentColor, res))
+            {
+                warnInvalidColorResolution();
+                ret = nil;
+            }
         }
+
     } until (ret == `ok || ret == `cancel);
 
     UI::CloseDialog();
@@ -152,6 +164,7 @@ define list<string> setupDisplaySize (string currentTraversal, string currentRat
 {
     // function rewritten because of (bnc#331664) and (bnc#399411)
 
+    y2milestone("Called setupDisplaySize with traversal(%1) and ratio(%2)", currentTraversal, currentRatio);
     string topic1 = XMessages::selectDisplayTraversal;
     string topic2 = XMessages::selectDisplayRatio;
     // offer some common display settings
@@ -324,6 +337,8 @@ define list setupMonitor ( map<string,list> data, string currentVendor, string c
 //--------------------------------
 define list<string> setupTablet ( map<string,list> data, string currentVendor, string currentModel )
 {
+    y2debug("Called setupTablet with data(%1)", data);
+    y2milestone("Called setupTablet with vendor(%1) and model(%2)", currentVendor, currentModel);
     any ret = nil;
     list<string> result = [];
     list<string> vendorList = [];

@@ -131,6 +131,37 @@ sub writeConfiguration {
 	return $status;
 }
 #==========================================
+# setPreferredMode
+# set the selected resolution and color depth the user selected (bnc#402581)
+#------------------------------------------
+BEGIN{ $TYPEINFO{setPreferredMode} = ["function", "boolean", "string", "string"]; }
+sub setPreferredMode {
+	my $class = shift;
+	my $resolution = shift;
+	my $colorDepth = shift;
+	my $mCard = new SaX::SaXManipulateCard ( $section{Card} );
+	$mCard->selectCard(0);
+
+	# if card driver is fbdev do not set preferred mode
+	if ( $mCard->getCardDriver() eq "fbdev" )
+	{ return 0; }
+
+	# check if the values are valid
+	if ( $resolution !~ /^\d+x\d+$/  ||
+	     $colorDepth !~ /^\d+$/          )
+	{ return 0; }
+
+	# really set the preferred mode
+	my $mDesktop = new SaX::SaXManipulateDesktop (
+		$section{Desktop},$section{Card},$section{Path}
+	);
+	$mDesktop->selectDesktop(0);
+	$mDesktop->setPreferredMode( $resolution );
+	$mDesktop->setColorDepth( $colorDepth );
+
+	return 1;
+}
+#==========================================
 # testConfiguration
 #------------------------------------------
 BEGIN{ $TYPEINFO{testConfiguration} = ["function","boolean"]; }

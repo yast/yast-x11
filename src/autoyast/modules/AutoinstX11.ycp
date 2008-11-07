@@ -213,6 +213,17 @@ global define boolean Write() {
 	} else {
 		XLib::deactivate3D();
 	}
+	// set the PreferredMode (bnc#402581)
+	string colorDepth = tostring(colors);
+	y2milestone("Trying to set X11 PreferredMode to: %1 @ %2", resolution, colorDepth);
+	if ( XLib::setPreferredMode(resolution, colorDepth) )
+	{
+		y2milestone("Sucessfully set the PreferredMode for X11");
+	}
+	else
+	{
+		y2error("Failed to set the PreferredMode for X11.");
+	}
 	boolean status = XLib::writeConfiguration();
 	return  status;
 }
