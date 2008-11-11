@@ -12,6 +12,8 @@ textdomain "x11";
 import "Summary";
 import "Directory";
 import "XLib";
+import "Arch";
+import "Mode";
 
 //=======================================
 // Globals
@@ -26,6 +28,27 @@ global boolean modified = false;
 global list vendors = [];
 global list models  = [];
 global list<map> all_monitors = [];
+
+
+//=======================================
+// autoyastX11Allowed
+//
+// disable autoYaST functionality (currently in Read and Export)
+//---------------------------------------
+global boolean autoyastX11Allowed ()
+{
+	// on Itanium during installation no X11 cloning should be performed (bnc#439612)
+	if ( Arch::ia64()  &&  Mode::mode() == "installation" )
+	{
+		y2warning("On Itanium (ia64) during installation no cloning of the X11 configuration is supported.");
+		y2warning("X11 will return an empty configuration now.");
+		y2warning("You can however create a clone config including X11 within the running system.");
+		return false;
+	}
+
+	return true;
+}
+
 
 //=======================================
 // SetModified
@@ -57,6 +80,8 @@ global define boolean Import (map settings) {
 // Export
 //---------------------------------------
 global define map Export () {
+	if ( ! autoyastX11Allowed() ) { return $[]; }
+
 	monitor["display"] = display;
 	monitor["monitor_device"] = current_model;
 	monitor["monitor_vendor"] = current_vendor;
@@ -128,6 +153,8 @@ global define void readMonitorDB() {
 // Read
 //---------------------------------------
 global define boolean Read() {
+	if ( ! autoyastX11Allowed() ) { return true; }
+
 	x11["display_manager"] = (string) eval (SCR::Read(
 		.sysconfig.displaymanager.DISPLAYMANAGER
 	));

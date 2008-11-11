@@ -25,7 +25,6 @@ STATUS        : Development
 textdomain "x11";
 
 import "AutoinstX11";
-import "Arch";
 
 include "x11/autoDialog.ycp";
 
@@ -49,18 +48,11 @@ if(size(WFM::Args()) > 0 && is(WFM::Args(0), string))
 y2debug("func=%1",  func);
 y2debug("param=%1", param);
 
-//=================================
-// check if this hardware supports X11 configuration (bnc#439612)
-//---------------------------------
-if ( ! Arch::x11_setup_needed() ) {
-	y2milestone("On this architecture no automatic X11 setup is supported. Thus no autoYaST configuration will be created or written.");
-	ret = false;
-}
 
 //=================================
 // Import configuration
 //---------------------------------
-else if (func == "Import") {
+if (func == "Import") {
 	ret = AutoinstX11::Import(param);
 }
 

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Nov 11 23:32:05 CET 2008 - jdsn@suse.de
+
+- only disable X11 cloning during installation (bnc#439612)
+
+-------------------------------------------------------------------
 Fri Nov  7 02:27:35 CET 2008 - jdsn@suse.de
 
 - fix deadlock in x11 dialogs (bnc#440281)
