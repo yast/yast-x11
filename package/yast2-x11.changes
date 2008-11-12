@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Nov 12 18:25:16 CET 2008 - jdsn@suse.de
+
+- fix tablet proposal during installation (bnc#429770)
+
+-------------------------------------------------------------------
 Tue Nov 11 23:32:05 CET 2008 - jdsn@suse.de
 
 - only disable X11 cloning during installation (bnc#439612)

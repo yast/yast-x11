@@ -898,87 +898,84 @@ sub setXkbOptions {
 #------------------------------------------
 BEGIN{ $TYPEINFO{getTabletCDB} = ["function",["map","string",["list","string"]]]; }
 sub getTabletCDB {
-    my $class = shift;
-    my $size = keys %tabletCDB;
-    if ($size > 0) {
-        return \%tabletCDB;
-    }
-    my $mTablet = new SaX::SaXManipulateTablets (
-        $section{Pointers},$section{Layout}
-    );
-    $mTablet->selectPointer (1);
-    my @vendorList = @{$mTablet->getTabletVendorList()};
-    foreach my $vendor (@vendorList) {
-        my $modelList = $mTablet->getTabletModelList ($vendor);
-        $tabletCDB{$vendor} = $modelList;
-    }
-    return \%tabletCDB;
+	my $class = shift;
+	my $size = keys %tabletCDB;
+	if ($size > 0) {
+		return \%tabletCDB;
+	}
+	my $mTablet = new SaX::SaXManipulateTablets (
+		$section{Pointers},$section{Layout}
+	);
+	my @vendorList = @{$mTablet->getTabletVendorList()};
+	foreach my $vendor (@vendorList) {
+		my $modelList = $mTablet->getTabletModelList ($vendor);
+		$tabletCDB{$vendor} = $modelList;
+	}
+	return \%tabletCDB;
 }
 #==========================================
 # getTabletVendor
 #------------------------------------------
 BEGIN{ $TYPEINFO{getTabletVendor} = ["function", "string"]; }
 sub getTabletVendor {
-        my $class = shift;
-        my $mTablet = new SaX::SaXManipulateTablets (
-                $section{Pointers},$section{Layout}
-        );
-        $mTablet->selectPointer(1);
-        my $vendor = $mTablet->getVendor();
-        if ($vendor =~ /Unknown/i) {
-                return "undef";
-        }
-        return $vendor;
+	my $class = shift;
+	my $mTablet = new SaX::SaXManipulateTablets (
+		$section{Pointers},$section{Layout}
+	);
+	my $vendor = $mTablet->getVendor();
+	if ($vendor =~ /Unknown/i) {
+		return "undef";
+	}
+	return $vendor;
 }
 #==========================================
 # getTabletModel
 #------------------------------------------
 BEGIN{ $TYPEINFO{getTabletModel} = ["function", "string"]; }
 sub getTabletModel {
-        my $class = shift;
-        my $mTablet = new SaX::SaXManipulateTablets (
-                $section{Pointers},$section{Layout}
-        );
-        $mTablet->selectPointer(1);
-        my $model = $mTablet->getName();
-        if ($model =~ /Unknown/i) {
-                return "undef";
-        }
-        return $model;
+	my $class = shift;
+	my $mTablet = new SaX::SaXManipulateTablets (
+		$section{Pointers},$section{Layout}
+	);
+	my $model = $mTablet->getName();
+	if ($model =~ /Unknown/i) {
+		return "undef";
+	}
+	return $model;
 }
 #==========================================
-# getTabletPointer
+# getTabletID
 #------------------------------------------
-BEGIN{ $TYPEINFO{getTabletPointer} = ["function", "string"]; }
-sub getTabletPointer {
-        my $class = shift;
-        my $mTablet = new SaX::SaXManipulateTablets (
-                $section{Pointers},$section{Layout}
-        );
-        # check if one of the first 5 pointer devices is a tablet
-        my $i;
-        for ( $i=0 ; $i <= 4 ; $i++ )
-        {
-            $mTablet->selectPointer($i);
-            if ($mTablet->isTablet() )
-            {
-                return "$i";
-            }
-        }
-        return "undef";
+BEGIN{ $TYPEINFO{getTabletID} = ["function", "string"]; }
+sub getTabletID {
+	my $mTablet = new SaX::SaXManipulateTablets (
+		$section{Pointers},$section{Layout}
+	);
+	my $tabletID = 0;
+	for ( my $i = $SaX::SAX_CORE_POINTER ; $i < $section{Pointers}->getCount() ; $i += 2 ) {
+		if ($mTablet->selectPointer($i)) {
+		if ($mTablet->isTablet()) {
+			$tabletID = $i;
+		}
+		}
+	}
+	if ( $tabletID == 0 ) {
+		return 0;
+	}
+	$mTablet->selectPointer( $tabletID );
+	return $tabletID;
 }
 #==========================================
 # setTablet
 #------------------------------------------
 BEGIN{ $TYPEINFO{setTablet} = ["function","void",["list","string"]]; }
 sub setTablet {
-        my $vendor = shift;
-        my $model  = shift;
-        my $mTablet = new SaX::SaXManipulateTablets (
-                $section{Pointers},$section{Layout}
-        );
-        $mTablet->selectPointer(1);
-        $mTablet->setTablet($vendor, $model);
+	my $vendor = shift;
+	my $model  = shift;
+	my $mTablet = new SaX::SaXManipulateTablets (
+		$section{Pointers},$section{Layout}
+	);
+	$mTablet->setTablet($vendor, $model);
 }
 
 

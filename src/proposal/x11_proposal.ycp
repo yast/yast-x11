@@ -117,9 +117,7 @@ if ( func == "MakeProposal" ) {
 	boolean extVGAactive= (boolean) XLib::isExternalVGAactive();
 	list    monitorSize = (list)    XLib::getDisplaySize();
 	string  monitorInch = (string)  monitorSize[0]:"undef";
-    //string  tabletPtr   = (string) XLib::getTabletPointer();
-    string  tabletName  = (string)  XLib::getTabletModel();
-    string  tabletVendor= (string)  XLib::getTabletVendor();
+	integer tabletID    = (string)  XLib::getTabletID();     // (bnc#429770)
 
     // add more verbose logging
     y2milestone("Reading libsax data finished.");
@@ -137,8 +135,7 @@ if ( func == "MakeProposal" ) {
         "extVGAactive"  : extVGAactive,
         "monitorSize"   : monitorSize,
         "monitorInch"   : monitorInch,
-        "tabletName"    : tabletName,
-        "tabletVendor"  : tabletVendor
+        "tabletID"      : tabletID
     ]);
 
 	//======================================
@@ -241,16 +238,21 @@ if ( func == "MakeProposal" ) {
     // Tablet settings (fate#302888)
     //--------------------------------------
     string tabletStatus = XMessages::unconfigured;
-    if ( tabletVendor != "undef"  &&
-         tabletName   != "undef"     )
+    if ( tabletID != 0 )
     {
+        string  tabletName  = (string)  XLib::getTabletModel();
+        string  tabletVendor= (string)  XLib::getTabletVendor();
+
         tabletStatus = sformat("%1 - %2", tabletVendor, tabletName);
+        y2milestone("Found tablet device: %1 (%2)", tabletName, tabletVendor);
+
+        // if no tablet was found no item in the proposal will be shown
+        proposal = proposal
+            + LI
+                + XMessages::Tablet + " " + tabletStatus
+                + " (<a href=\"sax-tablet\">" + XMessages::configure + "</a>)"
+            + IL;
     }
-    proposal = proposal
-        + LI
-            + XMessages::Tablet + " " + tabletStatus
-            + " (<a href=\"sax-tablet\">" + XMessages::configure + "</a>)"
-        + IL;
 	//======================================
 	// Test your configuration now
 	//--------------------------------------
