@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Nov 18 17:57:09 CET 2008 - jdsn@suse.de
+
+- prevent sax to switch to interactive mode (bnc#430600)
+
+-------------------------------------------------------------------
 Wed Nov 12 18:25:16 CET 2008 - jdsn@suse.de
 
 - fix tablet proposal during installation (bnc#429770)
