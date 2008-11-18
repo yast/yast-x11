@@ -117,7 +117,7 @@ if ( func == "MakeProposal" ) {
 	boolean extVGAactive= (boolean) XLib::isExternalVGAactive();
 	list    monitorSize = (list)    XLib::getDisplaySize();
 	string  monitorInch = (string)  monitorSize[0]:"undef";
-	integer tabletID    = (string)  XLib::getTabletID();     // (bnc#429770)
+	integer tabletID    = (integer) XLib::getTabletID();     // (bnc#429770)
 
     // add more verbose logging
     y2milestone("Reading libsax data finished.");

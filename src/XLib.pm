@@ -949,7 +949,7 @@ sub getTabletModel {
 #==========================================
 # getTabletID
 #------------------------------------------
-BEGIN{ $TYPEINFO{getTabletID} = ["function", "string"]; }
+BEGIN{ $TYPEINFO{getTabletID} = ["function", "integer"]; }
 sub getTabletID {
 	my $mTablet = new SaX::SaXManipulateTablets (
 		$section{Pointers},$section{Layout}
