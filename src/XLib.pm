@@ -978,7 +978,8 @@ sub setTablet {
 	my $mTablet = new SaX::SaXManipulateTablets (
 		$section{Pointers},$section{Layout}
 	);
-	$mTablet->setTablet($vendor, $model);
+	# only call the wrapper function of the sax api (bnc#445422)
+	$mTablet->setTablet("$vendor:$model");
 }
 
 

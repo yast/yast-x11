@@ -43,6 +43,30 @@ map     param = (map)    WFM::Args(1);
 map     ret   = $[];
 
 //==========================================
+// Check for graphics device // (bnc#431522)
+//------------------------------------------
+if ( (integer)SCR::Execute(.target.bash, "/sbin/lspci -n | cut -f 2 -d \" \" | grep -q \"0300\"") == 0 )
+{
+	y2milestone("Detected a graphics device: A PCI device exists with ClassID 0300.");
+	y2milestone("X11 configuration will be performed.");
+}
+else
+{
+	y2milestone("No PCI device exists with ClassID 0300.");
+	y2milestone("Now checking for a framebuffer device.");
+
+	if ( (integer)SCR::Execute(.target.bash, "[ -f /proc/fb ]") == 0 )
+	{
+		y2milestone("Found a framebuffer device. X11 configuration will be perfomed.");
+	}
+	else
+	{
+		y2error("Neither a PCI device with ClassID 0300 nor a framebuffer device was found.");
+		y2error("X11 configuration will not be performed now.");
+		return $[];
+	}
+}
+//==========================================
 // Check for installed packages...
 //------------------------------------------
 if (

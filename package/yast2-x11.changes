@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 19 21:49:04 CET 2008 - jdsn@suse.de
+
+- no x11 configuration only without a graphics device (bnc#431522)
+- fix sax call to set tablet (bnc#445422)
+
+-------------------------------------------------------------------
 Tue Nov 18 17:57:09 CET 2008 - jdsn@suse.de
 
 - prevent sax to switch to interactive mode (bnc#430600)
