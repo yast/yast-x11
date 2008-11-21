@@ -1,7 +1,13 @@
 -------------------------------------------------------------------
+Fri Nov 21 13:09:35 CET 2008 - jdsn@suse.de
+
+- disable manual tablet configuration in installation (bnc#447622)
+- 2.17.9 
+
+-------------------------------------------------------------------
 Wed Nov 19 21:49:04 CET 2008 - jdsn@suse.de
 
-- no x11 configuration only without a graphics device (bnc#431522)
+- no x11 configuration without a graphics device (bnc#431522)
 - fix sax call to set tablet (bnc#445422)
 
 -------------------------------------------------------------------

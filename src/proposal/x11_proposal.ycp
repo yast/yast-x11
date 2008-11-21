@@ -141,7 +141,8 @@ if ( func == "MakeProposal" ) {
 	boolean extVGAactive= (boolean) XLib::isExternalVGAactive();
 	list    monitorSize = (list)    XLib::getDisplaySize();
 	string  monitorInch = (string)  monitorSize[0]:"undef";
-	integer tabletID    = (integer) XLib::getTabletID();     // (bnc#429770)
+//	integer tabletID    = (integer) XLib::getTabletID();     // (bnc#429770)
+	integer tabletID    = 0;  // disabled due to (bnc#447622)
 
     // add more verbose logging
     y2milestone("Reading libsax data finished.");
@@ -274,7 +275,7 @@ if ( func == "MakeProposal" ) {
         proposal = proposal
             + LI
                 + XMessages::Tablet + " " + tabletStatus
-                + " (<a href=\"sax-tablet\">" + XMessages::configure + "</a>)"
+                // + " (<a href=\"sax-tablet\">" + XMessages::configure + "</a>)"
             + IL;
     }
 	//======================================
@@ -301,8 +302,8 @@ if ( func == "MakeProposal" ) {
 			"sax-colors",
 			"sax-3d",
 			"sax-ext-vga",
-			"sax-test",
-            "sax-tablet"
+			"sax-test"
+			//,"sax-tablet"
 		]
 	];
 	return ret;
@@ -394,15 +395,16 @@ else if ( func == "AskUser" ) {
 	if (chosenID == "x11_conf") {
 		infoPopup();
 	}
-    if (chosenID == "sax-tablet" ) {
-        y2milestone("X11: setup tablet...");
-        string vendor = XLib::getTabletVendor();
-        string model  = XLib::getTabletModel();
-        map<string,list> tcdb = XLib::getTabletCDB();
-        list selectedTablet = setupTablet(tcdb, vendor, model);
-        y2milestone("X11: setup tablet <%1>", selectedTablet);
-        XLib::setTablet( (list<string>)selectedTablet );
-    }
+//	if (chosenID == "sax-tablet" ) {
+//		y2milestone("X11: setup tablet...");
+//		string vendor = XLib::getTabletVendor();
+//		string model  = XLib::getTabletModel();
+//		map<string,list> tcdb = XLib::getTabletCDB();
+//		list selectedTablet = setupTablet(tcdb, vendor, model);
+//		y2milestone("X11: setup tablet <%1>", selectedTablet);
+//		XLib::setTablet( (list<string>)selectedTablet );
+//	}
+
 }
 //===================================================
 // Handle proposal description...
