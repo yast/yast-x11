@@ -37,8 +37,8 @@ global list<map> all_monitors = [];
 //---------------------------------------
 global boolean autoyastX11Allowed ()
 {
-	// on Itanium during installation no X11 cloning should be performed (bnc#439612)
-	if ( Arch::ia64()  &&  Mode::mode() == "installation" )
+	// on Itanium during installation/update/repair/live_installation no X11 cloning should be performed (bnc#439612) (bnc#449147)
+	if ( Arch::ia64()  &&   ! contains(["installation", "update", "repair", "live_installation"], Mode::mode()) )
 	{
 		y2warning("On Itanium (ia64) during installation no cloning of the X11 configuration is supported.");
 		y2warning("X11 will return an empty configuration now.");
