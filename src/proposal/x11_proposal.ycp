@@ -63,6 +63,17 @@ else
 	{
 		y2error("Neither a PCI device with ClassID 0300 nor a framebuffer device was found.");
 		y2error("X11 configuration will not be performed now.");
+
+		// prevent xserver starts (eg. via vnc) on machines without a graphics device (bnc#466352)
+		y2warning("No graphics device was found, thus setting DISPLAYMANAGER_STARTS_XSERVER to _no_ in /etc/sysconfig/displaymanager.");
+		if ( SCR::Write(.sysconfig.displaymanager.DISPLAYMANAGER_STARTS_XSERVER, "no") )
+		{
+		     y2milestone("Successfully set DISPLAYMANAGER_STARTS_XSERVER to _no_.");
+		}
+		else
+		{
+		    y2error("Setting DISPLAYMANAGER_STARTS_XSERVER to _no_ failed. VNC logins to this machine may fail.");
+		}
 		return $[];
 	}
 }

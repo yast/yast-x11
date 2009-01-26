@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 26 17:58:31 CET 2009 - jdsn@suse.de
+
+- no X server start via display manager without a graphics
+  device (bnc#466352) 
+
+-------------------------------------------------------------------
 Wed Nov 26 16:55:29 CET 2008 - jdsn@suse.de
 
 - autoyast X11 cloning on Itanium disabled in update (bnc#449147) 
