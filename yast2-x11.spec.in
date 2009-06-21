@@ -18,7 +18,7 @@ ExcludeArch:     s390 s390x
 
 BuildArch:       noarch
 
-Summary:	-
+Summary:	YaST2 - X Window System Configuration
 
 %description
 -
