@@ -38,15 +38,16 @@ global list<map> all_monitors = [];
 global boolean autoyastX11Allowed ()
 {
 	// on Itanium during installation/update/repair/live_installation no X11 cloning should be performed (bnc#439612) (bnc#449147)
-	if ( Arch::ia64()  &&   ! contains(["installation", "update", "repair", "live_installation"], Mode::mode()) )
-	{
-		y2warning("On Itanium (ia64) during installation no cloning of the X11 configuration is supported.");
-		y2warning("X11 will return an empty configuration now.");
-		y2warning("You can however create a clone config including X11 within the running system.");
-		return false;
-	}
+//	if ( Arch::ia64()  &&   ! contains(["installation", "update", "repair", "live_installation"], Mode::mode()) )
+//	{
+//		y2warning("On Itanium (ia64) during installation no cloning of the X11 configuration is supported.");
+//		y2warning("X11 will return an empty configuration now.");
+//		y2warning("You can however create a clone config including X11 within the running system.");
+//		return false;
+//	}
 
-	return true;
+//	return true;
+    return false;
 }
 
 
@@ -54,25 +55,27 @@ global boolean autoyastX11Allowed ()
 // SetModified
 //---------------------------------------
 global define void SetModified () {
-	modified = true;
+//	modified = true;
+    modified = false;
 }
 
 //=======================================
 // GetModified
 //---------------------------------------
 global define boolean GetModified () {
-	return modified;
+//	return modified;
+	return false;
 }
 
 //=======================================
 // Import
 //---------------------------------------
 global define boolean Import (map settings) {
-	x11 = settings;
-	monitor = x11["monitor"]:$[];
-	display = monitor["display"]:$[];
-	current_vendor = monitor["monitor_vendor"]:"" ;
-	current_model  = monitor["monitor_device"]:"" ;
+//	x11 = settings;
+//	monitor = x11["monitor"]:$[];
+//	display = monitor["display"]:$[];
+//	current_vendor = monitor["monitor_vendor"]:"" ;
+//	current_model  = monitor["monitor_device"]:"" ;
 	return true;
 }
 
@@ -80,102 +83,105 @@ global define boolean Import (map settings) {
 // Export
 //---------------------------------------
 global define map Export () {
-	if ( ! autoyastX11Allowed() ) { return $[]; }
-
-	monitor["display"] = display;
-	monitor["monitor_device"] = current_model;
-	monitor["monitor_vendor"] = current_vendor;
-	x11["monitor"] = monitor;
-	return x11;
+//	if ( ! autoyastX11Allowed() ) { return $[]; }
+//
+//	monitor["display"] = display;
+//	monitor["monitor_device"] = current_model;
+//	monitor["monitor_vendor"] = current_vendor;
+//	x11["monitor"] = monitor;
+//	return x11;
+	return $[];
 }
 
 //=======================================
 // Summary
 //---------------------------------------
 global define string Summary() {
-	string summary = "";
-	map m = x11["monitor"]:$[];
-	map d = m["display"]:$[];
-	string my_current_vendor = m["monitor_vendor"]:"";
-	string my_current_model  = m["monitor_device"]:"";
-	string my_monitor =  Summary::NotConfigured();
-	if (size(my_current_vendor) > 0) {
-		my_monitor = sformat("%1   %2", my_current_vendor, my_current_model);
-	}
-	string horizontal = sformat("%1 - %2",d["min_hsync"]:0 , d["max_hsync"]:0);
-	string vertical = sformat("%1 - %2",  d["min_vsync"]:0 , d["max_vsync"]:0);
-	string nc = Summary::NotConfigured ();
-	string depth = sformat ("%1",
-		(x11["color_depth"]:-1 != -1) ? x11["color_depth"]:-1 : nc
-	);
-	summary = Summary::AddHeader (summary, _("Enable 3D Support If Possible"));
-	summary = Summary::AddLine   (summary,
-		(x11["enable_3d"]:false) ? _("Yes") : nc
-	);
-	summary = Summary::AddHeader (summary, _("Enable Xgl if possible"));
-	summary = Summary::AddLine   (summary, ((boolean)x11["enable_xgl"]:false) ? _("Yes") : nc);
-	summary = Summary::AddHeader (summary, _("Color Depth"));
-	summary = Summary::AddLine   (summary, depth );
-	summary = Summary::AddHeader (summary, _("Resolution"));
-	summary = Summary::AddLine   (summary,
-		(x11["resolution"]:"" != "") ? x11["resolution"]:"" : nc
-	);
-	summary = Summary::AddHeader (summary, _("Display Manager"));
-	summary = Summary::AddLine   (summary,
-		(x11["display_manager"]:"" != "") ? x11["display_manager"]:"" : nc
-	);
-	summary = Summary::AddHeader (summary, _("Window Manager"));
-	summary = Summary::AddLine   (summary,
-		(x11["window_manager"]:"" != "") ? x11["window_manager"]:"" : nc
-	);
-	summary = Summary::AddHeader (summary, _("Monitor"));
-	summary = Summary::AddLine   (summary, my_monitor);
-	summary = Summary::AddHeader (summary, _("Horizontal frequency"));
-	summary = Summary::AddLine   (summary, horizontal);
-	summary = Summary::AddHeader (summary, _("Vertical frequency"));
-	summary = Summary::AddLine   (summary, vertical);
-
-    return summary;
+//	string summary = "";
+//	map m = x11["monitor"]:$[];
+//	map d = m["display"]:$[];
+//	string my_current_vendor = m["monitor_vendor"]:"";
+//	string my_current_model  = m["monitor_device"]:"";
+//	string my_monitor =  Summary::NotConfigured();
+//	if (size(my_current_vendor) > 0) {
+//		my_monitor = sformat("%1   %2", my_current_vendor, my_current_model);
+//	}
+//	string horizontal = sformat("%1 - %2",d["min_hsync"]:0 , d["max_hsync"]:0);
+//	string vertical = sformat("%1 - %2",  d["min_vsync"]:0 , d["max_vsync"]:0);
+//	string nc = Summary::NotConfigured ();
+//	string depth = sformat ("%1",
+//		(x11["color_depth"]:-1 != -1) ? x11["color_depth"]:-1 : nc
+//	);
+//	summary = Summary::AddHeader (summary, _("Enable 3D Support If Possible"));
+//	summary = Summary::AddLine   (summary,
+//		(x11["enable_3d"]:false) ? _("Yes") : nc
+//	);
+//	summary = Summary::AddHeader (summary, _("Enable Xgl if possible"));
+//	summary = Summary::AddLine   (summary, ((boolean)x11["enable_xgl"]:false) ? _("Yes") : nc);
+//	summary = Summary::AddHeader (summary, _("Color Depth"));
+//	summary = Summary::AddLine   (summary, depth );
+//	summary = Summary::AddHeader (summary, _("Resolution"));
+//	summary = Summary::AddLine   (summary,
+//		(x11["resolution"]:"" != "") ? x11["resolution"]:"" : nc
+//	);
+//	summary = Summary::AddHeader (summary, _("Display Manager"));
+//	summary = Summary::AddLine   (summary,
+//		(x11["display_manager"]:"" != "") ? x11["display_manager"]:"" : nc
+//	);
+//	summary = Summary::AddHeader (summary, _("Window Manager"));
+//	summary = Summary::AddLine   (summary,
+//		(x11["window_manager"]:"" != "") ? x11["window_manager"]:"" : nc
+//	);
+//	summary = Summary::AddHeader (summary, _("Monitor"));
+//	summary = Summary::AddLine   (summary, my_monitor);
+//	summary = Summary::AddHeader (summary, _("Horizontal frequency"));
+//	summary = Summary::AddLine   (summary, horizontal);
+//	summary = Summary::AddHeader (summary, _("Vertical frequency"));
+//	summary = Summary::AddLine   (summary, vertical);
+//
+//    return summary;
+    return "";
 }
 
 //=======================================
 // readMonitorDB
 //---------------------------------------
 global define void readMonitorDB() {
-	string static_monitors  = Directory::datadir + "/monitors.ycp";
-	all_monitors = (list<map>)SCR::Read( .target.ycp, [ static_monitors, [] ]);
-	vendors = toset(
-		maplist( map monitor, all_monitors,``( monitor["vendor"]:"" ))
-	);
+//	string static_monitors  = Directory::datadir + "/monitors.ycp";
+//	all_monitors = (list<map>)SCR::Read( .target.ycp, [ static_monitors, [] ]);
+//	vendors = toset(
+//		maplist( map monitor, all_monitors,``( monitor["vendor"]:"" ))
+//	);
+    vendors = [];
 }
 
 //=======================================
 // Read
 //---------------------------------------
 global define boolean Read() {
-	if ( ! autoyastX11Allowed() ) { return true; }
-
-	x11["display_manager"] = (string) eval (SCR::Read(
-		.sysconfig.displaymanager.DISPLAYMANAGER
-	));
-	x11["window_manager"] = (string) eval (SCR::Read(
-		.sysconfig.windowmanager.DEFAULT_WM
-	));
-	x11["enable_3d"] = false;
-	if (! (boolean)XLib::isInitialized()) {
-		y2milestone ("X11-Auto: Loading library cache...");
-		XLib::loadApplication();
-	}
-	current_vendor = (string) XLib::getMonitorVendor();
-	current_model  = (string) XLib::getMonitorModel();
+//	if ( ! autoyastX11Allowed() ) { return true; }
+//
+//	x11["display_manager"] = (string) eval (SCR::Read(
+//		.sysconfig.displaymanager.DISPLAYMANAGER
+//	));
+//	x11["window_manager"] = (string) eval (SCR::Read(
+//		.sysconfig.windowmanager.DEFAULT_WM
+//	));
+//	x11["enable_3d"] = false;
+//	if (! (boolean)XLib::isInitialized()) {
+//		y2milestone ("X11-Auto: Loading library cache...");
+//		XLib::loadApplication();
+//	}
+//	current_vendor = (string) XLib::getMonitorVendor();
+//	current_model  = (string) XLib::getMonitorModel();
     // store this value with type integer in the map so it gets exported
     // correctly to the autoyast profile (bnc#418648).
-    x11["color_depth"] = tointeger(XLib::getActiveColorDepth());
-	x11["resolution"]  = (string) XLib::getActiveResolutionString();
-	display["min_hsync"] = tointeger(XLib::getHsyncMin());
-	display["max_hsync"] = tointeger(XLib::getHsyncMax());
-	display["min_vsync"] = tointeger(XLib::getVsyncMin());
-	display["max_vsync"] = tointeger(XLib::getVsyncMax());
+//    x11["color_depth"] = tointeger(XLib::getActiveColorDepth());
+//	x11["resolution"]  = (string) XLib::getActiveResolutionString();
+//	display["min_hsync"] = tointeger(XLib::getHsyncMin());
+//	display["max_hsync"] = tointeger(XLib::getHsyncMax());
+//	display["min_vsync"] = tointeger(XLib::getVsyncMin());
+//	display["max_vsync"] = tointeger(XLib::getVsyncMax());
 	return true;
 }
 
@@ -183,75 +189,76 @@ global define boolean Read() {
 // Write
 //---------------------------------------
 global define boolean Write() {
-	if (! (boolean)XLib::isInitialized()) {
-		y2milestone ("X11-Auto: Loading library cache...");
-		XLib::loadApplication();
-	}
-	string displayManager = x11["display_manager"]:"";
-	string windowManager  = x11["window_manager"]:"";
-	if (size(displayManager) > 0) {
-		y2milestone("X11-Auto: setup display manager <%1>",displayManager);
-		SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER, displayManager);
-		SCR::Write (.sysconfig.displaymanager, nil);
-	}
-	if (size(windowManager) > 0) {
-		y2milestone("X11-Auto: setup window manager <%1>",windowManager);
-		SCR::Write (.sysconfig.windowmanager.DEFAULT_WM, windowManager);
-		SCR::Write (.sysconfig.windowmanager, nil);
-	}
-	integer hstart = tointeger(display["min_hsync"]:30);
-	integer hstop  = tointeger(display["max_hsync"]:60);
-	integer vstart = tointeger(display["min_vsync"]:60);
-	integer vstop  = tointeger(display["max_vsync"]:75);
-	y2milestone("X11-Auto: setup monitor <%1:%2>",current_vendor,current_model);
-	XLib::setMonitorCDB ( [current_vendor,current_model] );
-	XLib::setHsyncRange (hstart,hstop);
-	XLib::setVsyncRange (vstart,vstop);
-
-	string resolution = x11["resolution"]:"800x600 (SVGA)";
-	y2milestone("X11-Auto: setup resolution <%1>",resolution);
-	XLib::setResolution ( resolution );
-
-    // convert value to integer (bnc#307967)
-    // made obsolete by fix for (bnc#418648), cast the value to be sure it is integer
-	integer colors = (integer) x11["color_depth"]:16;
-	y2milestone("X11-Auto: setup color depth <%1>",colors);
-	XLib::setDefaultColorDepth ( tostring(colors) );
-
-	boolean enable3D = x11["enable_3d"]:false;
-	boolean enableXGL = x11["enable_xgl"]:false;
-	y2milestone("X11-Auto: setup 3D <%1>",enable3D);
-	y2milestone("X11-Auto: setup XGL <%1>", enableXGL);
-	boolean has3D = XLib::hasOpenGLFeatures();
-	if ((enable3D) && (has3D)) {
-		XLib::activate3D();
-		if ( enableXGL )
-		{
-		    // setup Xgl as X server
-		    SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER_XSERVER, "Xgl");
-		    // empty custom options string will not overwrite the default with empty options
-		    //     only one (or more) space character(s) will
-		    if ( x11["xgl_custom_options"]:"" != "" )
-		    {
-		        SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER_XGL_OPTS, x11["xgl_custom_options"]:"" );
-		    }
-		}
-
-	} else {
-		XLib::deactivate3D();
-	}
-	// set the PreferredMode (bnc#402581)
-	string colorDepth = tostring(colors);
-	y2milestone("Trying to set X11 PreferredMode to: %1 @ %2", resolution, colorDepth);
-	if ( XLib::setPreferredMode(resolution, colorDepth) )
-	{
-		y2milestone("Sucessfully set the PreferredMode for X11");
-	}
-	else
-	{
-		y2error("Failed to set the PreferredMode for X11.");
-	}
-	boolean status = XLib::writeConfiguration();
-	return  status;
+//	if (! (boolean)XLib::isInitialized()) {
+//		y2milestone ("X11-Auto: Loading library cache...");
+//		XLib::loadApplication();
+//	}
+//	string displayManager = x11["display_manager"]:"";
+//	string windowManager  = x11["window_manager"]:"";
+//	if (size(displayManager) > 0) {
+//		y2milestone("X11-Auto: setup display manager <%1>",displayManager);
+//		SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER, displayManager);
+//		SCR::Write (.sysconfig.displaymanager, nil);
+//	}
+//	if (size(windowManager) > 0) {
+//		y2milestone("X11-Auto: setup window manager <%1>",windowManager);
+//		SCR::Write (.sysconfig.windowmanager.DEFAULT_WM, windowManager);
+//		SCR::Write (.sysconfig.windowmanager, nil);
+//	}
+//	integer hstart = tointeger(display["min_hsync"]:30);
+//	integer hstop  = tointeger(display["max_hsync"]:60);
+//	integer vstart = tointeger(display["min_vsync"]:60);
+//	integer vstop  = tointeger(display["max_vsync"]:75);
+//	y2milestone("X11-Auto: setup monitor <%1:%2>",current_vendor,current_model);
+//	XLib::setMonitorCDB ( [current_vendor,current_model] );
+//	XLib::setHsyncRange (hstart,hstop);
+//	XLib::setVsyncRange (vstart,vstop);
+//
+//	string resolution = x11["resolution"]:"800x600 (SVGA)";
+//	y2milestone("X11-Auto: setup resolution <%1>",resolution);
+//	XLib::setResolution ( resolution );
+//
+//    // convert value to integer (bnc#307967)
+//    // made obsolete by fix for (bnc#418648), cast the value to be sure it is integer
+//	integer colors = (integer) x11["color_depth"]:16;
+//	y2milestone("X11-Auto: setup color depth <%1>",colors);
+//	XLib::setDefaultColorDepth ( tostring(colors) );
+//
+//	boolean enable3D = x11["enable_3d"]:false;
+//	boolean enableXGL = x11["enable_xgl"]:false;
+//	y2milestone("X11-Auto: setup 3D <%1>",enable3D);
+//	y2milestone("X11-Auto: setup XGL <%1>", enableXGL);
+//	boolean has3D = XLib::hasOpenGLFeatures();
+//	if ((enable3D) && (has3D)) {
+//		XLib::activate3D();
+//		if ( enableXGL )
+//		{
+//		    // setup Xgl as X server
+//		    SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER_XSERVER, "Xgl");
+//		    // empty custom options string will not overwrite the default with empty options
+//		    //     only one (or more) space character(s) will
+//		    if ( x11["xgl_custom_options"]:"" != "" )
+//		    {
+//		        SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER_XGL_OPTS, x11["xgl_custom_options"]:"" );
+//		    }
+//		}
+//
+//	} else {
+//		XLib::deactivate3D();
+//	}
+//	// set the PreferredMode (bnc#402581)
+//	string colorDepth = tostring(colors);
+//	y2milestone("Trying to set X11 PreferredMode to: %1 @ %2", resolution, colorDepth);
+//	if ( XLib::setPreferredMode(resolution, colorDepth) )
+//	{
+//		y2milestone("Sucessfully set the PreferredMode for X11");
+//	}
+//	else
+//	{
+//		y2error("Failed to set the PreferredMode for X11.");
+//	}
+//	boolean status = XLib::writeConfiguration();
+//	return  status;
+    return true;
 }
 } // end

@@ -34,99 +34,48 @@ STATUS        : Development
 { // begin
 textdomain "x11";
 
+/*
 import "XMessages";
 import "Wizard";
 import "Popup";
 import "Mode";
 import "Package";
 import "CommandLine";
+*/
+
+y2error("Detected start of yast2-x11. It is disabled as the X-Server is configured automtically now. yast2-x11 will not change anything and just exit.");
+
 
 //==========================================
 // Functions...
 //------------------------------------------
 //---[ finish ]----//
 define any finish() ``{
-	any localReturn = `next;
-	y2milestone ("Running displaymanager SuSEconfig module");
-	UI::BusyCursor();
-	SCR::Execute (.target.bash, "/sbin/SuSEconfig --module xdm");
-	SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
-	SCR::Execute (.target.bash, "/sbin/SuSEconfig --module gdm");
-	UI::NormalCursor();
-	return localReturn;
+
+return `next;
+
 }
 
 //==========================================
 // installPackages()...
 //------------------------------------------
 define any installPackages() ``{
-	list<string> requiredPacs = [
-		"xorg-x11", "xorg-x11-server","xorg-x11-server-glx","libusb",
-		"sax2", "sax2-gui", "sax2-ident", "sax2-tools","sax2-libsax",
-		"sax2-libsax-perl"
-	];
-	// ... /
-	// setup contents of requiredPacs plus required pacs
-	// for the detected card(s)
-	// ---
-	requiredPacs = toset ( flatten( [requiredPacs] ) );
 
-	// remove unavailable packages
-	requiredPacs = filter(string pac, requiredPacs, {return Pkg::PkgProperties(pac) != nil;} );
+return `auto;
 
-	y2milestone("required X11 packages: %1", requiredPacs);
-
-	return Package::InstallAllMsg (
-		requiredPacs, XMessages::pacsMissing
-	) ? `auto : nil;
 }
 
-//==========================================
-// install eventually missing packages...
-//------------------------------------------
-if (installPackages() == nil) {
-	return `nil;
-}
 
 //==========================================
 // setup GUI handler routine
 //------------------------------------------
 define boolean GUIHandler () {
-	any done = WFM::CallFunction ("XMain", [true,true]);
-	if ((done == `abort) || (done == `back) || (done == `nil)) {
-		return false;
-	}
-	finish();
-	return true;
+
+return true;
+
 }
 
-//==========================================
-// setup commandline description
-//------------------------------------------
-map cmdlineDescription = $[
-	"id"         : "x11",
-	"guihandler" : GUIHandler,
-	"help"       : XMessages::helpCMD
-];
+return `next;
 
-//==========================================
-// run module now...
-//------------------------------------------
-any ret = CommandLine::Run (
-	cmdlineDescription
-);
-
-// CommandLine::Run returns <any>, so we have to interpret what to return
-if (is(ret, symbol)) {
-    return (symbol)ret;
-}
-else if (is(ret, boolean)) {
-    // true equals `next, false will be `auto in order to not block the workflow
-    return (boolean)ret? `next:`auto;
-}
-else {
-    // values will be interpreted as success
-    return `next;
-}
 
 } // end

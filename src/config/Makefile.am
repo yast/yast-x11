@@ -3,8 +3,8 @@
 #
 # $Id$
 #
-desktop_DATA = x11.desktop
+##desktop_DATA = x11.desktop
 
-EXTRA_DIST = $(desktop_DATA)
+##EXTRA_DIST = $(desktop_DATA)
 
-include $(top_srcdir)/Makefile.am.common
+##include $(top_srcdir)/Makefile.am.common

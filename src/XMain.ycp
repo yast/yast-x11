@@ -37,17 +37,19 @@ textdomain "x11";
 //==========================================
 // Start SaX2 in normal mode...
 //------------------------------------------
-integer status = (integer)SCR::Execute ( .target.bash,
-	"/usr/sbin/sax2"
-);
+//integer status = (integer)SCR::Execute ( .target.bash,
+//	"/usr/sbin/sax2"
+//);
 
 //==========================================
 // exit module...
 //------------------------------------------
-y2milestone ("SaX finished with exit code: <%1>",status);
-if (status == 0) {
-	return `next;
-}
-return `nil;
+//y2milestone ("SaX finished with exit code: <%1>",status);
+y2error("SaX has been called via yast2-x11. This should not happen as X will be configured automatically. Exiting now.");
+return `next;
+//if (status == 0) {
+//	return `next;
+//}
+//return `nil;
 
 } // end

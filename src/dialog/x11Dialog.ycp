@@ -26,23 +26,24 @@ textdomain "x11";
 //================================
 // Imports...
 //--------------------------------
+/*
 import "XMessages";
 import "Label";
 import "Popup";
-
+*/
 //================================
 // Popups
 //--------------------------------
 define void infoPopup () ``{
-	Popup::Message(XMessages::selectLink);
+	integer i = 0;
 }
 
 define void warnNoteBookPopup () ``{
-	Popup::Message(XMessages::warnNoteBook);
+	integer i = 0;
 }
 
 define void warnInvalidColorResolution () ``{
-	Popup::Message(XMessages::warnInvalidColorResolution);
+	integer i = 0;
 }
 
 //================================
@@ -51,61 +52,7 @@ define void warnInvalidColorResolution () ``{
 define string setupColors ( string currentRes, string currentDepth )
 { // rewritten due to consistency with setupDisplaySize
 
-    y2milestone("Called setupColors with resolution(%1) and colorDepth(%2)", currentRes, currentDepth);
-    string topic = XMessages::colorDepth;
-    UI::OpenDialog( `MarginBox( 0.5, 0.5,
-        `VBox(
-            `Heading(XMessages::displaySettings),
-            `HBox(`ComboBox(`id(`depth),`opt(`hstretch), topic,
-                [
-                    `item(`id("8"),  XMessages::color8bit  ),
-                    `item(`id("15"), XMessages::color15bit ),
-                    `item(`id("16"), XMessages::color16bit ),
-                    `item(`id("24"), XMessages::color24bit ),
-                ]
-            )),
-            `VSpacing(0.5),
-            `HBox (
-                `PushButton(`id(`ok),Label::OKButton()),
-                `PushButton(`id(`cancel),Label::CancelButton())
-            )
-        )
-    ));
-
-    string color = "8";
-    if (contains(["8", "15", "16", "24"], currentDepth))
-    { color = currentDepth; }
-    else
-    { currentDepth = "undef"; }
-    UI::ChangeWidget(`id(`depth), `Value, color);
-
-    any ret = nil;
-
-    repeat
-    {
-        ret = UI::UserInput();
-
-        color = (string) UI::QueryWidget(`id(`depth), `Value);
-
-        // let the user cancel the dialog with cancel (bnc#440281)
-        if ( ret == `ok )
-        {
-            if (! XLib::hasValidColorResolutionSetup (color,currentRes))
-            {
-                warnInvalidColorResolution();
-                ret = nil;
-            }
-        }
-
-    } until ( ret == `ok || ret == `cancel);
-
-    UI::CloseDialog();
-    if (ret == `cancel)
-    {
-        return currentDepth;
-    }
-
-    return color;
+    return "DISABLED";
 };
 
 //================================
@@ -114,47 +61,7 @@ define string setupColors ( string currentRes, string currentDepth )
 define string setupResolutions (list reslist, string currentText, string currentColor)
 { // rewritten to be consistent with
 
-    y2milestone("Called setupResolution with reslist(%1) and resolution(%2) and color(%3).", reslist, currentText, currentColor);
-    string topic = XMessages::resolution;
-    UI::OpenDialog( `MarginBox( 0.5, 0.5,
-        `VBox(
-            `Heading(XMessages::displaySettings),
-            `VSpacing(0.5),
-            `ComboBox(`id(`resitem),topic, reslist),
-            `VSpacing(0.5),
-            `HBox (
-                `PushButton(`id(`ok),Label::OKButton()),
-                `PushButton(`id(`cancel),Label::CancelButton())
-            )
-        )
-    ));
-
-    UI::ChangeWidget(`id(`resitem), `Value, currentText);
-    any ret = nil;
-    string res = "";
-
-    repeat
-    {
-        ret = UI::UserInput();
-
-        res = (string) UI::QueryWidget(`id(`resitem), `Value);
-
-        // let the user cancel the dialog with cancel (bnc#440281)
-        if ( ret == `ok )
-        {
-            if (! XLib::hasValidColorResolutionSetup(currentColor, res))
-            {
-                warnInvalidColorResolution();
-                ret = nil;
-            }
-        }
-
-    } until (ret == `ok || ret == `cancel);
-
-    UI::CloseDialog();
-    if (ret == `cancel) { return currentText; }
-    return res;
-
+    return "DISABLED";
 };
 
 //================================
@@ -162,107 +69,9 @@ define string setupResolutions (list reslist, string currentText, string current
 //--------------------------------
 define list<string> setupDisplaySize (string currentTraversal, string currentRatio)
 {
-    // function rewritten because of (bnc#331664) and (bnc#399411)
 
-    y2milestone("Called setupDisplaySize with traversal(%1) and ratio(%2)", currentTraversal, currentRatio);
-    string topic1 = XMessages::selectDisplayTraversal;
-    string topic2 = XMessages::selectDisplayRatio;
-    // offer some common display settings
-    list<string> traversallist = [ "32.0", "31.5", "30.0", "26.0", "24.0", "23.0",
-                                   "22.2", "21.3", "21.1", "20.0", "19.0", "18.1",
-                                   "17.0", "15.4", "15.0", "14.1", "13.3", "12.2", "10.0" ];
-    list<string> ratiolist = [ "4/3", "5/4", "16/9", "16/10" ];
-
-    string traversal = currentTraversal;
-    string ratio     = currentRatio;
-    string traversalCheck = "";
-    string ratioCheck = "";
-
-    // merge calculated values into the predefined lists
-    traversallist = (list<string>) sort(union(traversallist, [traversal]));
-    ratiolist     = (list<string>) sort(union(ratiolist, [ratio]));
-
-    UI::OpenDialog(`MarginBox(0.5, 0.5,
-        `VBox(
-            `Heading(_("Display Settings")),
-            `VSpacing(0.5),
-            `HBox(
-                `HSpacing(`opt(`hstretch), 0.5),
-                `VBox(
-                    `Left( `ComboBox(`id(`traversal), `opt(`notify, `editable), topic1, traversallist)),
-                    `Left( `ComboBox(`id(`ratio), `opt(`notify, `editable), topic2, ratiolist))
-                ),
-                `HSpacing(`opt(`hstretch), 0.5)
-            ),
-            `VSpacing(0.5),
-            `HBox (
-                `PushButton(`id(`ok),Label::OKButton()),
-                `PushButton(`id(`cancel),Label::CancelButton())
-            )
-        )
-    ));
-
-    UI::ChangeWidget(`id(`traversal), `ValidChars, "1234567890.");
-    UI::ChangeWidget(`id(`ratio),     `ValidChars, "1234567890/");
-
-    UI::ChangeWidget(`id(`traversal), `Value, traversal);
-    UI::ChangeWidget(`id(`ratio),     `Value, ratio);
-
-
-    any ret = nil;
-    repeat
-    {
-        // wait for event from user
-        ret = UI::UserInput();
-
-        traversal = (string) UI::QueryWidget(`id(`traversal), `Value);
-        ratio     = (string) UI::QueryWidget(`id(`ratio),     `Value);
-
-        traversalCheck = regexpsub(traversal, "([1-9]+[0-9]*)(\.[0-9]?)?", "\\1\\2");
-        if (traversalCheck == nil) { traversal = ""; traversalCheck = ""; }
-        if (traversalCheck != traversal)
-        {
-            traversal = traversalCheck;
-            UI::ChangeWidget(`id(`traversal), `Value, traversal);
-        }
-
-        // here for ratio just sanity check
-        ratioCheck = regexpsub(ratio, "([1-9]+[0-9]*)(\/([1-9]+[0-9]*)?)?", "\\1\\2");
-        if (ratioCheck == nil) { ratio = ""; ratioCheck = ""; }
-        if (ratioCheck != ratio)
-        {
-            ratio = ratioCheck;
-            UI::ChangeWidget(`id(`ratio), `Value, ratio);
-        }
-
-        if (ret == `ok)
-        {
-            string ratioOrig = ratio;
-            ratio = regexpsub(ratio, "([1-9]+[0-9]*)\/([1-9]+[0-9]*)", "\\1\/\\2");
-            if (ratio != ratioOrig  || ratioOrig == "" || ratio == nil)
-            {
-                Popup::Message(_("The value for the display ratio is invalid, please correct."));
-                ret = nil;
-            }
-
-            if (traversal == "" || traversal == nil)
-            {
-                Popup::Message(_("The value for the display traversal is invalid, please correct."));
-                ret = nil;
-            }
-        }
-
-    } until (ret == `ok || ret == `cancel);
-
-
-    list<string> result = [traversal, ratio];
-    if (ret == `cancel)
-    {
-        result = [currentTraversal, currentRatio];
-    }
-
-    UI::CloseDialog();
-    return result;
+    list<string> l = [];
+    return l;
 };
 
 //================================
@@ -270,64 +79,8 @@ define list<string> setupDisplaySize (string currentTraversal, string currentRat
 //--------------------------------
 define list setupMonitor ( map<string,list> data, string currentVendor, string currentModel )
 {
-    any ret = nil;
-    list<string> result = [];
-    list<string> vendorList = [];
-    list modelList = [];
 
-    vendorList = maplist( string Dvendor, list Dmodel, data, { return Dvendor; });
-
-    UI::OpenDialog(`MarginBox( 0.5, 0.5,
-        `VBox(
-        `Left (`Label(XMessages::selectMonitor)),
-        `MinSize( 75, 15, `HBox (
-            `SelectionBox(`id(`vendor),`opt(`notify,`immediate), XMessages::Vendor,vendorList),
-            `SelectionBox(`id(`model) ,`opt(`notify,`immediate), XMessages::Model, [])
-        )),
-        `VSpacing(0.5),
-        `HBox (
-            `PushButton(`id(`ok),Label::OKButton()),
-            `PushButton(`id(`cancel),Label::CancelButton())
-        )
-        )
-    ));
-
-    string vendor = currentVendor;
-    string model  = currentModel;
-
-    modelList = sort (data[vendor]:[]);
-    UI::ChangeWidget(`id(`vendor), `CurrentItem, nil);
-    UI::ChangeWidget(`id(`model), `CurrentItem, nil);
-
-    if ( modelList != [] && modelList != nil)
-    {
-        UI::ChangeWidget(`id(`vendor), `CurrentItem, vendor);
-        UI::ChangeWidget(`id(`model) , `Items, modelList);
-        UI::ChangeWidget(`id(`model),  `CurrentItem, nil);
-
-        if (contains(modelList, model))
-            UI::ChangeWidget(`id(`model) , `CurrentItem, model);
-    }
-
-    repeat {
-        ret = UI::UserInput();
-        if (ret == `vendor) {
-            vendor = (string) UI::QueryWidget(`id(`vendor), `CurrentItem);
-            list modelList = sort (data[vendor]:[]);
-            UI::ChangeWidget(`id(`model ), `Items, modelList );
-            UI::ChangeWidget(`id(`model),  `CurrentItem, nil);
-        }
-        if (ret == `model) {
-            model  = (string) UI::QueryWidget(`id(`model),  `CurrentItem);
-        }
-        if (ret == `cancel) {
-            UI::CloseDialog();
-            return [currentVendor, currentModel];
-        }
-    } until ( ret == `ok );
-
-    UI::CloseDialog();
-    return [vendor, model];
+return [];
 
 };
 
@@ -337,70 +90,8 @@ define list setupMonitor ( map<string,list> data, string currentVendor, string c
 //--------------------------------
 define list<string> setupTablet ( map<string,list> data, string currentVendor, string currentModel )
 {
-    y2debug("Called setupTablet with data(%1)", data);
-    y2milestone("Called setupTablet with vendor(%1) and model(%2)", currentVendor, currentModel);
-    any ret = nil;
-    list<string> result = [];
-    list<string> vendorList = [];
-    list modelList = [];
-
-    vendorList = maplist( string Dvendor, list Dmodel, data, { return Dvendor; });
-
-    UI::OpenDialog(`MarginBox( 0.5, 0.5,
-        `VBox(
-        `Left (`Label(XMessages::selectTablet)),
-        `MinSize( 75, 15, `HBox (
-            `SelectionBox(`id(`vendor),`opt(`notify,`immediate), XMessages::Vendor, vendorList),
-            `SelectionBox(`id(`model) ,`opt(`notify,`immediate), XMessages::Model, [])
-        )),
-        `VSpacing(0.5),
-        `HBox (
-            `PushButton(`id(`ok),Label::OKButton()),
-            `PushButton(`id(`cancel),Label::CancelButton())
-        )
-        )
-    ));
-
-    string vendor = currentVendor;
-    string model  = currentModel;
-
-    modelList = sort (data[vendor]:[]);
-    UI::ChangeWidget(`id(`vendor), `CurrentItem, nil);
-    UI::ChangeWidget(`id(`model),  `CurrentItem, nil);
-
-    if ( modelList != [] && modelList != nil)
-    {
-        UI::ChangeWidget(`id(`vendor), `CurrentItem, vendor);
-        UI::ChangeWidget(`id(`model) , `Items, modelList);
-        UI::ChangeWidget(`id(`model),  `CurrentItem, nil);
-
-        if (contains(modelList, model))
-            UI::ChangeWidget(`id(`model) , `CurrentItem, model);
-    }
-
-    repeat
-    {
-        ret = UI::UserInput();
-        if (ret == `vendor)
-        {
-            vendor = (string) UI::QueryWidget(`id(`vendor), `CurrentItem);
-            modelList = sort (data[vendor]:[]);
-            UI::ChangeWidget(`id(`model), `Items, modelList );
-            UI::ChangeWidget(`id(`model), `CurrentItem, nil);
-        }
-        if (ret == `model)
-        {
-            model  = (string) UI::QueryWidget(`id(`model),  `CurrentItem);
-        }
-        if (ret == `cancel)
-        {
-            UI::CloseDialog();
-            return [currentVendor, currentModel];
-        }
-    } until ( ret == `ok );
-
-    UI::CloseDialog();
-    return [vendor, model];
+    list<string> l = [];
+    return l;
 }
 
 
