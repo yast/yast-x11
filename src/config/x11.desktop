@@ -20,9 +20,8 @@ X-SuSE-YaST-AutoInstClonable=true
 X-SuSE-YaST-AutoInstSchema=x11.rnc
 
 Icon=yast-x11
-Exec=/sbin/yast2 x11 
+Exec=xdg-su -c "/sbin/yast2 x11"
 
 Name=Graphics Card and Monitor
 GenericName=Configure the graphics card and monitor
-X-KDE-SubstituteUID=true
 StartupNotify=true
