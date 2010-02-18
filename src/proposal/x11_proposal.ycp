@@ -55,7 +55,9 @@ else
 	y2milestone("No PCI device exists with ClassID 0300.");
 	y2milestone("Now checking for a framebuffer device.");
 
-	if ( (integer)SCR::Execute(.target.bash, "[ -f /proc/fb ]") == 0 )
+	// check if the framebuffer device exists AND if it has content (bnc#565877)
+	// newer kernels create it even if no framebuffer is available
+	if ( (integer)SCR::Execute(.target.bash, "[ -e /proc/fb ] && [ `wc -l /proc/fb | cut -d\" \" -f 1` -gt 0 ]") == 0 )
 	{
 		y2milestone("Found a framebuffer device. X11 configuration will be perfomed.");
 	}
