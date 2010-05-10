@@ -161,7 +161,11 @@ global define boolean Read() {
 	x11["window_manager"] = (string) eval (SCR::Read(
 		.sysconfig.windowmanager.DEFAULT_WM
 	));
-	x11["enable_3d"] = false;
+	// x11["enable_3d"] = false;
+	// switch default of 3D to be enabled (bnc#594064)
+	x11["enable_3d"] = true;
+	x11["enable_xgl"] = true;
+
 	if (! (boolean)XLib::isInitialized()) {
 		y2milestone ("X11-Auto: Loading library cache...");
 		XLib::loadApplication();
