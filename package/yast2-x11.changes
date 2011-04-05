@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr  5 15:42:54 CEST 2011 - jdsn@suse.de
+
+- remove obsolete XGL configuration to prevent broken display
+  manager settings on cloned systems (bnc#684436)
+- 2.17.13.1 
+
+-------------------------------------------------------------------
 Mon May 10 15:54:27 CEST 2010 - jdsn@suse.de
 
 - enable 3D support by default during AutoYaST (bnc#594064)

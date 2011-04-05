@@ -112,8 +112,6 @@ global define string Summary() {
 	summary = Summary::AddLine   (summary,
 		(x11["enable_3d"]:false) ? _("Yes") : nc
 	);
-	summary = Summary::AddHeader (summary, _("Enable Xgl if possible"));
-	summary = Summary::AddLine   (summary, ((boolean)x11["enable_xgl"]:false) ? _("Yes") : nc);
 	summary = Summary::AddHeader (summary, _("Color Depth"));
 	summary = Summary::AddLine   (summary, depth );
 	summary = Summary::AddHeader (summary, _("Resolution"));
@@ -164,7 +162,6 @@ global define boolean Read() {
 	// x11["enable_3d"] = false;
 	// switch default of 3D to be enabled (bnc#594064)
 	x11["enable_3d"] = true;
-	x11["enable_xgl"] = true;
 
 	if (! (boolean)XLib::isInitialized()) {
 		y2milestone ("X11-Auto: Loading library cache...");
@@ -223,23 +220,10 @@ global define boolean Write() {
 	XLib::setDefaultColorDepth ( tostring(colors) );
 
 	boolean enable3D = x11["enable_3d"]:false;
-	boolean enableXGL = x11["enable_xgl"]:false;
 	y2milestone("X11-Auto: setup 3D <%1>",enable3D);
-	y2milestone("X11-Auto: setup XGL <%1>", enableXGL);
 	boolean has3D = XLib::hasOpenGLFeatures();
 	if ((enable3D) && (has3D)) {
 		XLib::activate3D();
-		if ( enableXGL )
-		{
-		    // setup Xgl as X server
-		    SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER_XSERVER, "Xgl");
-		    // empty custom options string will not overwrite the default with empty options
-		    //     only one (or more) space character(s) will
-		    if ( x11["xgl_custom_options"]:"" != "" )
-		    {
-		        SCR::Write (.sysconfig.displaymanager.DISPLAYMANAGER_XGL_OPTS, x11["xgl_custom_options"]:"" );
-		    }
-		}
 
 	} else {
 		XLib::deactivate3D();

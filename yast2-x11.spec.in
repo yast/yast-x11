@@ -18,10 +18,11 @@ ExcludeArch:     s390 s390x
 
 BuildArch:       noarch
 
-Summary:	-
+Summary:	YaST2 - X Window System Configuration
 
 %description
--
+This module is used for configuring the X Window System from within a
+running system. The module is accessible from the YaST2 control center.
 
 @PREP@
 

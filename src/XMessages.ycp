@@ -112,24 +112,6 @@ string color32bitMio = _("16.7 Mio. [32 bit]");
 string color32bitMillion = _("16.7 Million [32 bit]");
 global string color32bit = color32bitM;
 
-//=============================================
-// Xgl strings
-//---------------------------------------------
-// label for a checkbox
-global string enableXgl = _("Enable Xgl");
-// label for a checkbox
-global string enableXglIfPossible = _("Enable Xgl if possible");
-// label for a text entry
-global string xglOptions = _("Xgl options");
-// label for a heading
-global string xglOptions_uc = _("Xgl Options");
-// label for a text entry
-global string customXglOptions = _("Custom Xgl options");
-// label for a heading
-global string customXglOptions_uc = _("Custom Xgl Options");
-// label for a drop-down box
-global string XServer = _("X server");
-
 
 //=============================================
 // graphics card
