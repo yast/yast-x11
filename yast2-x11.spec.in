@@ -2,7 +2,7 @@
 
 @HEADER@
 Group:	System/YaST
-License: GPL v2 or later
+License: GPL-2.0+
 BuildRequires: docbook-xsl-stylesheets doxygen libxslt perl-XML-Writer qt3-devel sgml-skel update-desktop-files yast2 yast2-devtools yast2-perl-bindings yast2-testsuite
 #%ifnarch s390 s390x
 #BuildRequires: sax2 sax2-libsax-perl
