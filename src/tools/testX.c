@@ -5,14 +5,14 @@ PROJECT       : SaX ( SuSE advanced X configuration )
               :
 BELONGS TO    : Configuration tool X11 version 4.x
               : YaST2 inst-sys tools
-              :  
+              :
 DESCRIPTION   : Checks if the X server is ok and sets the root
               : window's color. Forks a child that creates an
-              : invisible X client. The child exits when the 
-              : X server exits. 
+              : invisible X client. The child exits when the
+              : X server exits.
               :
               : Exit code: 0: X server ok, 1: no X server.
-              : 
+              :
 STATUS        : Status: Up-to-date
 **************/
 
@@ -29,19 +29,17 @@ STATUS        : Status: Up-to-date
 //======================================
 // Defines
 //--------------------------------------
-#define TWM       "twm"
-#define MWM       "mwm"
-#define FVWM      "fvwm2"
 #define ICEWM     "icewm"
+#define FVWM      "fvwm2"
+#define MWM       "mwm"
+#define TWM       "twm"
 
-#define FVWMRC     "fvwmrc.yast2"
 #define ICEWMPREFS "preferences.yast2"
+#define FVWMRC     "fvwmrc.yast2"
 
 //======================================
 // Globals
 //--------------------------------------
-char *fore_color = NULL;
-char *back_color = NULL;
 int screen;
 
 //======================================
@@ -51,17 +49,17 @@ Cursor CreateCursorFromName(Display* dpy, const char* name);
 XColor NameToXColor(Display* dpy, const char* name, unsigned long pixel);
 int RunWindowManager(void);
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     Cursor cursor;
     Display *display;
     Window root;
     unsigned long pixel;
-    char *cname;
+    char* cname;
     XColor color;
     Atom prop;
     Pixmap save_pixmap = (Pixmap)None;
-    
+
     //============================================
     // open display and check if we got a display
     //--------------------------------------------
@@ -81,7 +79,7 @@ int main(int argc, char **argv)
     screen = DefaultScreen(display);
     root = RootWindow(display, screen);
     pixel = BlackPixel(display, screen);
-    
+
     if (XParseColor(display, DefaultColormap(display, screen), cname, &color)) {
 	if (XAllocColor(display, DefaultColormap(display, screen), &color)) {
 	    pixel = color.pixel;
@@ -89,7 +87,7 @@ int main(int argc, char **argv)
     }
     XSetWindowBackground(display, root, pixel);
     XClearWindow(display, root);
-    
+
     //============================================
     // set watch cursor
     //--------------------------------------------
@@ -98,12 +96,12 @@ int main(int argc, char **argv)
 	XDefineCursor(display, root, cursor);
 	XFreeCursor(display, cursor);
     }
-    
+
     //============================================
     // run the windowmanager (FVWM)
     //--------------------------------------------
     RunWindowManager();
-    
+
     //============================================
     // save background as pixmap
     //--------------------------------------------
@@ -112,7 +110,7 @@ int main(int argc, char **argv)
     XChangeProperty(display, root, prop, XA_PIXMAP, 32, PropModeReplace,
 		    (unsigned char*) &save_pixmap, 1);
     XSetCloseDownMode(display, RetainPermanent);
-    
+
     //============================================
     // close display and exit
     //--------------------------------------------
@@ -128,7 +126,9 @@ Cursor CreateCursorFromName(Display* dpy, const char* name)
     XColor fg, bg;
     int i;
     Font fid;
-    
+    char* fore_color = NULL;
+    char* back_color = NULL;
+
     fg = NameToXColor(dpy, fore_color, BlackPixel(dpy, screen));
     bg = NameToXColor(dpy, back_color, WhitePixel(dpy, screen));
 
@@ -147,7 +147,7 @@ Cursor CreateCursorFromName(Display* dpy, const char* name)
 XColor NameToXColor(Display* dpy, const char* name, unsigned long pixel)
 {
     XColor c;
-    
+
     if (!name || !*name) {
 	c.pixel = pixel;
 	XQueryColor(dpy, DefaultColormap(dpy, screen), &c);
@@ -170,6 +170,7 @@ int RunWindowManager(void)
 	    return 0;
 	    break;
 	case 0:
+	    setenv("ICEWM_PRIVCFG", "/etc/icewm/yast2", 1);
 	    execlp(ICEWM, "icewm", "-c", ICEWMPREFS, "-t", "yast2", NULL);
 	    execlp(FVWM, "fvwm2", "-f", FVWMRC, NULL);
 	    execlp(MWM, "mwm", NULL);
