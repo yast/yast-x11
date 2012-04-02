@@ -1,0 +1,29 @@
+@HEADER-COMMENT@
+
+@HEADER@
+Group:		System/YaST
+License:	GPL-2.0, GPL-2.0+
+BuildRequires:	autoconf automake libtool xorg-x11-libX11-devel xorg-x11-libXmu-devel
+BuildRequires:	yast2-devtools
+Summary:	YaST2 - X11 support
+
+%description
+This package contains the programs and files for YaST2 X11 support.
+
+@PREP@
+
+@BUILD@
+
+@INSTALL@
+
+@CLEAN@
+
+%files
+%defattr(-,root,root)
+
+@ybindir@/testX
+/etc/icewm
+
+%doc %dir @docdir@
+%doc @docdir@/README*
+%doc @docdir@/COPY*
