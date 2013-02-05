@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb  5 17:23:15 UTC 2013 - jdsn@suse.de
+
+- skip DefaultColorDepth in AutoYaST mode with fbdev (bnc#735130)
+- 2.17.14
+
+-------------------------------------------------------------------
 Tue Apr  5 15:42:54 CEST 2011 - jdsn@suse.de
 
 - remove obsolete XGL configuration to prevent broken display
