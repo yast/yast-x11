@@ -1,4 +1,5 @@
 @HEADER-COMMENT@
+# norootforbuild
 
 @HEADER@
 BuildRequires: docbook-xsl-stylesheets doxygen libxslt perl-XML-Writer qt3-devel sgml-skel update-desktop-files yast2 yast2-devtools yast2-perl-bindings yast2-testsuite
@@ -6,17 +7,15 @@ BuildRequires: docbook-xsl-stylesheets doxygen libxslt perl-XML-Writer qt3-devel
 BuildRequires: sax2 sax2-libsax-perl
 %endif
 
-Requires:	 yast2 sax2-libsax-perl
-
-Provides:	 yast2-config-x11 yast2-agent-isax y2a_xf86
-Obsoletes:	 yast2-config-x11 yast2-agent-isax y2a_xf86
-Provides:	 yast2-trans-inst-x11 y2t_inst-x11
-Obsoletes:	 yast2-trans-inst-x11 y2t_inst-x11
-Provides:	 yast2-agent-isax-devel
-Obsoletes:	 yast2-agent-isax-devel
-ExcludeArch:     s390 s390x
-
-BuildArch:       noarch
+Requires:     yast2 sax2-libsax-perl
+Provides:     yast2-config-x11 yast2-agent-isax y2a_xf86
+Obsoletes:    yast2-config-x11 yast2-agent-isax y2a_xf86
+Provides:     yast2-trans-inst-x11 y2t_inst-x11
+Obsoletes:    yast2-trans-inst-x11 y2t_inst-x11
+Provides:     yast2-agent-isax-devel
+Obsoletes:    yast2-agent-isax-devel
+ExcludeArch:  s390 s390x
+BuildArch:    noarch
 
 Summary:	YaST2 - X Window System Configuration
 
