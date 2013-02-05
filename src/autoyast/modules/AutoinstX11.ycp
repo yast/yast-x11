@@ -216,8 +216,12 @@ global define boolean Write() {
 	// convert value to integer (bnc#307967)
 	// made obsolete by fix for (bnc#418648), cast the value to be sure it is integer
 	integer colors = (integer) x11["color_depth"]:16;
-	y2milestone("X11-Auto: setup color depth <%1>",colors);
-	XLib::setDefaultColorDepth ( tostring(colors) );
+
+	// do not set the DefaultColorDepth when using fbdev (bnc#735130)
+	if ( ! XLib::isFbdevBased() ) {
+	    y2milestone("X11-Auto: setup color depth <%1>",colors);
+	    XLib::setDefaultColorDepth ( tostring(colors) );
+	}
 
 	boolean enable3D = x11["enable_3d"]:false;
 	y2milestone("X11-Auto: setup 3D <%1>",enable3D);
