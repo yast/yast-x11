@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Thu Mar 14 15:36:59 UTC 2013 - sndirsch@suse.com
+
+- no_resolution-colordepth-change_for_fbdev.patch
+  * no longer offer to change resolution/color depth in proposal
+    dialog, when fbdev driver is used; it can't be changed at
+    this place anyway (bnc#801784)
+
+-------------------------------------------------------------------
+Wed Mar 13 15:23:04 UTC 2013 - sndirsch@suse.com
+
+- no_preferred_mode.patch
+  * no longer write PreferredMode line to xorg.conf (bnc#794324)
+
+-------------------------------------------------------------------
 Tue Feb  5 17:23:15 UTC 2013 - jdsn@suse.de
 
 - skip DefaultColorDepth in AutoYaST mode with fbdev (bnc#735130)
