@@ -135,7 +135,7 @@ sub writeConfiguration {
 }
 #==========================================
 # setPreferredMode
-# set the selected resolution and color depth the user selected (bnc#402581)
+# set the selected color depth the user selected (bnc#402581, bnc#794324)
 #------------------------------------------
 BEGIN{ $TYPEINFO{setPreferredMode} = ["function", "boolean", "string", "string"]; }
 sub setPreferredMode {
@@ -159,7 +159,6 @@ sub setPreferredMode {
 		$section{Desktop},$section{Card},$section{Path}
 	);
 	$mDesktop->selectDesktop(0);
-	$mDesktop->setPreferredMode( $resolution );
 	$mDesktop->setColorDepth( $colorDepth );
 
 	return 1;
