@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Tue Apr  9 15:50:58 CEST 2013 - sndirsch@suse.de
+
+- no longer write DefaultDepth since setting this is more harm than
+  benefit with GPUs used nowadays; e.g. it breaks X with modesetting
+  (mga/cirrus) and fbdev (as fallback) drivers in secure boot mode
+  (bnc#814306)
+- 2.17.16
+
+-------------------------------------------------------------------
+Fri Apr  5 15:09:13 CEST 2013 - sndirsch@suse.de
+
+- 2.17.15
+
+-------------------------------------------------------------------
 Thu Mar 14 15:36:59 UTC 2013 - sndirsch@suse.com
 
 - no_resolution-colordepth-change_for_fbdev.patch
