@@ -201,14 +201,14 @@ global define boolean Write() {
 		SCR::Write (.sysconfig.windowmanager, nil);
 	}
 
-	// Use hsync range up to 100 kHz since apparently on modern machines
+	// Use hsync range up to 94 kHz since apparently on modern machines
 	// hwinfo/libhd always fails to detect the monitor and a limit to 60kHz
 	// breaks resolutions used nowadays. This should be safe since you
 	// can't break modern monitors that easy any longer. Also the mode
 	// chosen depends on being detected/supported by KMS in most cases
 	// now anyway.
 	integer hstart = tointeger(display["min_hsync"]:31);
-	integer hstop  = tointeger(display["max_hsync"]:100);
+	integer hstop  = tointeger(display["max_hsync"]:94);
 	integer vstart = tointeger(display["min_vsync"]:50);
 	integer vstop  = tointeger(display["max_vsync"]:75);
 	y2milestone("X11-Auto: setup monitor <%1:%2>",current_vendor,current_model);
