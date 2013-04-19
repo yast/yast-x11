@@ -8,6 +8,7 @@ BuildRequires:	xorg-x11-libXmu-devel yast2-devtools
 Requires:	xdm
 Summary:	YaST2 - X11 support
 Supplements:	packageand(yast2-installation:xorg-x11)
+Obsolete:	sax2-tools <= 8.1
 
 %description
 This package contains the programs and files for YaST2 X11 support.
