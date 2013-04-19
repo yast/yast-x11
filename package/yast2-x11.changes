@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr 19 12:39:20 CEST 2013 - aschnell@suse.de
+
+- added xkbctrl from sax2-tools
+- 2.24.0
+
+-------------------------------------------------------------------
 Wed Jun 06 14:33:31 CEST 2012 - aschnell@suse.de
 
 - added supplements (bnc#765242)

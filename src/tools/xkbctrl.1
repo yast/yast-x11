@@ -1,0 +1,74 @@
+.TH xkbctrl 1 "March 15, 2005" "Version 8.1" "Utils for X-Window"
+.UC 1
+
+.SH NAME
+xkbctrl \- get X11 keyboard data according to console keyboard mapname
+
+.SH SYNOPSIS
+.B xkbctrl
+[
+.I options
+]
+
+.SH DESCRIPTION
+xkbctrl is used to obtain the X11 keyboard configuration parameters
+according to a given console map name. The currently used console map
+is stored in the
+.I KEYTABLE
+variable within the file:
+.I /etc/sysconfig/keyboard
+
+.SH COMMAND LINE OPTIONS
+The one and only argument is the name of the console map but this
+argument is required. If the map does not exist an empty set of
+X11 variables is printed out.
+
+.SH XKB KEYBOARD SPECIFICATION
+.TP
+XkbLayout
+The language dependent keyboard layout specification.
+.TP
+XkbModel
+The hardware keyboard type specification.
+.TP
+Protocol
+The protocol used for communication.
+.TP
+XkbRules
+The XKB rules file.
+.TP
+XkbOptions
+Special XKB options for key-remappings
+.TP
+MapName
+The console map name.
+.TP
+XkbKeyCodes
+The XKB keycodes file.
+.TP
+LeftAlt
+The behaviour of the left alt key.
+.TP
+RightAlt
+The behaviour of the right alt key.
+.TP
+ScrollLock
+The behaviour of the scroll lock key.
+.TP
+RightCtl
+The behaviour of the right ctrl key.
+.TP
+Apply
+The apply string used for the xkbset call.
+
+.SH AUTHORS
+Written by Marcus Schäfer
+
+.SH REPORTING BUGS
+Report bugs to <bugzilla.novell.com>.
+
+.SH COPYRIGHT
+Copyright © 2005 SuSE Linux Products GmbH, Inc.
+This is free software; see the source for copying conditions.  There is
+NO  warranty;  not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.
