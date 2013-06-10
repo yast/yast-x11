@@ -33,8 +33,8 @@ import "Popup";
 //================================
 // Popups
 //--------------------------------
-define void infoPopup () ``{
-	Popup::Message(XMessages::selectLink);
+define void infoPopup (string message) ``{
+	Popup::Message(message);
 }
 
 define void warnNoteBookPopup () ``{

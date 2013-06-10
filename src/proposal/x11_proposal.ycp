@@ -425,7 +425,13 @@ else if ( func == "AskUser" ) {
 		y2milestone("X11: refer to /var/log/Xorg.99.log for details");
 	}
 	if (chosenID == "x11_conf") {
-		infoPopup();
+		if (! XLib::isFbdevBased()) {
+			infoPopup(XMessages::selectLink);
+		} else {
+			// nothing to be changed in framebuffer mode, so adapt the message (bnc#821864)
+			infoPopup(XMessages::noChangesWithFramebuffer);
+		}
+
 	}
 //	if (chosenID == "sax-tablet" ) {
 //		y2milestone("X11: setup tablet...");

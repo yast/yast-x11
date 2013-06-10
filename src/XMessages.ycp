@@ -210,6 +210,12 @@ global string displaySize = _("Display Size:");
 global string selectLink = _("Click the underlined setting to change.");
 
 //=============================================
+// nothing to be changed in framebuffer mode, so adapt the message (bnc#821864)
+//---------------------------------------------
+// translators: do not translate the word "framebuffer" its a technical term
+global string noChangesWithFramebuffer = _("The settings can not be changed in framebuffer mode.");
+
+//=============================================
 // Scale unit for display traversal
 //---------------------------------------------
 global string Inches = _("Inches");
