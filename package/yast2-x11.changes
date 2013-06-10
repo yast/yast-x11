@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jun 10 15:34:53 UTC 2013 - jdsn@suse.de
+
+- fix popup message in framebuffer mode (bnc#821864)
+
+-------------------------------------------------------------------
 Thu Apr 18 05:01:05 CEST 2013 - sndirsch@suse.de
 
 - limit hsync max to 94kHz to avoid 1024x768 doublescan mode, 
