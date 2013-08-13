@@ -10,4 +10,3 @@ icewmpriv_DATA = winoptions
 
 EXTRA_DIST = $(icewm_DATA) $(icewmpriv_DATA)
 
-include $(top_srcdir)/Makefile.am.common
