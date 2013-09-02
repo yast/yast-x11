@@ -7,7 +7,7 @@ BuildRequires:	autoconf automake gcc-c++ libtool xorg-x11-libX11-devel
 BuildRequires:	xorg-x11-libXmu-devel yast2-devtools
 Requires:	xdm
 Summary:	YaST2 - X11 support
-Supplements:	packageand(yast2-installation:xorg-x11)
+Supplements:	packageand(yast2-installation:xorg-x11-server)
 Obsoletes:	sax2-tools <= 8.1
 
 %description
