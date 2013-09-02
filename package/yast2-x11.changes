@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep  2 14:01:56 UTC 2013 - coolo@suse.com
+
+- trigger installation of the package not on xorg-x11, but on
+  xorg-x11-server (bnc#837450)
+
+-------------------------------------------------------------------
 Tue Aug 13 10:52:05 UTC 2013 - lslezak@suse.cz
 
 - fixed build with yast2-devtools >= 3.0.3
