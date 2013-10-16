@@ -53,6 +53,5 @@ This package contains the programs and files for YaST2 X11 support.
 /etc/icewm
 
 %doc %dir %{yast_docdir}
-%doc %{yast_docdir}/README*
 %doc %{yast_docdir}/COPY*
 %doc %{_mandir}/*/*
