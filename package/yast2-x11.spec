@@ -27,7 +27,7 @@ Group:		System/YaST
 License:	GPL-2.0
 BuildRequires:	autoconf automake gcc-c++ libtool xorg-x11-libX11-devel
 BuildRequires:	xorg-x11-libXmu-devel
-BuildRequires:  yast2-devtools >= 3.0.6
+BuildRequires:  yast2-devtools >= 3.1.10
 Requires:	xdm
 Summary:	YaST2 - X11 support
 Supplements:	packageand(yast2-installation:xorg-x11-server)
