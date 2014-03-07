@@ -30,6 +30,7 @@ BuildRequires:	xorg-x11-libXmu-devel
 BuildRequires:  yast2-devtools >= 3.1.10
 Requires:	xdm
 Summary:	YaST2 - X11 support
+Url:            http://github.com/yast/yast-x11/
 Supplements:	packageand(yast2-installation:xorg-x11-server)
 Obsoletes:	sax2-tools <= 8.1
 
