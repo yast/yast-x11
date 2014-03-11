@@ -29,6 +29,7 @@ BuildRequires:	autoconf automake gcc-c++ libtool xorg-x11-libX11-devel
 BuildRequires:	xorg-x11-libXmu-devel
 BuildRequires:  yast2-devtools >= 3.1.10
 Requires:	xdm
+Requires:	yast2-theme >= 3.1.10
 Summary:	YaST2 - X11 support
 Url:            http://github.com/yast/yast-x11/
 Supplements:	packageand(yast2-installation:xorg-x11-server)
