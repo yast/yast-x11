@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Mar 13 09:29:50 UTC 2014 - jreidinger@suse.com
+
+- fix typo in requires 
+
+-------------------------------------------------------------------
 Tue Mar 11 14:33:37 UTC 2014 - jreidinger@suse.com
 
 - move icewm config to yast2-theme as it contain color schema
