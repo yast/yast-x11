@@ -28,4 +28,3 @@ Makefile.am.common
 *.lo
 *.la
 package/*.bz2
-package/*.spec
