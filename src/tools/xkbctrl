@@ -13,7 +13,7 @@ use strict;
 #=================================
 # Globals...
 #---------------------------------
-my $CFGMap = "/etc/X11/xdm/Keyboard.map";
+my $CFGMap = "/usr/share/systemd/kbd-model-map";
 
 #=================================
 # The magic main :-)
@@ -26,15 +26,7 @@ sub main {
 	my $XkbVariant;
 	my $XkbLayout;
 	my $XkbModel;
-	my $Protocol;
-	my $XkbRules;
 	my $XkbOptions;
-	my $MapName;
-	my $XkbKeyCodes;
-	my $LeftAlt;
-	my $RightAlt;
-	my $ScrollLock;
-	my $RightCtl;
 	my $Apply;
 
 	my %map;
@@ -50,51 +42,31 @@ sub main {
 	foreach (keys %map) {
 	if ($_ eq $ARGV[0]) {
 		my @list = split (/:/,$map{$_});
-		$XkbModel    = Tr (shift(@list));
 		$XkbLayout   = Tr (shift(@list));
+		$XkbModel    = Tr (shift(@list));
 		$XkbVariant  = Tr (shift(@list));
-		$XkbKeyCodes = Tr (shift(@list));
-		$LeftAlt     = Tr (shift(@list));
-		$RightAlt    = Tr (shift(@list));
-		$ScrollLock  = Tr (shift(@list));
-		$RightCtl    = Tr (shift(@list));
 		$XkbOptions  = Tr (join(":",@list));
 	}
 	}
-	$opt{-model}   = $XkbModel;
 	$opt{-layout}  = $XkbLayout;
-	$opt{-option}  = $XkbOptions;
+	$opt{-model}   = $XkbModel;
 	$opt{-variant} = $XkbVariant;
+	$opt{-option}  = $XkbOptions;
 	foreach (keys %opt) {
-	if (($opt{$_} ne "x") && ($opt{$_} ne "")) {
+	if (($opt{$_} ne "-") && ($opt{$_} ne "")) {
 		$Apply = "$Apply $_ $opt{$_}";
 	}
 	}
 	$Apply =~ s/^ +//;
 
 	print "\$[\n";
-	if ($XkbVariant ne "x") {
+	if ($XkbVariant ne "-") {
 	print "   \"XkbVariant\"   : \"$XkbVariant\",\n";
 	}
 	print "   \"XkbLayout\"    : \"$XkbLayout\",\n";
 	print "   \"XkbModel\"     : \"$XkbModel\",\n";
-	if ($XkbOptions ne "x") {
+	if ($XkbOptions ne "-") {
 	print "   \"XkbOptions\"   : \"$XkbOptions\",\n";
-	}
-	if ($XkbKeyCodes !~ /xfree86/) {
-	print "   \"XkbKeyCodes\"  : \"$XkbKeyCodes\",\n";
-	}
-	if ($LeftAlt ne "x") {
-	print "   \"LeftAlt\"      : \"$LeftAlt\",\n";
-	}
-	if ($RightAlt ne "x") {
-	print "   \"RightAlt\"     : \"$RightAlt\",\n";
-	}
-	if ($ScrollLock ne "x") {
-	print "   \"ScrollLock\"   : \"$ScrollLock\",\n";
-	}
-	if ($RightCtl ne "x") {
-	print "   \"RightCtl\"     : \"$RightCtl\",\n";
 	}
 	print "   \"Apply\"        : \"$Apply\"\n";
 	print "]\n"
@@ -116,6 +88,9 @@ sub ReadDataConfigMap {
 		die "could not open file: $filename";
 	}
 	while (my $line=<DATA>) {
+		$line =~ s/\t+/ /g;
+		$line =~ s/ +/ /g;
+		$line =~ s/ /:/g;
 		chomp ($line);
 		my @list = split (/:/,$line);
 		$consoleName = shift (@list);
