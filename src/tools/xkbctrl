@@ -2,7 +2,7 @@
 # Copyright (c) 2002 SuSE GmbH Nuernberg, Germany.  All rights reserved.
 #
 # Author: Marcus Schaefer <sax@suse.de>, 2002
-# SaX2 script: get console -> x11 xkb mapping information
+# script: get console -> x11 xkb mapping information
 # --
 # CVS ID:
 # --------
