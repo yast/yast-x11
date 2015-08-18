@@ -88,9 +88,7 @@ sub ReadDataConfigMap {
 		die "could not open file: $filename";
 	}
 	while (my $line=<DATA>) {
-		$line =~ s/\t+/ /g;
-		$line =~ s/ +/ /g;
-		$line =~ s/ /:/g;
+		$line =~ s/[ \t]+/:/g;
 		chomp ($line);
 		my @list = split (/:/,$line);
 		$consoleName = shift (@list);
