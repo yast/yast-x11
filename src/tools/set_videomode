@@ -1,0 +1,51 @@
+#! /usr/bin/perl
+
+use strict;
+
+my $usage = <<XXX;
+set_videomode [MODE][,DPI]
+
+Sets video mode MODE using xrandr. If DPI is specified, also adjusts physical
+screen size to match the dpi value. If MODE is missing, only DPI is adjusted.
+
+If the mode can't be set, the old video mode is kept.
+
+To be precise, it changes the first connected display.
+XXX
+
+my ($mode, $dpi) = split /,/, @ARGV[0];
+$dpi += 0;
+
+die $usage unless $mode ne "" || $dpi;
+
+open my $log, ">>/var/log/YaST2/y2videomode.log";
+
+my $xrandr = "xrandr";
+
+my @randr = `$xrandr 2>&1`;
+print $log "== xrandr ==\n", @randr;
+
+my $output;
+my %modes;
+
+for(@randr) {
+  if(/^(\S+)\s+connected\s/ ... /^\S/) {
+    $output = $1 if !defined $output;
+    $modes{$1} = 1 if /^\s+(\S+)\s+\S+/;
+  }
+}
+
+print $log "== mode = '$mode', dpi = '$dpi', output = '$output'\n";
+print $log "  '$_'\n" for sort keys %modes;
+
+if($modes{$mode}) {
+  $xrandr .= " --output '$output' --mode '$mode'";
+}
+
+if($dpi) {
+  $xrandr .= " --dpi '$dpi'"
+}
+
+@randr = `$xrandr 2>&1`;
+print $log "== $xrandr ==\n", @randr;
+

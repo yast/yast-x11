@@ -51,6 +51,7 @@ This package contains the programs and files for YaST2 X11 support.
 %defattr(-,root,root)
 
 %{yast_ybindir}/testX
+%{yast_ybindir}/set_videomode
 /usr/sbin/xkbctrl
 /etc/icewm
 
