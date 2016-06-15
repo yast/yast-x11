@@ -17,7 +17,7 @@
 
 
 Name:           yast2-x11
-Version:        3.1.4
+Version:        3.1.5
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -51,6 +51,7 @@ This package contains the programs and files for YaST2 X11 support.
 %defattr(-,root,root)
 
 %{yast_ybindir}/testX
+%{yast_ybindir}/set_videomode
 /usr/sbin/xkbctrl
 /etc/icewm
 

@@ -4,6 +4,8 @@
 
 ybin_PROGRAMS = testX
 
+ybin_SCRIPTS = set_videomode
+
 sbin_SCRIPTS = xkbctrl
 
 man_MANS = xkbctrl.1
