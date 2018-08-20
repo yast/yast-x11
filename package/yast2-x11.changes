@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug 20 16:17:25 CEST 2018 - schubi@suse.de
+
+- Changed licence to GPL-2.0-only.
+- Changed dir of COPYING file.
+
+-------------------------------------------------------------------
 Mon Jan 15 08:16:28 UTC 2018 - jreidinger@suse.com
 
 - drop note about KEYTABLE (bsc#1075828, fate#319454)
