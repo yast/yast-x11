@@ -24,7 +24,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
 
 Group:		System/YaST
-License:	GPL-2.0
+License:	GPL-2.0-only
 BuildRequires:	autoconf automake gcc-c++ libtool xorg-x11-libX11-devel
 BuildRequires:	xorg-x11-libXmu-devel
 BuildRequires:  yast2-devtools >= 3.1.10
@@ -56,5 +56,5 @@ This package contains the programs and files for YaST2 X11 support.
 /etc/icewm
 
 %doc %dir %{yast_docdir}
-%doc %{yast_docdir}/COPY*
+%license %{yast_docdir}/COPY*
 %doc %{_mandir}/*/*
