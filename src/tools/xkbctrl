@@ -39,7 +39,7 @@ sub main {
 		$ARGV[0] = $1;
 	}
 	%map = ReadDataConfigMap ($CFGMap);
-	foreach (keys %map) {
+	foreach (sort keys %map) {
 	if ($_ eq $ARGV[0]) {
 		my @list = split (/:/,$map{$_});
 		$XkbLayout   = Tr (shift(@list));
@@ -52,7 +52,7 @@ sub main {
 	$opt{-model}   = $XkbModel;
 	$opt{-variant} = $XkbVariant;
 	$opt{-option}  = $XkbOptions;
-	foreach (keys %opt) {
+	foreach (sort keys %opt) {
 	if (($opt{$_} ne "-") && ($opt{$_} ne "")) {
 		$Apply = "$Apply $_ $opt{$_}";
 	}
