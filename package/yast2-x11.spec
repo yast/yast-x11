@@ -17,7 +17,7 @@
 
 
 Name:           yast2-x11
-Version:        4.0.1
+Version:        4.1.0
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -29,7 +29,7 @@ BuildRequires:	autoconf automake gcc-c++ libtool xorg-x11-libX11-devel
 BuildRequires:	xorg-x11-libXmu-devel
 BuildRequires:  yast2-devtools >= 3.1.10
 Requires:	systemd
-Requires:	yast2_theme >= 3.1.10
+Requires:	yast2-theme >= 4.1.7
 Summary:	YaST2 - X11 support
 Url:            http://github.com/yast/yast-x11/
 Supplements:	packageand(yast2-installation:xorg-x11-server)
