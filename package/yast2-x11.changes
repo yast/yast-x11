@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Nov 29 15:33:42 UTC 2018 - lslezak@suse.cz
+
+- Explicitly depend on the new yast2-theme, the old yast2_theme
+  dependency is ambiguous and makes troubles
+  (related to boo#1109310)
+- 4.1.0
+
+-------------------------------------------------------------------
 Fri Sep 28 07:30:09 UTC 2018 - bwiedemann@suse.com
 
 - xkbctrl: sort hash keys (boo#1109534)
