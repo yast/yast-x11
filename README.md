@@ -1,5 +1,7 @@
 # YaST - X11 Tools and Configs #
 
-[![Travis Build](https://travis-ci.org/yast/yast-x11.svg?branch=master)](https://travis-ci.org/yast/yast-x11)
-[![Jenkins Build](http://img.shields.io/jenkins/s/https/ci.opensuse.org/yast-x11-master.svg)](https://ci.opensuse.org/view/Yast/job/yast-x11-master/)
+[![Workflow Status](https://github.com/yast/yast-x11/workflows/CI/badge.svg?branch=master)](
+https://github.com/yast/yast-x11/actions?query=branch%3Amaster)
+[![Jenkins Status](https://ci.opensuse.org/buildStatus/icon?job=yast-yast-x11-master)](
+https://ci.opensuse.org/view/Yast/job/yast-yast-x11-master/)
 
