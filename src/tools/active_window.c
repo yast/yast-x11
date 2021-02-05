@@ -22,7 +22,7 @@
  *   active_window [WID]
  *
  * Without any parameter it prints the active window ID, with a parameter
- * it activates the window with that ID [WID].
+ * it activates and raises the window with that ID [WID].
  *
  *
  * It uses the Extended Window Manager Hints (EWMH) to read and set the active window.
