@@ -17,7 +17,7 @@
 
 
 Name:           yast2-x11
-Version:        4.1.0
+Version:        4.3.0
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -50,6 +50,7 @@ This package contains the programs and files for YaST2 X11 support.
 %files
 %defattr(-,root,root)
 
+%{yast_ybindir}/active_window
 %{yast_ybindir}/testX
 %{yast_ybindir}/set_videomode
 /usr/sbin/xkbctrl
