@@ -17,7 +17,7 @@
 
 
 Name:           yast2-x11
-Version:        4.3.0
+Version:        4.4.0
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
