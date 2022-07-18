@@ -2,7 +2,7 @@
 # Makefile.am for x11/src/tools
 #
 
-ybin_PROGRAMS = testX active_window
+ybin_PROGRAMS = testX active_window xftdpi
 
 ybin_SCRIPTS = set_videomode
 
@@ -20,6 +20,12 @@ active_window_SOURCES = \
 	active_window.c
 
 active_window_LDFLAGS = \
+	-L/usr/X11R6/lib -L/usr/X11R6/lib64 -lX11
+
+xftdpi = \
+	xftdpi.c
+
+xftdpi_LDFLAGS = \
 	-L/usr/X11R6/lib -L/usr/X11R6/lib64 -lX11
 
 EXTRA_DIST = $(sbin_SCRIPTS) $(man_MANS)
