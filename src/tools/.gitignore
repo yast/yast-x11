@@ -1,4 +1,4 @@
-testX.o
-testX
-active_window.o
+*.o
 active_window
+testX
+xftdpi
