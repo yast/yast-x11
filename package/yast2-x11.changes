@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Aug  2 14:49:40 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
+
+- Added "xftdpi" tool to not depend on xrdb (which requires
+  the C pre-processor), this decreases the installed size
+  (bsc#1201966, bsc#1201532) 
+- 4.4.2
+
+-------------------------------------------------------------------
 Tue Apr 20 18:14:05 UTC 2021 - Dirk Müller <dmueller@suse.com>
 
 - stop packaging docdir, it only contained the license which
