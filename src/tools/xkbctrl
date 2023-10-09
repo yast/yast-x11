@@ -14,6 +14,7 @@ use strict;
 # Globals...
 #---------------------------------
 my $CFGMap = "/usr/share/systemd/kbd-model-map";
+my $CFGMap2 = "/usr/share/systemd/kbd-model-map.xkb-generated";
 
 #=================================
 # The magic main :-)
@@ -30,6 +31,7 @@ sub main {
 	my $Apply;
 
 	my %map;
+	my %map2;
 	my %opt;
 
 	if (! defined $ARGV[0]) {
@@ -39,6 +41,9 @@ sub main {
 		$ARGV[0] = $1;
 	}
 	%map = ReadDataConfigMap ($CFGMap);
+	%map2 = ReadDataConfigMap ($CFGMap2);
+	%map = (%map, %map2);
+
 	foreach (sort keys %map) {
 	if ($_ eq $ARGV[0]) {
 		my @list = split (/:/,$map{$_});
