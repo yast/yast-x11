@@ -161,7 +161,7 @@ XColor NameToXColor(Display* dpy, const char* name, unsigned long pixel)
     }
     else if (!XParseColor(dpy, DefaultColormap(dpy, screen), name, &c))
     {
-	fprintf(stderr, "testX: unknown color or bad color format: %s\n", name);
+	fprintf(stderr, "\ntestX: unknown color or bad color format: %s\n", name);
 	exit(1);
     }
 
@@ -177,7 +177,7 @@ void RunWindowManager(void)
     {
 	case -1:
             // fork() failed
-	    fprintf(stderr, "testX: FATAL: fork() failed\n");
+	    fprintf(stderr, "\ntestX: FATAL: fork() failed\n");
             exit(2);
 
 	case 0:
@@ -191,7 +191,7 @@ void RunWindowManager(void)
 	    execlp(TWM, "twm", NULL);
 
             // exec..() only returns if the process could not be started.
-	    fprintf(stderr, "testX: Could not run any windowmanager\n");
+	    fprintf(stderr, "\ntestX: Could not run any windowmanager\n");
 
             // Exit, don't return. We don't want to return to main() in the
             // child process to do more X11 calls with the parent process's X
@@ -201,7 +201,7 @@ void RunWindowManager(void)
 	default:
             // Parent process
 
-            // fprintf(stderr, "testX: Started child process %d to start a window manager\n", wm_pid);
+            // fprintf(stderr, "\ntestX: Started child process %d to start a window manager\n", wm_pid);
             break;
     }
 }
@@ -214,6 +214,6 @@ void SigChildHandler(int sig_num)
 
     if (pid != 0 && exit_status > 0)
     {
-        fprintf(stderr, "testX: Child process %d exited with %d\n", pid, exit_status);
+        fprintf(stderr, "\ntestX: Child process %d exited with %d\n", pid, exit_status);
     }
 }
