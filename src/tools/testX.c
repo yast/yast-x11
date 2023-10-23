@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <signal.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xmu/CurUtil.h>
@@ -40,10 +41,13 @@
 #define FVWMRC     "fvwmrc.yast2"
 
 int screen;
+int wm_pid = -1;
 
 Cursor CreateCursorFromName(Display* dpy, const char* name);
 XColor NameToXColor(Display* dpy, const char* name, unsigned long pixel);
-int RunWindowManager(void);
+void RunWindowManager(void);
+void SigChildHandler(int sig_num);
+
 
 int main(int argc, char** argv)
 {
@@ -103,6 +107,7 @@ int main(int argc, char** argv)
     //============================================
     // start a window manager
     //--------------------------------------------
+    signal(SIGCHLD, SigChildHandler);
     RunWindowManager();
 
     //============================================
@@ -163,25 +168,52 @@ XColor NameToXColor(Display* dpy, const char* name, unsigned long pixel)
     return c;
 }
 
-int RunWindowManager(void)
+
+void RunWindowManager(void)
 {
-    int wmpid = fork();
-    switch (wmpid)
+    int wm_pid = fork();
+
+    switch ( wm_pid )
     {
 	case -1:
-	    return 0;
-	    break;
+            // fork() failed
+	    fprintf(stderr, "testX: FATAL: fork() failed\n");
+            exit(2);
+
 	case 0:
+            // Child process: Start a window manager.
+
 	    setenv("ICEWM_PRIVCFG", "/etc/icewm/yast2", 1);
 	    execlp(ICEWM, "icewm", "-c", ICEWMPREFS, "-t", "yast2", NULL);
+
 	    execlp(FVWM, "fvwm2", "-f", FVWMRC, NULL);
 	    execlp(MWM, "mwm", NULL);
 	    execlp(TWM, "twm", NULL);
-	    fprintf(stderr, "testX: could not run any windowmanager");
-	    return 0;
-	    break;
+
+            // exec..() only returns if the process could not be started.
+	    fprintf(stderr, "testX: Could not run any windowmanager\n");
+
+            // Exit, don't return. We don't want to return to main() in the
+            // child process to do more X11 calls with the parent process's X
+            // connection.
+            exit(1);
+
 	default:
-	    waitpid(wmpid, NULL, WNOHANG | WUNTRACED);
+            // Parent process
+
+            // fprintf(stderr, "testX: Started child process %d to start a window manager\n", wm_pid);
+            break;
     }
-    return 1;
+}
+
+
+void SigChildHandler(int sig_num)
+{
+    int exit_status = -1;
+    int pid = waitpid(0, &exit_status, WNOHANG | WUNTRACED);
+
+    if (pid != 0 && exit_status > 0)
+    {
+        fprintf(stderr, "testX: Child process %d exited with %d\n", pid, exit_status);
+    }
 }
