@@ -41,7 +41,6 @@
 #define FVWMRC     "fvwmrc.yast2"
 
 int screen;
-int wm_pid = -1;
 
 Cursor CreateCursorFromName(Display* dpy, const char* name);
 XColor NameToXColor(Display* dpy, const char* name, unsigned long pixel);
