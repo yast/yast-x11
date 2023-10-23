@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2012 Novell, Inc.
+ * Copyright (c) 2023 SUSE Linux LLC
  *
  * All Rights Reserved.
  *
@@ -19,37 +20,18 @@
  * find current contact information at www.novell.com.
  */
 
-/**************
-FILE          : testX.c
-***************
-PROJECT       : SaX ( SuSE advanced X configuration )
-              :
-BELONGS TO    : Configuration tool X11 version 4.x
-              : YaST2 inst-sys tools
-              :
-DESCRIPTION   : Checks if the X server is ok and sets the root
-              : window's color. Forks a child that creates an
-              : invisible X client. The child exits when the
-              : X server exits.
-              :
-              : Exit code: 0: X server ok, 1: no X server.
-              :
-STATUS        : Status: Up-to-date
-**************/
 
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <signal.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xmu/CurUtil.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
-//======================================
-// Defines
-//--------------------------------------
 #define ICEWM     "icewm"
 #define FVWM      "fvwm2"
 #define MWM       "mwm"
@@ -58,17 +40,13 @@ STATUS        : Status: Up-to-date
 #define ICEWMPREFS "preferences.yast2"
 #define FVWMRC     "fvwmrc.yast2"
 
-//======================================
-// Globals
-//--------------------------------------
 int screen;
 
-//======================================
-// Functions
-//--------------------------------------
 Cursor CreateCursorFromName(Display* dpy, const char* name);
 XColor NameToXColor(Display* dpy, const char* name, unsigned long pixel);
-int RunWindowManager(void);
+void RunWindowManager(void);
+void SigChildHandler(int sig_num);
+
 
 int main(int argc, char** argv)
 {
@@ -79,16 +57,20 @@ int main(int argc, char** argv)
     char* cname;
     XColor color;
     Atom prop;
-    Pixmap save_pixmap = (Pixmap)None;
+    Pixmap save_pixmap = (Pixmap) None;
 
     //============================================
     // open display and check if we got a display
     //--------------------------------------------
     display = XOpenDisplay(NULL);
-    if (!display) {
+
+    if (!display)
+    {
 	exit (1);
     }
-    if ((argc == 2) && (strcmp(argv[1], "--fast") == 0)) {
+
+    if ((argc == 2) && (strcmp(argv[1], "--fast") == 0))
+    {
 	XCloseDisplay(display);
 	exit (0);
     }
@@ -101,8 +83,10 @@ int main(int argc, char** argv)
     root = RootWindow(display, screen);
     pixel = BlackPixel(display, screen);
 
-    if (XParseColor(display, DefaultColormap(display, screen), cname, &color)) {
-	if (XAllocColor(display, DefaultColormap(display, screen), &color)) {
+    if (XParseColor(display, DefaultColormap(display, screen), cname, &color))
+    {
+	if (XAllocColor(display, DefaultColormap(display, screen), &color))
+        {
 	    pixel = color.pixel;
 	}
     }
@@ -110,17 +94,19 @@ int main(int argc, char** argv)
     XClearWindow(display, root);
 
     //============================================
-    // set watch cursor
+    // set the cursor
     //--------------------------------------------
     cursor = CreateCursorFromName(display, "top_left_arrow");
-    if (cursor) {
+    if (cursor)
+    {
 	XDefineCursor(display, root, cursor);
 	XFreeCursor(display, cursor);
     }
 
     //============================================
-    // run the windowmanager (FVWM)
+    // start a window manager
     //--------------------------------------------
+    signal(SIGCHLD, SigChildHandler);
     RunWindowManager();
 
     //============================================
@@ -133,15 +119,13 @@ int main(int argc, char** argv)
     XSetCloseDownMode(display, RetainPermanent);
 
     //============================================
-    // close display and exit
+    // Shut down
     //--------------------------------------------
     XCloseDisplay(display);
-    exit (0);
+    exit(0);
 }
 
-//=========================================
-// CreateCursorFromName
-//-----------------------------------------
+
 Cursor CreateCursorFromName(Display* dpy, const char* name)
 {
     XColor fg, bg;
@@ -154,53 +138,81 @@ Cursor CreateCursorFromName(Display* dpy, const char* name)
     bg = NameToXColor(dpy, back_color, WhitePixel(dpy, screen));
 
     i = XmuCursorNameToIndex(name);
+
     if (i == -1)
 	return (Cursor) 0;
     fid = XLoadFont (dpy, "cursor");
     if (!fid)
 	return (Cursor) 0;
+
     return XCreateGlyphCursor(dpy, fid, fid, i, i+1, &fg, &bg);
 }
 
-//=========================================
-// NameToXColor
-//-----------------------------------------
+
 XColor NameToXColor(Display* dpy, const char* name, unsigned long pixel)
 {
     XColor c;
 
-    if (!name || !*name) {
+    if (!name || !*name)
+    {
 	c.pixel = pixel;
 	XQueryColor(dpy, DefaultColormap(dpy, screen), &c);
-    } else if (!XParseColor(dpy, DefaultColormap(dpy, screen), name, &c)) {
-	fprintf(stderr, "testX: unknown color or bad color format: %s\n", name);
+    }
+    else if (!XParseColor(dpy, DefaultColormap(dpy, screen), name, &c))
+    {
+	fprintf(stderr, "\ntestX: unknown color or bad color format: %s\n", name);
 	exit(1);
     }
+
     return c;
 }
 
-//=========================================
-// RunWindowManager
-//-----------------------------------------
-int RunWindowManager(void)
+
+void RunWindowManager(void)
 {
-    int wmpid = fork();
-    switch (wmpid)
+    int wm_pid = fork();
+
+    switch ( wm_pid )
     {
 	case -1:
-	    return 0;
-	    break;
+            // fork() failed
+	    fprintf(stderr, "\ntestX: FATAL: fork() failed\n");
+            exit(2);
+
 	case 0:
+            // Child process: Start a window manager.
+
 	    setenv("ICEWM_PRIVCFG", "/etc/icewm/yast2", 1);
 	    execlp(ICEWM, "icewm", "-c", ICEWMPREFS, "-t", "yast2", NULL);
+
 	    execlp(FVWM, "fvwm2", "-f", FVWMRC, NULL);
 	    execlp(MWM, "mwm", NULL);
 	    execlp(TWM, "twm", NULL);
-	    fprintf(stderr, "testX: could not run any windowmanager");
-	    return 0;
-	    break;
+
+            // exec..() only returns if the process could not be started.
+	    fprintf(stderr, "\ntestX: Could not run any windowmanager\n");
+
+            // Exit, don't return. We don't want to return to main() in the
+            // child process to do more X11 calls with the parent process's X
+            // connection.
+            exit(1);
+
 	default:
-	    waitpid(wmpid, NULL, WNOHANG | WUNTRACED);
+            // Parent process
+
+            // fprintf(stderr, "\ntestX: Started child process %d to start a window manager\n", wm_pid);
+            break;
     }
-    return 1;
+}
+
+
+void SigChildHandler(int sig_num)
+{
+    int exit_status = -1;
+    int pid = waitpid(0, &exit_status, WNOHANG | WUNTRACED);
+
+    if (pid != 0 && exit_status > 0)
+    {
+        fprintf(stderr, "\ntestX: Child process %d exited with %d\n", pid, exit_status);
+    }
 }
