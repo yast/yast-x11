@@ -3,18 +3,18 @@ Mon Oct 23 09:22:36 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Prevent testX from hanging in second stage if no supported WM
   can be started (bsc#1216297)
-- 4.6.2
+- 5.0.2
 
 -------------------------------------------------------------------
-Tue Oct 17 14:43:21 UTC 2023 - Martin Vidner <mvidner@suse.com>
+Tue Oct 10 11:09:32 UTC 2023 - Martin Vidner <mvidner@suse.com>
 
 - xkbctrl: use also kbd-model-map.xkb-generated (bsc#1211104)
-- 4.6.1
+- 5.0.1
 
 -------------------------------------------------------------------
-Fri Sep 01 19:57:03 UTC 2023 - Josef Reidinger <jreidinger@suse.com>
+Wed Aug 30 20:16:10 UTC 2023 - Josef Reidinger <jreidinger@suse.cz>
 
-- Branch package for SP6 (bsc#1208913)
+- 5.0.0 (#bsc1185510)
 
 -------------------------------------------------------------------
 Fri Mar 03 14:44:07 UTC 2023 - Ladislav Slezák <lslezak@suse.cz>
